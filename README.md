@@ -7,7 +7,7 @@ Create Nuxt extendable layer with this GitHub template.
 Make sure to install the dependencies:
 
 ```bash
-pnpm install
+npm install
 ```
 
 ## Working on your layer
@@ -16,7 +16,7 @@ Your layer is at the root of this repository, it is exactly like a regular Nuxt 
 
 The `.playground` directory should help you on trying your layer during development.
 
-Running `pnpm dev` will prepare and boot `.playground` directory, which imports your layer itself.
+Running `npm dev` will prepare and boot `.playground` directory, which imports your layer itself.
 
 ## Distributing your layer
 
@@ -47,7 +47,7 @@ defineNuxtConfig({
 Start the development server on http://localhost:3000
 
 ```bash
-pnpm dev
+npm dev
 ```
 
 ## Production
@@ -55,19 +55,19 @@ pnpm dev
 Build the application for production:
 
 ```bash
-pnpm build
+npm build
 ```
 
 Or statically generate it with:
 
 ```bash
-pnpm generate
+npm generate
 ```
 
 Locally preview production build:
 
 ```bash
-pnpm preview
+npm preview
 ```
 
 Checkout the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
