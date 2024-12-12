@@ -21,11 +21,14 @@ export default defineNuxtConfig({
         sepia: 'monokai'
       },
       langs: [
+        'bash',
         'c',
         'cpp',
         'java',
         'javascript',
-        'perl'
+        'perl',
+        'python',
+        'rust'
       ]
     }
   },
