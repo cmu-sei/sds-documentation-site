@@ -8,10 +8,13 @@
     />
     <Body class="bg-white dark:bg-gray-950 text-black dark:text-white" />
     <header class="border-b dark:border-gray-800 flex gap-6 px-4 items-center">
-      <p class="block sm:min-w-64 text-lg font-light">
-        {{ pageTitle }}
-      </p>
-      <div class="grow overflow-auto">
+      <div class="flex gap-1 items-center">
+        <MobileMenu class="md:hidden" />
+        <p class="block sm:min-w-64 text-lg font-light">
+          {{ pageTitle }}
+        </p>
+      </div>
+      <div class="hidden md:block grow overflow-auto">
         <ContentNavigation v-slot="{ navigation }">
           <ul class="flex">
             <li
@@ -21,7 +24,7 @@
               <NuxtLink
                 :to="link._path"
                 active-class="active"
-                class="tab tab-underline tab-red"
+                class="tab tab-underline tab-red py-4"
                 :title="link.title"
                 :class="{
                   'active': link._path.startsWith(`/${firstPart}`) && firstPart
@@ -31,10 +34,13 @@
           </ul>
         </ContentNavigation>
       </div>
-      <SearchBox v-model="showSearchModal" />
+      <SearchBox
+        v-model="showSearchModal"
+        class="ml-auto py-3"
+      />
     </header>
     <main
-      class="flex flex-col md:flex-row gap-6 h-[calc(100vh-2.875rem)]"
+      class="flex flex-col md:flex-row gap-6 h-[calc(100vh-3.6rem)]"
     >
       <ContentNavigation
         v-if="firstPart"
@@ -45,9 +51,9 @@
           <SdsResizer
             direction="right"
             clamp
-            class="border-r dark:border-gray-800"
+            class="hidden md:flex border-r dark:border-gray-800"
           >
-            <div class="flex flex-col h-[calc(100vh-8.175rem)] gap-2 w-72">
+            <div class="flex flex-col h-[calc(100vh-8.85rem)] gap-2 w-72">
               <nav class="grow mt-6 overflow-auto">
                 <ul>
                   <li
@@ -153,7 +159,7 @@
         tabindex="0"
         class="overflow-auto w-full py-12"
       >
-        <div class="prose prose-blue dark:prose-invert mx-auto max-w-2xl prose-pre:bg-white prose-pre:border dark:prose-pre:bg-black dark:prose-pre:border-gray-800">
+        <div class="prose prose-blue dark:prose-invert px-4 xl:px-0 mx-auto max-w-2xl prose-pre:bg-white prose-pre:border dark:prose-pre:bg-black dark:prose-pre:border-gray-800">
           <slot />
         </div>
       </div>
