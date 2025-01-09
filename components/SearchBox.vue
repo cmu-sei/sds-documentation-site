@@ -2,7 +2,7 @@
   <div>
     <button
       ref="searchButtonRef"
-      class="text-left text-sm w-full h-8 px-2 italic text-gray-600 transition-colors duration-150 transform bg-white border border-gray-300 rounded shadow-inner whitespace-nowrap dark:bg-gray-850 dark:text-gray-300 dark:border-gray-500 hover:text-gray-500 dark:hover:text-gray-300 hover:border-gray-400 dark:hover:border-gray-400 outline-none"
+      class="flex items-center text-sm w-48 h-8 px-2 italic text-gray-500 transition-colors duration-150 transform bg-white border border-gray-200 rounded shadow-inner whitespace-nowrap dark:bg-gray-900 dark:text-gray-300 dark:border-gray-800 hover:text-gray-600 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-700 outline-none"
       title="Use '/' to bring up search anytime."
       @click="handleShowSearchModalClick"
       @keydown="handleShowSearchModalKeyDown"
@@ -15,8 +15,11 @@
         />
       </svg>
       <span class="align-middle ml-2">Search</span>
+      <span
+        class="ml-auto border border-gray-200 dark:border-gray-700 px-1.5 rounded"
+      >/</span>
     </button>
-    <sds-modal v-model="modelValue">
+    <sds-modal v-model="modelValue" size="lg">
       <template #title>
         <h2>Search</h2>
       </template>
@@ -26,7 +29,7 @@
         type="text"
         class="form-control"
         placeholder="Search all pages"
-      />
+      >
       <nav v-if="results?.length" class="py-4">
         <nuxt-link
           v-for="(item, index) of results"
@@ -36,9 +39,9 @@
           :class="{
             'bg-gray-50 dark:bg-gray-800': selectedIndex === index,
           }"
-          @mouseover.native="selectedIndex = index"
-          @focus.native="selectedIndex = index"
-          @click.native="modelValue = false"
+          @mouseover="selectedIndex = index"
+          @focus="selectedIndex = index"
+          @click="modelValue = false"
         >
           <span>{{ item.title }}</span>
           <span
@@ -99,13 +102,13 @@ onUnmounted(() => {
 const handleKeyUp = async (e: KeyboardEvent) => {
   if (modelValue.value && results.value?.length > 0) {
     if (e.key === 'ArrowDown') {
-      selectedIndex.value !== results.value.length - 1
-        ? selectedIndex.value++
-        : (selectedIndex.value = 0)
+      selectedIndex.value = selectedIndex.value !== results.value.length - 1
+        ? selectedIndex.value + 1
+        : 0
     } else if (e.key === 'ArrowUp') {
-      selectedIndex.value !== 0
-        ? selectedIndex.value--
-        : (selectedIndex.value = results.value.length - 1)
+      selectedIndex.value = selectedIndex.value !== 0
+        ? selectedIndex.value - 1
+        : results.value.length - 1
     } else if (e.key === 'Enter') {
       await navigateTo(results.value[selectedIndex.value].id)
       modelValue.value = false
