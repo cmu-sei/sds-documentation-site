@@ -10,7 +10,7 @@
     <header class="border-b dark:border-gray-800 flex gap-6 px-4 items-center">
       <div class="flex gap-1 items-center">
         <MobileMenu class="md:hidden" />
-        <p class="block sm:min-w-64 text-lg font-light">
+        <p class="hidden md:block sm:min-w-64 text-lg font-light">
           {{ pageTitle }}
         </p>
       </div>
