@@ -2,19 +2,19 @@
   <div>
     <button
       ref="searchButtonRef"
-      class="flex items-center text-sm w-48 h-8 px-2 italic text-gray-500 transition-colors duration-150 transform bg-white border border-gray-200 rounded shadow-inner whitespace-nowrap dark:bg-gray-900 dark:text-gray-300 dark:border-gray-800 hover:text-gray-600 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-700 outline-none"
+      class="flex items-center gap-2 text-sm w-48 py-2 px-3 italic text-gray-500 transition-colors duration-150 transform bg-white border border-gray-200 rounded shadow-inner whitespace-nowrap dark:bg-gray-900 dark:text-gray-300 dark:border-gray-800 hover:text-gray-600 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-700 outline-none"
       title="Use '/' to bring up search anytime."
       @click="handleShowSearchModalClick"
       @keydown="handleShowSearchModalKeyDown"
     >
-      <svg class="inline-block w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+      <svg class="inline-block h-5 w-auto" fill="currentColor" viewBox="0 0 20 20">
         <path
           fill-rule="evenodd"
           clip-rule="evenodd"
           d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
         />
       </svg>
-      <span class="align-middle ml-2">Search</span>
+      <span>Search</span>
       <span
         class="ml-auto border border-gray-200 dark:border-gray-700 px-1.5 rounded"
       >/</span>
