@@ -9,12 +9,12 @@
     <Body class="bg-white dark:bg-gray-950 text-black dark:text-white" />
     <header class="border-b dark:border-gray-800 flex gap-6 px-4 items-center">
       <div class="flex gap-1 items-center">
-        <MobileMenu class="md:hidden" />
-        <p class="hidden md:block sm:min-w-64 text-lg font-light">
+        <MobileMenu class="lg:hidden" />
+        <p class="hidden lg:block sm:min-w-64 text-lg font-light">
           {{ pageTitle }}
         </p>
       </div>
-      <div class="hidden md:block grow overflow-auto">
+      <div class="hidden lg:block grow overflow-auto">
         <ContentNavigation v-slot="{ navigation }">
           <ul class="flex">
             <li
@@ -24,10 +24,10 @@
               <NuxtLink
                 :to="link._path"
                 active-class="active"
-                class="tab tab-underline tab-red py-4"
+                class="tab tab-underline tab-red py-5"
                 :title="link.title"
                 :class="{
-                  'active': link._path.startsWith(`/${firstPart}`) && firstPart
+                  'active': link._path.startsWith(`/${firstPart}`) && !!firstPart
                 }"
               >{{ link.title }}</NuxtLink>
             </li>
@@ -40,7 +40,7 @@
       />
     </header>
     <main
-      class="flex flex-col md:flex-row gap-6 h-[calc(100vh-3.6rem)]"
+      class="flex flex-col lg:flex-row gap-6 h-[calc(100vh-4.125rem)]"
     >
       <ContentNavigation
         v-if="firstPart"
@@ -51,9 +51,9 @@
           <SdsResizer
             direction="right"
             clamp
-            class="hidden md:flex border-r dark:border-gray-800"
+            class="hidden lg:flex border-r dark:border-gray-800"
           >
-            <div class="flex flex-col h-[calc(100vh-8.85rem)] gap-2 w-72">
+            <div class="flex flex-col h-[calc(100vh-9.375rem)] gap-2 w-72">
               <nav class="grow mt-6 overflow-auto">
                 <ul>
                   <li
@@ -64,7 +64,7 @@
                     <NuxtLink
                       :to="link._path"
                       active-class="active"
-                      class="truncate w-full px-4 py-2 text-sm font-bold border-l-4 border-transparent hover:bg-gray-25 dark:hover:bg-gray-900"
+                      class="line-clamp-1 w-full px-4 py-2 text-sm font-bold border-l-4 border-transparent hover:bg-gray-25 dark:hover:bg-gray-900"
                       :title="link.title"
                     >{{ link.title }}</NuxtLink>
                     <ul v-if="link.children">
@@ -73,36 +73,159 @@
                         :key="child._path"
                         class="grid"
                       >
-                        <NuxtLink
-                          :to="child._path"
-                          active-class="active"
-                          class="truncate w-full px-4 py-2 text-sm border-l-4 border-transparent [&.active]:border-red-600 dark:[&.active]:border-red-400 [&.active]:bg-gray-25 dark:[&.active]:bg-gray-900 hover:bg-gray-25 dark:hover:bg-gray-900"
-                          :title="child.title"
-                        >{{ child.title }}</NuxtLink>
-                        <ul v-if="child.children">
+                        <div
+                          class="relative flex items-center gap-1 px-4 py-2 text-sm border-l-4 border-transparent has-[.active]:border-red-600 dark:has-[.active]:border-red-400 has-[.active]:bg-gray-25 dark:has-[.active]:bg-gray-900 hover:bg-gray-25 dark:hover:bg-gray-900"
+                        >
+                          <button
+                            v-if="child.children"
+                            class="w-4 text-left z-10"
+                            type="button"
+                            @click.prevent="toggleTreeNode(child)"
+                          >
+                            <svg
+                              v-if="closedTreeNodes.some(i => child._path === i)"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="20"
+                              height="32"
+                              viewBox="0 0 320 512"
+                              class="h-3 w-auto inline-block"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256L73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
+                              />
+                            </svg>
+                            <svg
+                              v-else
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="32"
+                              height="32"
+                              viewBox="0 0 512 512"
+                              class="h-3 w-auto inline-block"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7L86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                              />
+                            </svg>
+                            <span class="sr-only">Toggle tree</span>
+                          </button>
+                          <span class="line-clamp-1">{{ child.title }}</span>
+                          <NuxtLink
+                            :to="child._path"
+                            active-class="active"
+                            class="absolute inset-0"
+                            :title="child.title"
+                          >
+                            <span class="sr-only">{{ child.title }}</span>
+                          </NuxtLink>
+                        </div>
+                        <ul v-if="child.children && !closedTreeNodes.some(i => child._path === i)">
                           <li
                             v-for="subchild in child.children.filter(i => i._path !== child._path)"
                             :key="subchild._path"
                             class="grid"
                           >
-                            <NuxtLink
-                              :to="subchild._path"
-                              active-class="active"
-                              class="truncate w-full pl-8 pr-4 py-2 text-sm border-l-4 border-transparent [&.active]:border-red-600 dark:[&.active]:border-red-400 [&.active]:bg-gray-25 dark:[&.active]:bg-gray-900 hover:bg-gray-25 dark:hover:bg-gray-900"
-                              :title="subchild.title"
-                            >{{ subchild.title }}</NuxtLink>
-                            <ul v-if="subchild.children">
+                            <div
+                              class="pl-8 relative flex items-center gap-1 px-4 py-2 text-sm border-l-4 border-transparent has-[.active]:border-red-600 dark:has-[.active]:border-red-400 has-[.active]:bg-gray-25 dark:has-[.active]:bg-gray-900 hover:bg-gray-25 dark:hover:bg-gray-900"
+                            >
+                              <button
+                                v-if="subchild.children"
+                                class="w-4 text-left z-10"
+                                type="button"
+                                @click.prevent="toggleTreeNode(subchild)"
+                              >
+                                <svg
+                                  v-if="closedTreeNodes.some(i => subchild._path === i)"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="20"
+                                  height="32"
+                                  viewBox="0 0 320 512"
+                                  class="h-3 w-auto inline-block"
+                                >
+                                  <path
+                                    fill="currentColor"
+                                    d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256L73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
+                                  />
+                                </svg>
+                                <svg
+                                  v-else
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="32"
+                                  height="32"
+                                  viewBox="0 0 512 512"
+                                  class="h-3 w-auto inline-block"
+                                >
+                                  <path
+                                    fill="currentColor"
+                                    d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7L86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                                  />
+                                </svg>
+                                <span class="sr-only">Toggle tree</span>
+                              </button>
+                              <span class="line-clamp-1">{{ subchild.title }}</span>
+                              <NuxtLink
+                                :to="subchild._path"
+                                active-class="active"
+                                class="absolute inset-0"
+                                :title="subchild.title"
+                              >
+                                <span class="sr-only">{{ subchild.title }}</span>
+                              </NuxtLink>
+                            </div>
+                            <ul v-if="subchild.children && !closedTreeNodes.some(i => subchild._path === i)">
                               <li
                                 v-for="grandchild in subchild.children.filter(i => i._path !== subchild._path)"
                                 :key="grandchild._path"
                                 class="grid"
                               >
-                                <NuxtLink
-                                  :to="grandchild._path"
-                                  active-class="active"
-                                  class="truncate w-full pl-12 pr-4 py-2 text-sm border-l-4 border-transparent [&.active]:border-red-600 dark:[&.active]:border-red-400 [&.active]:bg-gray-25 dark:[&.active]:bg-gray-900 hover:bg-gray-25 dark:hover:bg-gray-900"
-                                  :title="grandchild.title"
-                                >{{ grandchild.title }}</NuxtLink>
+                                <div
+                                  class="pl-12 relative flex items-center gap-1 px-4 py-2 text-sm border-l-4 border-transparent has-[.active]:border-red-600 dark:has-[.active]:border-red-400 has-[.active]:bg-gray-25 dark:has-[.active]:bg-gray-900 hover:bg-gray-25 dark:hover:bg-gray-900"
+                                >
+                                  <button
+                                    v-if="grandchild.children"
+                                    class="w-4 text-left z-10 ml-8"
+                                    type="button"
+                                    @click.prevent="toggleTreeNode(grandchild)"
+                                  >
+                                    <svg
+                                      v-if="closedTreeNodes.some(i => grandchild._path === i)"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="20"
+                                      height="32"
+                                      viewBox="0 0 320 512"
+                                      class="h-3 w-auto inline-block"
+                                    >
+                                      <path
+                                        fill="currentColor"
+                                        d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256L73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
+                                      />
+                                    </svg>
+                                    <svg
+                                      v-else
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="32"
+                                      height="32"
+                                      viewBox="0 0 512 512"
+                                      class="h-3 w-auto inline-block"
+                                    >
+                                      <path
+                                        fill="currentColor"
+                                        d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7L86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                                      />
+                                    </svg>
+                                    <span class="sr-only">Toggle tree</span>
+                                  </button>
+                                  <span class="line-clamp-1">{{ grandchild.title }}</span>
+                                  <NuxtLink
+                                    :to="grandchild._path"
+                                    active-class="active"
+                                    class="absolute inset-0"
+                                    :title="grandchild.title"
+                                  >
+                                    <span class="sr-only">{{ grandchild.title }}</span>
+                                  </NuxtLink>
+                                </div>
                               </li>
                             </ul>
                           </li>
@@ -146,7 +269,7 @@
               </div>
               <div class="bg-gray-25 dark:bg-gray-900 p-2 border-t border-gray-200 dark:border-gray-800">
                 <p class="text-sm">
-                  <span class="font-bold text-red-600 dark:text-red-400">{{ appSuitePrefix }}</span>
+                  <span class="font-bold text-red-600 dark:text-red-300">{{ appSuitePrefix }}</span>
                   <span>{{ appSuite }}</span>
                 </p>
               </div>
@@ -210,6 +333,16 @@ const firstPart = route.path.split('/')[1]
 const showScrollspy = ref(false)
 
 const navQuery = queryContent(firstPart)
+
+const closedTreeNodes = ref<string[]>([])
+
+const toggleTreeNode = (link: { _path: string }) => {
+  if (closedTreeNodes.value.some(i => link._path === i)) {
+    closedTreeNodes.value = closedTreeNodes.value.filter(i => link._path !== i)
+  } else {
+    closedTreeNodes.value.push(link._path)
+  }
+}
 
 onMounted(() => {
   if (route.hash && route.hash !== '') {
