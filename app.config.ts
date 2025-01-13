@@ -1,5 +1,8 @@
 export default defineAppConfig({
-  hostname: '',
+  sitemap: {
+    hostname: '',
+    changefreq: 'monthly'
+  },
   appSuitePrefix: 'SDS',
   appSuite: 'Docs',
   pageTitle: 'Sample Documentation Site'
@@ -7,7 +10,10 @@ export default defineAppConfig({
 
 declare module '@nuxt/schema' {
   interface AppConfigInput {
-    hostname: string,
+    sitemap: {
+      hostname: string,
+      changefreq?: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never'
+    }
     appSuitePrefix: string,
     appSuite: string,
     pageTitle: string
