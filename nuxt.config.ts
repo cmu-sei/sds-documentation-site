@@ -47,4 +47,10 @@ export default defineNuxtConfig({
   build: {
     transpile: ['@sds/components-vue3'],
   },
+
+  nitro: {
+    prerender: {
+      routes: ['/sitemap.xml']
+    }
+  }
 })

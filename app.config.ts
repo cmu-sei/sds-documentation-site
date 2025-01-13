@@ -1,4 +1,5 @@
 export default defineAppConfig({
+  hostname: '',
   appSuitePrefix: 'SDS',
   appSuite: 'Docs',
   pageTitle: 'Sample Documentation Site'
@@ -6,6 +7,7 @@ export default defineAppConfig({
 
 declare module '@nuxt/schema' {
   interface AppConfigInput {
+    hostname: string,
     appSuitePrefix: string,
     appSuite: string,
     pageTitle: string
