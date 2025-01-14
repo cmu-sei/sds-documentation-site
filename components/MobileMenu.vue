@@ -79,7 +79,7 @@
                         >
                           <button
                             v-if="child.children"
-                            class="w-4 text-left z-10"
+                            class="w-4 text-left z-10 hover:text-red-600 dark:hover:text-red-300"
                             type="button"
                             @click.prevent="toggleTreeNode(child)"
                           >
@@ -132,7 +132,7 @@
                             >
                               <button
                                 v-if="subchild.children"
-                                class="w-4 text-left z-10"
+                                class="w-4 text-left z-10 hover:text-red-600 dark:hover:text-red-300"
                                 type="button"
                                 @click.prevent="toggleTreeNode(subchild)"
                               >
@@ -185,7 +185,7 @@
                                 >
                                   <button
                                     v-if="grandchild.children"
-                                    class="w-4 text-left z-10 ml-8"
+                                    class="w-4 text-left z-10 ml-8 hover:text-red-600 dark:hover:text-red-300"
                                     type="button"
                                     @click.prevent="toggleTreeNode(grandchild)"
                                   >
@@ -239,9 +239,12 @@
             </div>
           </template>
         </ContentNavigation>
+        <hr
+          v-if="toc?.links.length > 0"
+          class="my-8 border-gray-200 dark:border-gray-700"
+        >
         <div
           v-if="toc?.links.length > 0"
-          class="mt-8"
         >
           <div class="flex gap-2 items-center mb-2">
             <svg
@@ -261,7 +264,7 @@
           <CustomScrollspy
             :items="toc.links"
             parent="#page-content"
-            item-class="px-4 py-2 text-sm border-l dark:border-gray-800 [&.active]:border-l-2 [&.active]:font-bold [&.active]:border-red-600 dark:[&.active]:border-red-400 hover:bg-gray-25 dark:hover:bg-gray-800"
+            item-class="px-4 py-2 text-sm border-l dark:border-gray-800 hover:pl-[calc(1rem-1px)] [&.active]:pl-[calc(1rem-1px)] hover:border-l-2 [&.active]:border-l-2 hover:border-gray-600 dark:hover:border-gray-400 [&.active]:font-bold [&.active]:border-red-600 dark:[&.active]:border-red-400 hover:bg-gray-25 dark:hover:bg-gray-900"
             active-class="active"
             class="grid"
           />
