@@ -75,11 +75,12 @@ const searchText = ref('')
 const selectedIndex = ref(0)
 const results = ref()
 
-watch(searchText, async () => {
+watch(searchText, async (value) => {
   selectedIndex.value = 0
-  const response = await searchContent(searchText)
-  results.value = response.value?.filter((item, index, self) =>
-    index === self.findIndex((i) => i.title === item.title)
+  const response = await queryCollectionSearchSections('content')
+  results.value = response.filter((item) =>
+    !item.id.includes('#') &&
+    item.title.toLowerCase().includes(value.toLowerCase())
   ).slice(0, 10)
 })
 

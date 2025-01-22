@@ -45,219 +45,211 @@
         </p>
       </template>
       <template #default>
-        <ContentNavigation v-slot="{ navigation }">
-          <NuxtLink
-            v-for="link of navigation"
-            :key="link._path"
-            v-slot="{ isExactActive }"
-            :to="link._path"
-            custom
-          >
-            <SdsNavigationItem
-              :label="link.title"
-              :href="link._path"
-              :selected="isExactActive || (link._path.startsWith(`/${firstPart}`) && !!firstPart)"
-            />
-          </NuxtLink>
-        </ContentNavigation>
-        <hr class="my-4 border-gray-200 dark:border-gray-700">
-        <ContentNavigation
-          v-if="firstPart"
-          v-slot="{ navigation }"
-          :query="navQuery"
+        <NuxtLink
+          v-for="link of navigation"
+          :key="link.path"
+          v-slot="{ isExactActive }"
+          :to="link.path"
+          custom
         >
-          <template v-if="navigation.some(i => i.children)">
-            <div class="-mx-6 flex flex-col gap-2">
-              <nav class="grow overflow-auto">
-                <ul>
-                  <li
-                    v-for="link of navigation"
-                    :key="link._path"
-                    class="grid"
-                  >
-                    <NuxtLink
-                      :to="link._path"
-                      active-class="active"
-                      class="line-clamp-1 w-full px-4 py-2 text-sm font-bold border-l-4 border-transparent hover:bg-gray-25 dark:hover:bg-gray-800"
-                      :title="link.title"
-                    >{{ link.title }}</NuxtLink>
-                    <ul v-if="link.children">
-                      <li
-                        v-for="child in link.children.filter(i => i._path !== link._path)"
-                        :key="child._path"
-                        class="grid"
+          <SdsNavigationItem
+            :label="link.title"
+            :href="link.path"
+            :selected="isExactActive || (link.path.startsWith(`/${firstPart}`) && !!firstPart)"
+          />
+        </NuxtLink>
+        <hr class="my-4 border-gray-200 dark:border-gray-700">
+        <template v-if="sidebar && sidebar?.some(i => i.children)">
+          <div class="-mx-6 flex flex-col gap-2">
+            <nav class="grow overflow-auto">
+              <ul>
+                <li
+                  v-for="link of sidebar"
+                  :key="link.path"
+                  class="grid"
+                >
+                  <NuxtLink
+                    :to="link.path"
+                    active-class="active"
+                    class="line-clamp-1 w-full px-4 py-2 text-sm font-bold border-l-4 border-transparent hover:bg-gray-25 dark:hover:bg-gray-800"
+                    :title="link.title"
+                  >{{ link.title }}</NuxtLink>
+                  <ul v-if="link.children">
+                    <li
+                      v-for="child in link.children.filter((i: ContentNavigationItem) => i.path !== link.path)"
+                      :key="child.path"
+                      class="grid"
+                    >
+                      <div
+                        class="relative flex items-center gap-1 px-4 py-2 text-sm border-l-4 border-transparent has-[.active]:border-red-600 dark:has-[.active]:border-red-400 has-[.active]:bg-gray-25 dark:has-[.active]:bg-gray-800 hover:bg-gray-25 dark:hover:bg-gray-800"
                       >
-                        <div
-                          class="relative flex items-center gap-1 px-4 py-2 text-sm border-l-4 border-transparent has-[.active]:border-red-600 dark:has-[.active]:border-red-400 has-[.active]:bg-gray-25 dark:has-[.active]:bg-gray-800 hover:bg-gray-25 dark:hover:bg-gray-800"
+                        <button
+                          v-if="child.children"
+                          class="w-4 text-left z-10 hover:text-red-600 dark:hover:text-red-300"
+                          type="button"
+                          @click.prevent="toggleTreeNode(child)"
                         >
-                          <button
-                            v-if="child.children"
-                            class="w-4 text-left z-10 hover:text-red-600 dark:hover:text-red-300"
-                            type="button"
-                            @click.prevent="toggleTreeNode(child)"
+                          <svg
+                            v-if="closedTreeNodes.some(i => child.path === i)"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="32"
+                            viewBox="0 0 320 512"
+                            class="h-3 w-auto inline-block"
                           >
-                            <svg
-                              v-if="closedTreeNodes.some(i => child._path === i)"
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="20"
-                              height="32"
-                              viewBox="0 0 320 512"
-                              class="h-3 w-auto inline-block"
-                            >
-                              <path
-                                fill="currentColor"
-                                d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256L73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
-                              />
-                            </svg>
-                            <svg
-                              v-else
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="32"
-                              height="32"
-                              viewBox="0 0 512 512"
-                              class="h-3 w-auto inline-block"
-                            >
-                              <path
-                                fill="currentColor"
-                                d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7L86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
-                              />
-                            </svg>
-                            <span class="sr-only">Toggle tree</span>
-                          </button>
-                          <span class="line-clamp-1">{{ child.title }}</span>
-                          <NuxtLink
-                            :to="child._path"
-                            active-class="active"
-                            class="absolute inset-0"
-                            :title="child.title"
+                            <path
+                              fill="currentColor"
+                              d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256L73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
+                            />
+                          </svg>
+                          <svg
+                            v-else
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="32"
+                            height="32"
+                            viewBox="0 0 512 512"
+                            class="h-3 w-auto inline-block"
                           >
-                            <span class="sr-only">{{ child.title }}</span>
-                          </NuxtLink>
-                        </div>
-                        <ul v-if="child.children && !closedTreeNodes.some(i => child._path === i)">
-                          <li
-                            v-for="subchild in child.children.filter(i => i._path !== child._path)"
-                            :key="subchild._path"
-                            class="grid"
+                            <path
+                              fill="currentColor"
+                              d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7L86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                            />
+                          </svg>
+                          <span class="sr-only">Toggle tree</span>
+                        </button>
+                        <span class="line-clamp-1">{{ child.title }}</span>
+                        <NuxtLink
+                          :to="child.path"
+                          active-class="active"
+                          class="absolute inset-0"
+                          :title="child.title"
+                        >
+                          <span class="sr-only">{{ child.title }}</span>
+                        </NuxtLink>
+                      </div>
+                      <ul v-if="child.children && !closedTreeNodes.some(i => child.path === i)">
+                        <li
+                          v-for="subchild in child.children.filter((i: ContentNavigationItem) => i.path !== child.path)"
+                          :key="subchild.path"
+                          class="grid"
+                        >
+                          <div
+                            class="pl-8 relative flex items-center gap-1 px-4 py-2 text-sm border-l-4 border-transparent has-[.active]:border-red-600 dark:has-[.active]:border-red-400 has-[.active]:bg-gray-25 dark:has-[.active]:bg-gray-800 hover:bg-gray-25 dark:hover:bg-gray-800"
                           >
-                            <div
-                              class="pl-8 relative flex items-center gap-1 px-4 py-2 text-sm border-l-4 border-transparent has-[.active]:border-red-600 dark:has-[.active]:border-red-400 has-[.active]:bg-gray-25 dark:has-[.active]:bg-gray-800 hover:bg-gray-25 dark:hover:bg-gray-800"
+                            <button
+                              v-if="subchild.children"
+                              class="w-4 text-left z-10 hover:text-red-600 dark:hover:text-red-300"
+                              type="button"
+                              @click.prevent="toggleTreeNode(subchild)"
                             >
-                              <button
-                                v-if="subchild.children"
-                                class="w-4 text-left z-10 hover:text-red-600 dark:hover:text-red-300"
-                                type="button"
-                                @click.prevent="toggleTreeNode(subchild)"
+                              <svg
+                                v-if="closedTreeNodes.some(i => subchild.path === i)"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="20"
+                                height="32"
+                                viewBox="0 0 320 512"
+                                class="h-3 w-auto inline-block"
                               >
-                                <svg
-                                  v-if="closedTreeNodes.some(i => subchild._path === i)"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="20"
-                                  height="32"
-                                  viewBox="0 0 320 512"
-                                  class="h-3 w-auto inline-block"
-                                >
-                                  <path
-                                    fill="currentColor"
-                                    d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256L73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
-                                  />
-                                </svg>
-                                <svg
-                                  v-else
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="32"
-                                  height="32"
-                                  viewBox="0 0 512 512"
-                                  class="h-3 w-auto inline-block"
-                                >
-                                  <path
-                                    fill="currentColor"
-                                    d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7L86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
-                                  />
-                                </svg>
-                                <span class="sr-only">Toggle tree</span>
-                              </button>
-                              <span class="line-clamp-1">{{ subchild.title }}</span>
-                              <NuxtLink
-                                :to="subchild._path"
-                                active-class="active"
-                                class="absolute inset-0"
-                                :title="subchild.title"
+                                <path
+                                  fill="currentColor"
+                                  d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256L73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
+                                />
+                              </svg>
+                              <svg
+                                v-else
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="32"
+                                height="32"
+                                viewBox="0 0 512 512"
+                                class="h-3 w-auto inline-block"
                               >
-                                <span class="sr-only">{{ subchild.title }}</span>
-                              </NuxtLink>
-                            </div>
-                            <ul v-if="subchild.children && !closedTreeNodes.some(i => subchild._path === i)">
-                              <li
-                                v-for="grandchild in subchild.children.filter(i => i._path !== subchild._path)"
-                                :key="grandchild._path"
-                                class="grid"
+                                <path
+                                  fill="currentColor"
+                                  d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7L86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                                />
+                              </svg>
+                              <span class="sr-only">Toggle tree</span>
+                            </button>
+                            <span class="line-clamp-1">{{ subchild.title }}</span>
+                            <NuxtLink
+                              :to="subchild.path"
+                              active-class="active"
+                              class="absolute inset-0"
+                              :title="subchild.title"
+                            >
+                              <span class="sr-only">{{ subchild.title }}</span>
+                            </NuxtLink>
+                          </div>
+                          <ul v-if="subchild.children && !closedTreeNodes.some(i => subchild.path === i)">
+                            <li
+                              v-for="grandchild in subchild.children.filter((i: ContentNavigationItem) => i.path !== subchild.path)"
+                              :key="grandchild.path"
+                              class="grid"
+                            >
+                              <div
+                                class="pl-12 relative flex items-center gap-1 px-4 py-2 text-sm border-l-4 border-transparent has-[.active]:border-red-600 dark:has-[.active]:border-red-400 has-[.active]:bg-gray-25 dark:has-[.active]:bg-gray-800 hover:bg-gray-25 dark:hover:bg-gray-800"
                               >
-                                <div
-                                  class="pl-12 relative flex items-center gap-1 px-4 py-2 text-sm border-l-4 border-transparent has-[.active]:border-red-600 dark:has-[.active]:border-red-400 has-[.active]:bg-gray-25 dark:has-[.active]:bg-gray-800 hover:bg-gray-25 dark:hover:bg-gray-800"
+                                <button
+                                  v-if="grandchild.children"
+                                  class="w-4 text-left z-10 ml-8 hover:text-red-600 dark:hover:text-red-300"
+                                  type="button"
+                                  @click.prevent="toggleTreeNode(grandchild)"
                                 >
-                                  <button
-                                    v-if="grandchild.children"
-                                    class="w-4 text-left z-10 ml-8 hover:text-red-600 dark:hover:text-red-300"
-                                    type="button"
-                                    @click.prevent="toggleTreeNode(grandchild)"
+                                  <svg
+                                    v-if="closedTreeNodes.some(i => grandchild.path === i)"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="20"
+                                    height="32"
+                                    viewBox="0 0 320 512"
+                                    class="h-3 w-auto inline-block"
                                   >
-                                    <svg
-                                      v-if="closedTreeNodes.some(i => grandchild._path === i)"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width="20"
-                                      height="32"
-                                      viewBox="0 0 320 512"
-                                      class="h-3 w-auto inline-block"
-                                    >
-                                      <path
-                                        fill="currentColor"
-                                        d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256L73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
-                                      />
-                                    </svg>
-                                    <svg
-                                      v-else
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width="32"
-                                      height="32"
-                                      viewBox="0 0 512 512"
-                                      class="h-3 w-auto inline-block"
-                                    >
-                                      <path
-                                        fill="currentColor"
-                                        d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7L86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
-                                      />
-                                    </svg>
-                                    <span class="sr-only">Toggle tree</span>
-                                  </button>
-                                  <span class="line-clamp-1">{{ grandchild.title }}</span>
-                                  <NuxtLink
-                                    :to="grandchild._path"
-                                    active-class="active"
-                                    class="absolute inset-0"
-                                    :title="grandchild.title"
+                                    <path
+                                      fill="currentColor"
+                                      d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256L73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
+                                    />
+                                  </svg>
+                                  <svg
+                                    v-else
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="32"
+                                    height="32"
+                                    viewBox="0 0 512 512"
+                                    class="h-3 w-auto inline-block"
                                   >
-                                    <span class="sr-only">{{ grandchild.title }}</span>
-                                  </NuxtLink>
-                                </div>
-                              </li>
-                            </ul>
-                          </li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-          </template>
-        </ContentNavigation>
+                                    <path
+                                      fill="currentColor"
+                                      d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7L86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                                    />
+                                  </svg>
+                                  <span class="sr-only">Toggle tree</span>
+                                </button>
+                                <span class="line-clamp-1">{{ grandchild.title }}</span>
+                                <NuxtLink
+                                  :to="grandchild.path"
+                                  active-class="active"
+                                  class="absolute inset-0"
+                                  :title="grandchild.title"
+                                >
+                                  <span class="sr-only">{{ grandchild.title }}</span>
+                                </NuxtLink>
+                              </div>
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </template>
         <hr
-          v-if="toc?.links.length > 0"
+          v-if="toc && toc.links.length > 0"
           class="my-8 border-gray-200 dark:border-gray-700"
         >
         <div
-          v-if="toc?.links.length > 0"
+          v-if="toc && toc.links.length > 0"
         >
           <div class="flex gap-2 items-center mb-2">
             <svg
@@ -318,6 +310,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { ContentNavigationItem } from '@nuxt/content'
+
 const {
   appSuitePrefix,
   appSuite,
@@ -329,18 +323,25 @@ const showPanel = ref(false)
 const route = useRoute()
 const firstPart = route.path.split('/')[1]
 
-const navQuery = queryContent(firstPart)
+const { data: navigation } = await useAsyncData('mobile-navigation', () => {
+  return queryCollectionNavigation('content')
+})
+
+const { data: sidebar } = await useAsyncData('mobile-sidebar', () => {
+  if (!firstPart) return Promise.resolve(null)
+  return queryCollectionNavigation('content').where('path', 'LIKE', `/${firstPart}%`)
+})
 
 const darkMode = useCookie('dark-mode-toggle')
-const { toc } = useContent()
+const toc = useToc()
 
 const closedTreeNodes = ref<string[]>([])
 
-const toggleTreeNode = (link: { _path: string }) => {
-  if (closedTreeNodes.value.some(i => link._path === i)) {
-    closedTreeNodes.value = closedTreeNodes.value.filter(i => link._path !== i)
+const toggleTreeNode = (link: { path: string }) => {
+  if (closedTreeNodes.value.some(i => link.path === i)) {
+    closedTreeNodes.value = closedTreeNodes.value.filter(i => link.path !== i)
   } else {
-    closedTreeNodes.value.push(link._path)
+    closedTreeNodes.value.push(link.path)
   }
 }
 </script>

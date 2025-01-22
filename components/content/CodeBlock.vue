@@ -251,8 +251,8 @@
       data-id="content"
       class="prose prose-blue dark:prose-invert prose-pre:bg-opacity-0 dark:prose-pre:bg-opacity-0 prose-pre:border-none dark:prose-pre:border-none"
     >
-      <ContentSlot v-if="useCompleteBlock" :use="$slots.complete" />
-      <ContentSlot v-else :use="$slots.default" />
+      <slot v-if="useCompleteBlock" :use="$slots.complete" />
+      <slot v-else :use="$slots.default" />
     </div>
   </div>
 </template>
