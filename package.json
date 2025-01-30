@@ -14,14 +14,14 @@
     "release-beta": "echo 'prerelease' | ./scripts/release-beta.sh"
   },
   "devDependencies": {
-    "@nuxt/eslint": "^0.7.5",
-    "eslint": "^9.18.0",
-    "nuxt": "^3.15.2",
+    "@nuxt/eslint": "^0.7.6",
+    "eslint": "^9.19.0",
+    "nuxt": "^3.15.4",
     "typescript": "^5.7.3",
     "vue": "latest"
   },
   "dependencies": {
-    "@nuxt/content": "^3.0.0",
+    "@nuxt/content": "^3.0.1",
     "@nuxtjs/tailwindcss": "^6.13.1",
     "@sds/components-vue3": "^3.10.0",
     "@sds/tailwindcss-3": "^3.0.10",
