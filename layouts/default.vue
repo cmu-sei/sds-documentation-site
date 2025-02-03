@@ -345,11 +345,11 @@ const route = useRoute()
 const firstPart = route.path.split('/')[1]
 const showScrollspy = ref(false)
 
-const { data: navigation } = await useAsyncData('navigation', () => {
+const { data: navigation } = await useAsyncData(`navigation-${route.path}`, () => {
   return queryCollectionNavigation('content')
 })
 
-const { data: sidebar } = await useAsyncData('sidebar', () => {
+const { data: sidebar } = await useAsyncData(`sidebar-${route.path}`, () => {
   if (!firstPart) return Promise.resolve(null)
   return queryCollectionNavigation('content').where('path', 'LIKE', `/${firstPart}%`)
 })
