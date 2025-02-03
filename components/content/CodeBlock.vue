@@ -38,7 +38,7 @@
           'bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-200': quality === 'bad'
         }"
       >
-      <svg
+        <svg
           v-if="quality === 'bad'"
           xmlns="http://www.w3.org/2000/svg"
           width="11"
@@ -281,8 +281,8 @@
       data-id="content"
       class="prose prose-blue dark:prose-invert prose-pre:bg-opacity-0 dark:prose-pre:bg-opacity-0 prose-pre:border-none dark:prose-pre:border-none"
     >
-      <slot v-if="useCompleteBlock" :use="$slots.complete" />
-      <slot v-else :use="$slots.default" />
+      <slot v-if="useCompleteBlock" name="complete" />
+      <slot v-else />
     </div>
   </div>
 </template>
