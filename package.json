@@ -1,7 +1,7 @@
 {
   "name": "@sds/nuxt-layer-documentation-template",
   "type": "module",
-  "version": "0.0.16",
+  "version": "0.0.17-beta.0",
   "main": "./nuxt.config.ts",
   "scripts": {
     "dev": "nuxi dev .playground",
