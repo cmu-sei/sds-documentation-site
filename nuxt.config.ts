@@ -1,35 +1,32 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-
   modules: ['@nuxt/content', '@nuxtjs/tailwindcss'],
 
   content: {
-    documentDriven: true,
-    experimental: {
-      search: {
-        indexed: true
+    build: {
+      markdown: {
+        highlight: {
+          theme: {
+            // Default theme (same as single string)
+            default: 'github-light',
+            // Theme used if `html.dark`
+            dark: 'github-dark',
+            // Theme used if `html.sepia`
+            sepia: 'monokai'
+          },
+          langs: [
+            'bash',
+            'c',
+            'cpp',
+            'java',
+            'javascript',
+            'perl',
+            'python',
+            'rust'
+          ]
+        }
       }
-    },
-    highlight: {
-      theme: {
-        // Default theme (same as single string)
-        default: 'github-light',
-        // Theme used if `html.dark`
-        dark: 'github-dark',
-        // Theme used if `html.sepia`
-        sepia: 'monokai'
-      },
-      langs: [
-        'bash',
-        'c',
-        'cpp',
-        'java',
-        'javascript',
-        'perl',
-        'python',
-        'rust'
-      ]
     }
   },
 
@@ -42,10 +39,6 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/png', sizes: '96x96', href: '/favicon-96x96.png' }
       ]
     }
-  },
-
-  routeRules: {
-    '/': { prerender: true }
   },
 
   css: [
@@ -63,5 +56,7 @@ export default defineNuxtConfig({
     prerender: {
       routes: ['/sitemap.xml']
     }
-  }
+  },
+
+  compatibilityDate: '2025-01-22'
 })

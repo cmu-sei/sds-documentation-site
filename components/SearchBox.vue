@@ -75,12 +75,35 @@ const searchText = ref('')
 const selectedIndex = ref(0)
 const results = ref()
 
-watch(searchText, async () => {
+const route = useRoute()
+
+const { data: searchData } = await useAsyncData(`search-box-${route.path}`, () => {
+  return queryCollectionSearchSections('content')
+})
+
+const removeDuplicatesByTitleAndURL = (array: { id: string; title: string; titles: string[]; level: number; content: string; }[]) => {
+  const urlMap = new Map()
+
+  array.forEach(item => {
+    // If the title is not in the map or the current URL is shorter, update the map
+    if (!urlMap.has(item.title) || item.id.length < urlMap.get(item.title).length) {
+      urlMap.set(item.title, item.id)
+    }
+  })
+
+  // Create an array of unique items based on the shortest URL for each title
+  return array.filter(item => urlMap.get(item.title) === item.id)
+}
+
+watch(searchText, async (value) => {
   selectedIndex.value = 0
-  const response = await searchContent(searchText)
-  results.value = response.value?.filter((item, index, self) =>
-    index === self.findIndex((i) => i.title === item.title)
-  ).slice(0, 10)
+  if (searchData.value) {
+    results.value = removeDuplicatesByTitleAndURL(searchData.value.filter((item) =>
+      item.title.toLowerCase().includes(value.toLowerCase())
+    )).slice(0, 10)
+  } else {
+    results.value = []
+  }
 })
 
 watch(modelValue, (value) => {
