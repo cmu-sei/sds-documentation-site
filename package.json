@@ -14,19 +14,19 @@
     "release-beta": "echo 'prerelease' | ./scripts/release-beta.sh"
   },
   "devDependencies": {
-    "@nuxt/eslint": "^1.0.0",
-    "eslint": "^9.19.0",
-    "nuxt": "^3.15.4",
-    "typescript": "^5.7.3",
+    "@nuxt/eslint": "^1.1.0",
+    "eslint": "^9.21.0",
+    "nuxt": "^3.16.0",
+    "typescript": "^5.8.2",
     "vue": "latest"
   },
   "dependencies": {
-    "@nuxt/content": "^3.1.0",
-    "@nuxtjs/tailwindcss": "^6.13.1",
-    "@sds/components-vue3": "^3.10.0",
-    "@sds/tailwindcss-3": "^3.0.10",
+    "@cmu-sei/sei-design-system": "^3.12.1-next.1",
+    "@nuxt/content": "^3.3.0",
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.16",
-    "sitemap": "^8.0.0"
+    "@tailwindcss/vite": "^4.0.12",
+    "sitemap": "^8.0.0",
+    "tailwindcss": "^4.0.12"
   }
 }
