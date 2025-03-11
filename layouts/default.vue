@@ -337,7 +337,7 @@ const {
   pageTitle
 } = useAppConfig()
 
-const darkMode = useCookie('dark-mode-toggle')
+const darkMode = useCookie('dark-mode-toggle', { default: () => false })
 const toc = useToc()
 const showSearchModal = ref(false)
 

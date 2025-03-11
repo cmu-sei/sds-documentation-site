@@ -71,3 +71,14 @@ npm preview
 ```
 
 Checkout the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+## Google Analytics
+
+We use the `nuxt-gtag` package to integrate with Google Tag Manager. See their [documentation](https://www.npmjs.com/package/nuxt-gtag) for details.
+
+Instead of hard-coding your Google tag ID in your Nuxt configuration, you can set your desired option in your project's `.env` file, leveraging automatically replaced public runtime config values by matching environment variables at runtime.
+
+```bash
+# Overwrites the `gtag.id` module option
+NUXT_PUBLIC_GTAG_ID=G-XXXXXXXXXX
+```
