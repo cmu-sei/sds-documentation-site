@@ -6,11 +6,11 @@
       'border-gray-200 dark:border-gray-800 prose-pre:bg-opacity-0 dark:prose-pre:bg-opacity-0 prose-pre:border-none dark:prose-pre:border-none': quality === 'average',
       'border-red-200 dark:border-red-800 prose-pre:bg-opacity-0 dark:prose-pre:bg-opacity-0 prose-pre:border-none dark:prose-pre:border-none': quality === 'bad',
     }"
-    class="max-w-none border rounded relative bg-white dark:bg-black"
+    class="max-w-none border rounded-sm relative bg-white dark:bg-black"
   >
     <div
       v-if="title"
-      class="rounded-t px-4 py-2 border-b flex items-center gap-2 relative"
+      class="rounded-t-sm px-4 py-2 border-b flex items-center gap-2 relative"
       :class="{
         'bg-blue-25 dark:bg-blue-900 border-blue-100 dark:border-blue-900': quality === 'good',
         'bg-gray-25 dark:bg-gray-900 border-gray-100 dark:border-gray-900': quality === 'average',
@@ -32,7 +32,7 @@
       <p class="text-sm text-gray-700 dark:text-gray-300">{{ title }}</p>
       <div
         v-if="quality !== 'average'"
-        class="absolute left-1/2 -translate-x-1/2 text-sm p-2 rounded flex gap-1 items-center"
+        class="absolute left-1/2 -translate-x-1/2 text-sm p-2 rounded-sm flex gap-1 items-center"
         :class="{
           'bg-blue-100 text-blue-700 dark:bg-blue-800 dark:text-blue-200': quality === 'good',
           'bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-200': quality === 'bad'
@@ -156,7 +156,7 @@
         <template #trigger>
           <div
             v-if="quality !== 'average'"
-            class="mx-auto text-sm p-2 rounded flex gap-1 items-center"
+            class="mx-auto text-sm p-2 rounded-sm flex gap-1 items-center"
             :class="{
               'bg-blue-100 text-blue-700 dark:bg-blue-800 dark:text-blue-200': quality === 'good',
               'bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-200': quality === 'bad'

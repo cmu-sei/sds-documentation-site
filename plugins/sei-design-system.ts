@@ -1,5 +1,5 @@
-import '@sds/components-vue3/volar'
-import SdsComponents from '@sds/components-vue3'
+import '@cmu-sei/sei-design-system/volar'
+import SdsComponents from '@cmu-sei/sei-design-system'
 
 export default defineNuxtPlugin(nuxtApp => {
   nuxtApp.vueApp.use(SdsComponents)

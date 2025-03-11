@@ -2,7 +2,7 @@
   <div>
     <button
       ref="searchButtonRef"
-      class="flex items-center gap-2 text-sm w-48 py-2 px-3 italic text-gray-500 transition-colors duration-150 transform bg-white border border-gray-200 rounded shadow-inner whitespace-nowrap dark:bg-gray-900 dark:text-gray-300 dark:border-gray-800 hover:text-gray-600 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-700 outline-none"
+      class="flex items-center gap-2 text-sm w-48 py-2 px-3 italic text-gray-500 transition-colors duration-150 transform bg-white border border-gray-200 rounded-sm shadow-inner whitespace-nowrap dark:bg-gray-900 dark:text-gray-300 dark:border-gray-800 hover:text-gray-600 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-700 outline-hidden"
       title="Use '/' to bring up search anytime."
       @click="handleShowSearchModalClick"
       @keydown="handleShowSearchModalKeyDown"
@@ -16,7 +16,7 @@
       </svg>
       <span>Search</span>
       <span
-        class="ml-auto border border-gray-200 dark:border-gray-700 px-1.5 rounded"
+        class="ml-auto border border-gray-200 dark:border-gray-700 px-1.5 rounded-sm"
       >/</span>
     </button>
     <sds-modal v-model="modelValue" size="lg">
@@ -35,7 +35,7 @@
           v-for="(item, index) of results"
           :key="item.id"
           :to="item.id"
-          class="grid w-full px-4 py-2 rounded"
+          class="grid w-full px-4 py-2 rounded-sm"
           :class="{
             'bg-gray-50 dark:bg-gray-800': selectedIndex === index,
           }"
@@ -52,7 +52,7 @@
       </nav>
       <div
         v-else
-        class="p-6 my-4 text-blue-800 bg-blue-25 border border-blue-200 rounded dark:bg-blue-950 dark:border-blue-800 dark:text-blue-200"
+        class="p-6 my-4 text-blue-800 bg-blue-25 border border-blue-200 rounded-sm dark:bg-blue-950 dark:border-blue-800 dark:text-blue-200"
       >
         <p v-if="searchText === ''">
           Type a query in the search box above to display a list of results.

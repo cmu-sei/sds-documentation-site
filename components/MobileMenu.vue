@@ -332,7 +332,7 @@ const { data: sidebar } = await useAsyncData(`sidebar-${route.path}`, () => {
   return queryCollectionNavigation('content').where('path', 'LIKE', `/${firstPart}%`)
 })
 
-const darkMode = useCookie('dark-mode-toggle')
+const darkMode = useCookie('dark-mode-toggle', { default: () => false })
 const toc = useToc()
 
 const closedTreeNodes = ref<string[]>([])

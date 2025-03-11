@@ -1,7 +1,9 @@
+import tailwindcss from '@tailwindcss/vite'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ['@nuxt/content', '@nuxtjs/tailwindcss'],
+  modules: ['nuxt-gtag', '@nuxt/content'],
 
   content: {
     build: {
@@ -43,13 +45,21 @@ export default defineNuxtConfig({
 
   css: [
     // Provide the Open Sans font used by our Tailwind preset
-    '@sds/tailwindcss-3/open-sans/index.css',
+    '@cmu-sei/sei-design-system/open-sans/index.css',
+    // Provide the Tailwind CSS directives to our app
+    '../assets/css/main.css',
     // Provide the CSS for every component
-    '@sds/components-vue3/dist/style.css',
+    '@cmu-sei/sei-design-system/dist/style.css',
   ],
 
   build: {
-    transpile: ['@sds/components-vue3'],
+    transpile: ['@cmu-sei/sei-design-system'],
+  },
+
+  vite: {
+    plugins: [
+      tailwindcss(),
+    ],
   },
 
   nitro: {
