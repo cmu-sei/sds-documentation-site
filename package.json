@@ -1,5 +1,5 @@
 {
-  "name": "@sds/nuxt-layer-documentation-template",
+  "name": "@cmu-sei/sds-documentation-site",
   "type": "module",
   "version": "0.0.16",
   "main": "./nuxt.config.ts",
@@ -14,18 +14,18 @@
     "release-beta": "echo 'prerelease' | ./scripts/release-beta.sh"
   },
   "devDependencies": {
-    "@nuxt/eslint": "^1.2.0",
-    "eslint": "^9.22.0",
-    "nuxt": "^3.16.0",
+    "@nuxt/eslint": "^1.3.0",
+    "eslint": "^9.23.0",
+    "nuxt": "^3.16.2",
     "typescript": "^5.8.2",
     "vue": "latest"
   },
   "dependencies": {
     "@cmu-sei/sei-design-system": "^3.12.1-next.4",
-    "@nuxt/content": "^3.3.0",
+    "@nuxt/content": "^3.4.0",
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.16",
-    "@tailwindcss/vite": "^4.0.12",
+    "@tailwindcss/vite": "^4.1.3",
     "nuxt-gtag": "^3.0.2",
     "sitemap": "^8.0.0",
     "tailwindcss": "^4.0.12"
