@@ -10,7 +10,8 @@ const {
 useHead({
   titleTemplate: (title) => `${title} | ${pageTitle}`,
   htmlAttrs: {
-    lang: 'en-US'
+    lang: 'en-US',
+    class: 'sds-theme-forge'
   }
 })
 </script>
