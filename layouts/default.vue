@@ -45,7 +45,7 @@
               class="tab tab-underline tab-red py-5"
               :title="link.title"
               :class="{
-                'active': link.path.startsWith(`/${firstPart}`) && !!firstPart
+                'active': link.path === `/${firstPart}` && !!firstPart
               }"
             >{{ link.title }}</NuxtLink>
           </li>
