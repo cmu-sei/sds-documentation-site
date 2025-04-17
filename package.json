@@ -21,7 +21,7 @@
     "vue": "latest"
   },
   "dependencies": {
-    "@cmu-sei/sei-design-system": "^3.12.1-next.4",
+    "@cmu-sei/sei-design-system": "^3.14.1-beta.21",
     "@nuxt/content": "^3.4.0",
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.16",
