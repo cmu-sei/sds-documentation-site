@@ -4,12 +4,12 @@
   "version": "0.0.20",
   "main": "./nuxt.config.ts",
   "scripts": {
-    "dev": "nuxi dev .playground",
-    "dev:prepare": "nuxt prepare .playground",
-    "build": "nuxt build .playground",
-    "generate": "nuxt generate .playground",
-    "preview": "nuxt preview .playground",
-    "lint": "eslint .",
+    "dev": "npx nuxi dev .playground",
+    "dev:prepare": "npx nuxt prepare .playground",
+    "build": "npx nuxt build .playground",
+    "generate": "npx nuxt generate .playground",
+    "preview": "npx nuxt preview .playground",
+    "lint": "npx eslint .",
     "change-registry-in-package-lock": "./scripts/update-package-lock.sh"
   },
   "devDependencies": {
