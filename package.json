@@ -10,7 +10,8 @@
     "generate": "npx nuxt generate .playground",
     "preview": "npx nuxt preview .playground",
     "lint": "npx eslint .",
-    "change-registry-in-package-lock": "./scripts/update-package-lock.sh"
+    "change-registry-in-package-lock": "./scripts/update-package-lock.sh",
+    "bundle:release": "./scripts/bundle-release.sh"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.3.0",
