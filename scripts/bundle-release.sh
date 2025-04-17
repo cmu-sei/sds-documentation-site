@@ -4,7 +4,10 @@ set -e
 
 start=$SECONDS
 
-printf "\nlint check all components...\n"
+printf "\nprepare .nuxt directory...\n"
+npm run dev:prepare
+
+printf "\nlint check...\n"
 npm run lint
 
 duration=$(( SECONDS - start ))
