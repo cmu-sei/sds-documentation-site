@@ -10,8 +10,7 @@
     "generate": "nuxt generate .playground",
     "preview": "nuxt preview .playground",
     "lint": "eslint .",
-    "release": "./scripts/release.sh",
-    "release-beta": "echo 'prerelease' | ./scripts/release-beta.sh"
+    "change-registry-in-package-lock": "./scripts/update-package-lock.sh"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.3.0",

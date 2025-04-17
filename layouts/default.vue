@@ -350,8 +350,8 @@ const { data: navigation } = await useAsyncData(`navigation-${route.path}`, () =
 })
 
 const { data: sidebar } = await useAsyncData(`sidebar-${route.path}`, () => {
-  if (!firstPart) return Promise.resolve(null)
-  return queryCollectionNavigation('content').where('path', 'LIKE', `/${firstPart}%`)
+  if (!firstPart || `/${firstPart}` !== route.path) return Promise.resolve(null)
+  return queryCollectionNavigation('content').where('path', '=', `/${firstPart}`)
 })
 
 const closedTreeNodes = ref<string[]>([])
