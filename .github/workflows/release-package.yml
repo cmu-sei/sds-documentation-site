@@ -24,22 +24,6 @@ jobs:
         # Defaults to the user or organization that owns the workflow file
         scope: '@cmu-sei'
 
-    - name: Cache dependencies
-      uses: actions/cache@v4
-      id: cache
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
-
-    - name: Install dependencies
-      run: npm install
-
-    - name: Prepare .nuxt directory
-      run: npm run dev:prepare
-
-    - name: Lint project
-      run: npm run lint
-
     - name: Publish package
       run: npm publish
       env:
