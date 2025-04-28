@@ -15,7 +15,10 @@
   <div class="grid grid-cols-12 max-w-7xl mx-auto px-4 py-6 gap-6">
 
     <!-- Sidebar: sticky -->
-    <aside class="hidden lg:block lg:col-span-3 sticky top-[90px] self-start h-[calc(100vh-90px)] overflow-y-auto">
+    <aside
+      ref="leftBar"
+      class="hidden lg:block lg:col-span-3 sticky top-[90px] self-start h-[calc(100vh-90px)] overflow-y-auto"
+    >
       <slot name="left-bar" />
     </aside>
 
@@ -121,3 +124,21 @@
 
 </div>
 </template>
+
+<script setup lang="ts">
+const leftBar = useTemplateRef('leftBar')
+const lastScroll = useState<number>('lastScroll')
+
+const { y, isScrolling } = useScroll(leftBar)
+
+watch(() => isScrolling.value, () => {
+  lastScroll.value = y.value
+})
+
+onMounted(() => {
+  if (lastScroll.value) {
+    leftBar.value?.scrollTo(0, lastScroll.value)
+    lastScroll.value = 0
+  }
+})
+</script>
