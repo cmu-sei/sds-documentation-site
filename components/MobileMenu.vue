@@ -275,36 +275,6 @@
           />
         </div>
       </template>
-      <template #footer>
-        <SdsActionButton
-          block
-          @click="darkMode = !darkMode"
-        >
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              v-if="darkMode"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-            />
-            <path
-              v-else
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-            />
-          </svg>
-          <span>{{ darkMode ? 'Dark' : 'Light' }} mode</span>
-        </SdsActionButton>
-      </template>
     </SdsPanel>
   </div>
 </template>
@@ -321,18 +291,17 @@ const {
 const showPanel = ref(false)
 
 const route = useRoute()
-const firstPart = route.path.split('/')[1]
+const firstPart = computed(() => route.path.split('/')[1])
 
-const { data: navigation } = await useAsyncData(`navigation-${route.path}`, () => {
+const { data: navigation } = await useAsyncData(`mobile-navigation-${route.path}`, () => {
   return queryCollectionNavigation('content')
 })
 
-const { data: sidebar } = await useAsyncData(`sidebar-${route.path}`, () => {
-  if (!firstPart) return Promise.resolve(null)
-  return queryCollectionNavigation('content').where('path', 'LIKE', `/${firstPart}%`)
+const { data: sidebar } = await useAsyncData(`mobile-sidebar-${route.path}`, () => {
+  if (!firstPart.value) return Promise.resolve(null)
+  return queryCollectionNavigation('content').where('path', 'LIKE', `/${firstPart.value}%`)
 })
 
-const darkMode = useCookie('dark-mode-toggle', { default: () => false })
 const toc = useToc()
 
 const closedTreeNodes = ref<string[]>([])

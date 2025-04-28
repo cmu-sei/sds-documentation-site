@@ -1,11 +1,10 @@
 <template>
   <div>
-    <button
+    <SdsActionButton
       ref="searchButtonRef"
-      class="flex items-center gap-2 text-sm w-48 py-2 px-3 italic text-gray-500 transition-colors duration-150 transform bg-white border border-gray-200 rounded-sm shadow-inner whitespace-nowrap dark:bg-gray-900 dark:text-gray-300 dark:border-gray-800 hover:text-gray-600 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-700 outline-hidden"
+      size="md"
       title="Use '/' to bring up search anytime."
       @click="handleShowSearchModalClick"
-      @keydown="handleShowSearchModalKeyDown"
     >
       <svg class="inline-block h-5 w-auto" fill="currentColor" viewBox="0 0 20 20">
         <path
@@ -14,11 +13,8 @@
           d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
         />
       </svg>
-      <span>Search</span>
-      <span
-        class="ml-auto border border-gray-200 dark:border-gray-700 px-1.5 rounded-sm"
-      >/</span>
-    </button>
+      <span class="sr-only">Search</span>
+    </SdsActionButton>
     <sds-modal v-model="modelValue" size="lg">
       <template #title>
         <h2>Search</h2>
@@ -106,12 +102,6 @@ watch(searchText, async (value) => {
   }
 })
 
-watch(modelValue, (value) => {
-  if (!value) {
-    searchButtonRef.value?.focus()
-  }
-})
-
 onMounted(() => {
   requestAnimationFrame(() => {
     document.addEventListener('keyup', handleKeyUp)
@@ -149,16 +139,6 @@ const handleKeyUp = async (e: KeyboardEvent) => {
 
 const handleShowSearchModalClick = () => {
   searchText.value = ''
-  modelValue.value = true
-  setFocusOnInput()
-}
-
-const handleShowSearchModalKeyDown = (e: KeyboardEvent) => {
-  const input = String.fromCharCode(e.keyCode)
-  const isAlphaNum = /[a-zA-Z0-9-_ ]/.test(input)
-  if (!isAlphaNum || e.metaKey) return
-  if (!modelValue.value)
-    searchText.value = String.fromCharCode(e.keyCode).trim()
   modelValue.value = true
   setFocusOnInput()
 }

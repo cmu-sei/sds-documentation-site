@@ -3,6 +3,7 @@ export default defineAppConfig({
     hostname: '',
     changefreq: 'monthly'
   },
+  githubUrl: 'https://github.com',
   appSuitePrefix: 'SDS',
   appSuite: 'Docs',
   pageTitle: 'Sample Documentation Site'
@@ -14,6 +15,7 @@ declare module '@nuxt/schema' {
       hostname: string,
       changefreq?: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never'
     }
+    githubUrl?: string
     appSuitePrefix: string,
     appSuite: string,
     pageTitle: string
