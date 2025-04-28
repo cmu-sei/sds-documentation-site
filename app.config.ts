@@ -3,7 +3,6 @@ export default defineAppConfig({
     hostname: '',
     changefreq: 'monthly'
   },
-  githubUrl: 'https://github.com',
   appSuitePrefix: 'SDS',
   appSuite: 'Docs',
   pageTitle: 'Sample Documentation Site'
