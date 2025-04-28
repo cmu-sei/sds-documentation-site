@@ -1,7 +1,7 @@
 {
   "name": "@cmu-sei/sds-documentation-site",
   "type": "module",
-  "version": "0.0.21-beta.11",
+  "version": "0.0.21-beta.12",
   "main": "./nuxt.config.ts",
   "scripts": {
     "dev": "npx nuxi dev .playground",
