@@ -283,8 +283,33 @@
         lang="en"
       />
       <Body class="bg-white dark:bg-gray-950 text-black dark:text-white" />
-      <div class="prose max-w-none prose-blue dark:prose-invert py-4 mx-auto prose-pre:bg-white prose-pre:border dark:prose-pre:bg-black dark:prose-pre:border-gray-800">
-        <slot />
+      <div>
+        <div class="prose max-w-none prose-blue dark:prose-invert py-4 mx-auto prose-pre:bg-white prose-pre:border dark:prose-pre:bg-black dark:prose-pre:border-gray-800">
+          <slot />
+        </div>
+        <div
+          v-if="surround && surround.length > 0"
+          class="hidden sm:flex gap-2 justify-between w-full border-t border-gray-100 dark:border-gray-900 mt-4 py-8"
+        >
+          <template
+            v-for="(item, index) in surround"
+            :key="item?.stem"
+          >
+            <NuxtLink
+              v-if="item"
+              :to="item.path"
+              class="action-btn action-btn-ghost action-btn-gray"
+            >
+              <svg v-if="index === 0" width="13" height="14" viewBox="0 0 13 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.5977 6.75C12.5977 7.24219 12.2148 7.625 11.75 7.625H3.35547L6.22656 10.5234C6.58203 10.8516 6.58203 11.4258 6.22656 11.7539C6.0625 11.918 5.84375 12 5.625 12C5.37891 12 5.16016 11.918 4.99609 11.7539L0.621094 7.37891C0.265625 7.05078 0.265625 6.47656 0.621094 6.14844L4.99609 1.77344C5.32422 1.41797 5.89844 1.41797 6.22656 1.77344C6.58203 2.10156 6.58203 2.67578 6.22656 3.00391L3.35547 5.875H11.75C12.2148 5.875 12.5977 6.28516 12.5977 6.75Z" fill="#595A5C"/>
+              </svg>
+              <span>{{ item.title }}</span>
+              <svg v-if="index === 1" width="13" height="14" viewBox="0 0 13 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.3516 7.37891L7.97656 11.7539C7.8125 11.918 7.59375 12 7.375 12C7.12891 12 6.91016 11.918 6.74609 11.7539C6.39062 11.4258 6.39062 10.8516 6.74609 10.5234L9.61719 7.625H1.25C0.757812 7.625 0.375 7.24219 0.375 6.75C0.375 6.28516 0.757812 5.875 1.25 5.875H9.61719L6.74609 3.00391C6.39062 2.67578 6.39062 2.10156 6.74609 1.77344C7.07422 1.41797 7.64844 1.41797 7.97656 1.77344L12.3516 6.14844C12.707 6.47656 12.707 7.05078 12.3516 7.37891Z" fill="#595A5C"/>
+              </svg>
+            </NuxtLink>
+          </template>
+        </div>
       </div>
     </template>
     <template #right-bar>
@@ -340,6 +365,10 @@ const showScrollspy = ref(false)
 
 const { data: navigation } = await useAsyncData(`navigation-${route.path}`, () => {
   return queryCollectionNavigation('content')
+})
+
+const { data: surround } = await useAsyncData(`surround-${route.path}`, () => {
+  return queryCollectionItemSurroundings('content', route.path)
 })
 
 const { data: sidebar } = await useAsyncData(`sidebar-${route.path}`, () => {
