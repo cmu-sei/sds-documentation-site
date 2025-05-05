@@ -115,7 +115,6 @@
           </NuxtLink>
           <div class="text-sm text-gray-700 dark:text-gray-300">
             <p>© {{ new Date().getFullYear() }} Carnegie Mellon University</p>
-            <p>Proprietary. SEI Internal Use Only.</p>
           </div>
         </div>
       </slot>

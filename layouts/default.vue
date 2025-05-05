@@ -95,6 +95,7 @@
     <template #left-bar>
       <nav
         v-if="sidebar && sidebar.some(i => i.children)"
+        class="mt-4"
       >
         <ul>
           <li
@@ -105,7 +106,7 @@
             <NuxtLink
               :to="link.path"
               active-class="active"
-              class="line-clamp-2 w-full p-2 text-sm font-bold border-l-2 border-transparent hover:bg-gray-25 dark:hover:bg-gray-900"
+              class="line-clamp-2 w-full px-3 pb-2 text-sm font-semibold border-l-2 border-transparent text-gray-700 dark:text-gray-100 hover:text-black dark:hover:text-white rounded-lg"
               :title="link.title"
             >{{ link.title }}</NuxtLink>
             <ul v-if="link.children">
@@ -115,11 +116,19 @@
                 class="grid"
               >
                 <div
-                  class="relative flex items-center gap-1 p-2 text-sm border-l-2 border-transparent has-[.active]:border-red-600 dark:has-[.active]:border-red-400 has-[.active]:bg-gray-25 dark:has-[.active]:bg-gray-900 hover:bg-gray-25 dark:hover:bg-gray-900"
+                  class="relative flex items-start justify-between gap-1 text-sm border-l-2 border-transparent"
                 >
+                  <NuxtLink
+                    :to="child.path"
+                    active-class="active text-red-600 dark:text-red-300"
+                    class="grow px-3 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
+                  >
+                    <span class="line-clamp-2">{{ child.title }}</span>
+                    <span class="absolute inset-0"/>
+                  </NuxtLink>
                   <button
                     v-if="child.children"
-                    class="w-4 text-left z-10 -mt-1 hover:text-red-600 dark:hover:text-red-300"
+                    class="p-1 rounded-sm text-left mt-1.5 z-10 hover:bg-gray-25 dark:hover:bg-gray-900 dark:bg-gray-950 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white"
                     type="button"
                     @click.prevent="toggleTreeNode(child)"
                   >
@@ -129,7 +138,7 @@
                       width="20"
                       height="32"
                       viewBox="0 0 320 512"
-                      class="h-3 w-auto inline-block"
+                      class="h-3 w-auto"
                     >
                       <path
                         fill="currentColor"
@@ -142,7 +151,7 @@
                       width="32"
                       height="32"
                       viewBox="0 0 512 512"
-                      class="h-3 w-auto inline-block"
+                      class="h-3 w-auto"
                     >
                       <path
                         fill="currentColor"
@@ -151,15 +160,6 @@
                     </svg>
                     <span class="sr-only">Toggle tree</span>
                   </button>
-                  <span class="line-clamp-2">{{ child.title }}</span>
-                  <NuxtLink
-                    :to="child.path"
-                    active-class="active"
-                    class="absolute inset-0"
-                    :title="child.title"
-                  >
-                    <span class="sr-only">{{ child.title }}</span>
-                  </NuxtLink>
                 </div>
                 <ul v-if="child.children && !closedTreeNodes.some(i => child.path === i)">
                   <li
@@ -168,11 +168,19 @@
                     class="grid"
                   >
                     <div
-                      class="pl-6 relative flex items-center gap-1 p-2 text-sm border-l-2 border-transparent has-[.active]:border-red-600 dark:has-[.active]:border-red-400 has-[.active]:bg-gray-25 dark:has-[.active]:bg-gray-900 hover:bg-gray-25 dark:hover:bg-gray-900"
+                      class="ml-4 pl-3 relative flex items-start justify-between gap-1 text-sm border-l-2 border-gray-100 dark:border-gray-900 has-[.active]:border-red-600 dark:has-[.active]:border-red-400"
                     >
+                      <NuxtLink
+                        :to="subchild.path"
+                        active-class="active text-red-600 dark:text-red-300"
+                        class="grow px-3 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
+                      >
+                        <span class="line-clamp-2">{{ subchild.title }}</span>
+                        <span class="absolute inset-0"/>
+                      </NuxtLink>
                       <button
                         v-if="subchild.children"
-                        class="w-4 text-left z-10 -mt-1 hover:text-red-600 dark:hover:text-red-300"
+                        class="p-1 rounded-sm text-left mt-1.5 z-10 hover:bg-gray-25 dark:hover:bg-gray-900 dark:bg-gray-950 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white"
                         type="button"
                         @click.prevent="toggleTreeNode(subchild)"
                       >
@@ -182,7 +190,7 @@
                           width="20"
                           height="32"
                           viewBox="0 0 320 512"
-                          class="h-3 w-auto inline-block"
+                          class="h-3 w-auto"
                         >
                           <path
                             fill="currentColor"
@@ -195,7 +203,7 @@
                           width="32"
                           height="32"
                           viewBox="0 0 512 512"
-                          class="h-3 w-auto inline-block"
+                          class="h-3 w-auto"
                         >
                           <path
                             fill="currentColor"
@@ -204,15 +212,6 @@
                         </svg>
                         <span class="sr-only">Toggle tree</span>
                       </button>
-                      <span class="line-clamp-2">{{ subchild.title }}</span>
-                      <NuxtLink
-                        :to="subchild.path"
-                        active-class="active"
-                        class="absolute inset-0"
-                        :title="subchild.title"
-                      >
-                        <span class="sr-only">{{ subchild.title }}</span>
-                      </NuxtLink>
                     </div>
                     <ul v-if="subchild.children && !closedTreeNodes.some(i => subchild.path === i)">
                       <li
@@ -221,11 +220,19 @@
                         class="grid"
                       >
                         <div
-                          class="pl-10 relative flex items-center gap-1 p-2 text-sm border-l-2 border-transparent has-[.active]:border-red-600 dark:has-[.active]:border-red-400 has-[.active]:bg-gray-25 dark:has-[.active]:bg-gray-900 hover:bg-gray-25 dark:hover:bg-gray-900"
+                          class="ml-4 pl-7 relative flex items-start justify-between gap-1 text-sm border-l-2 border-gray-100 dark:border-gray-900 has-[.active]:border-red-600 dark:has-[.active]:border-red-400"
                         >
+                          <NuxtLink
+                            :to="grandchild.path"
+                            active-class="active text-red-600 dark:text-red-300"
+                            class="grow px-3 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
+                          >
+                            <span class="line-clamp-2">{{ grandchild.title }}</span>
+                            <span class="absolute inset-0"/>
+                          </NuxtLink>
                           <button
                             v-if="grandchild.children"
-                            class="w-4 text-left z-10 -mt-1 ml-8 hover:text-red-600 dark:hover:text-red-300"
+                            class="p-1 rounded-sm text-left mt-1.5 z-10 hover:bg-gray-25 dark:hover:bg-gray-900 dark:bg-gray-950 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white"
                             type="button"
                             @click.prevent="toggleTreeNode(grandchild)"
                           >
@@ -235,7 +242,7 @@
                               width="20"
                               height="32"
                               viewBox="0 0 320 512"
-                              class="h-3 w-auto inline-block"
+                              class="h-4 w-auto"
                             >
                               <path
                                 fill="currentColor"
@@ -248,7 +255,7 @@
                               width="32"
                               height="32"
                               viewBox="0 0 512 512"
-                              class="h-3 w-auto inline-block"
+                              class="h-3 w-auto"
                             >
                               <path
                                 fill="currentColor"
@@ -257,15 +264,6 @@
                             </svg>
                             <span class="sr-only">Toggle tree</span>
                           </button>
-                          <span class="line-clamp-2">{{ grandchild.title }}</span>
-                          <NuxtLink
-                            :to="grandchild.path"
-                            active-class="active"
-                            class="absolute inset-0"
-                            :title="grandchild.title"
-                          >
-                            <span class="sr-only">{{ grandchild.title }}</span>
-                          </NuxtLink>
                         </div>
                       </li>
                     </ul>
@@ -285,13 +283,13 @@
         lang="en"
       />
       <Body class="bg-white dark:bg-gray-950 text-black dark:text-white" />
-      <div class="prose max-w-none prose-blue dark:prose-invert py-8 mx-auto prose-pre:bg-white prose-pre:border dark:prose-pre:bg-black dark:prose-pre:border-gray-800">
+      <div class="prose max-w-none prose-blue dark:prose-invert py-4 mx-auto prose-pre:bg-white prose-pre:border dark:prose-pre:bg-black dark:prose-pre:border-gray-800">
         <slot />
       </div>
     </template>
     <template #right-bar>
       <template v-if="toc && toc.links.length > 0">
-        <div class="flex gap-2 items-center mb-2">
+        <div class="flex gap-2 items-center mt-4 mb-2 text-sm font-semibold text-gray-700 dark:text-gray-100">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="32"
@@ -309,10 +307,16 @@
         <CustomScrollspy
           :items="toc.links"
           parent="#page-content"
-          item-class="px-4 py-2 text-sm border-l dark:border-gray-800 hover:pl-[calc(1rem-1px)] [&.active]:pl-[calc(1rem-1px)] hover:border-l-2 [&.active]:border-l-2 hover:border-gray-600 dark:hover:border-gray-400 [&.active]:font-bold [&.active]:border-red-600 dark:[&.active]:border-red-400 hover:bg-gray-25 dark:hover:bg-gray-900"
+          item-class="group ml-1.5 border-l-2 border-gray-100 dark:border-gray-900 [&.active]:font-semibold [&.active]:border-red-600 dark:[&.active]:border-red-400 [&.active_span]:text-red-600 dark:[&.active_span]:text-red-300"
           active-class="active"
           class="grid"
-        />
+        >
+            <template #default="{ item }">
+              <span
+                class="block mx-3 px-3 py-1.5 text-sm text-gray-600 dark:text-gray-300 group-hover:text-black dark:group-hover:text-white group-hover:bg-gray-25 dark:group-hover:bg-gray-900 rounded-lg"
+              >{{ item.text }}</span>
+            </template>
+          </CustomScrollspy>
       </template>
     </template>
   </LayoutSkeleton>
