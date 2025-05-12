@@ -44,7 +44,7 @@
           </li>
         </ul>
       </div>
-      <div class="ml-auto flex gap-1 items-center py-3">
+      <div class="ml-auto flex gap-2 items-center py-3">
         <NuxtLink
           v-if="githubUrl"
           :to="githubUrl"
@@ -59,6 +59,11 @@
           </svg>
           <span class="sr-only">GitHub</span>
         </NuxtLink>
+        <div
+          v-if="githubUrl"
+          class="w-px h-6 mx-1 bg-gray-200 dark:bg-gray-800"
+          aria-hidden="true"
+        />
         <SdsActionButton
           size="md"
           @click="darkMode = !darkMode"

@@ -17,25 +17,38 @@
     <!-- Sidebar: sticky -->
     <aside
       ref="leftBar"
-      class="hidden lg:block lg:col-span-3 sticky top-[90px] self-start h-[calc(100vh-90px)] overflow-y-auto"
+      class="hidden lg:block lg:col-span-3 sticky top-[90px] self-start lg:h-[calc(100vh-90px)] overflow-y-auto"
     >
       <slot name="left-bar" />
     </aside>
 
     <!-- Main content area -->
-    <main class="col-span-12 lg:col-span-8 xl:col-span-6">
+    <main class="col-span-12 lg:col-span-8 xl:col-span-6 h-[calc(100vh-270px)] sm:h-[calc(100vh-240px)] lg:h-auto">
       <slot name="content" />
     </main>
 
     <!-- Table of Contents: sticky -->
-    <nav class="hidden xl:block col-span-3 sticky top-[90px] self-start h-[calc(100vh-90px)] overflow-y-auto">
+    <nav class="hidden xl:block col-span-3 sticky top-[90px] self-start xl:h-[calc(100vh-90px)] overflow-y-auto">
       <slot name="right-bar" />
     </nav>
 
   </div>
 
   <!-- Footer -->
-  <footer class="border-t border-gray-200 dark:border-gray-800">
+  <footer class="relative border-t mt-4 border-gray-200 dark:border-gray-800">
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      class="hidden sm:block absolute -top-3 left-1/2 bg-white ring-4 ring-white w-6 h-6 text-red-600 dark:text-red-300"
+    >
+      <path
+        d="M14.5625 2.625C15.125 2.875 15.5 3.40625 15.5 4C15.5 12 9.59375 16 7.96875 16C6.40625 16 0.5 12.0625 0.5 4C0.5 3.40625 0.84375 2.875 1.40625 2.625L7.40625 0.125C7.5625 0.0625 7.8125 0.03125 8 0.03125C8.15625 0.03125 8.40625 0.0625 8.5625 0.125L14.5625 2.625ZM11 6.25C11 6.03125 10.8125 5.5 10.25 5.5C10.0312 5.5 9.8125 5.5625 9.65625 5.75L7.1875 8.625L6.25 7.71875C6.125 7.5625 5.9375 7.5 5.75 7.5C5.3125 7.5 5 7.84375 5 8.25C5 8.46875 5.0625 8.65625 5.21875 8.78125L6.71875 10.2812C6.84375 10.4062 7.03125 10.5 7.25 10.5C7.3125 10.5 7.59375 10.5 7.8125 10.25L10.8125 6.75C10.9375 6.625 11 6.4375 11 6.25Z"
+        fill="currentColor"
+      />
+    </svg>
     <div class="max-w-7xl mx-auto px-4 py-8">
       <slot name="footer">
         <div class="flex gap-4 flex-col sm:flex-row sm:items-center sm:justify-between">
