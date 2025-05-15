@@ -150,7 +150,7 @@
                           class="grid"
                         >
                           <div
-                            class="ml-5 pl-2 relative flex items-start justify-between gap-1 text-sm border-l-2 border-gray-100 dark:border-gray-900 has-[.active]:border-red-600 dark:has-[.active]:border-red-400"
+                            class="ml-4 pl-2 relative flex items-start justify-between gap-1 text-sm border-l-2 border-gray-100 dark:border-gray-900 has-[.active]:border-red-600 dark:has-[.active]:border-red-400"
                           >
                             <NuxtLink
                               :to="subchild.path"
@@ -208,7 +208,7 @@
                               class="grid"
                             >
                               <div
-                                class="ml-5 pl-6 relative flex items-start justify-between gap-1 text-sm border-l-2 border-gray-100 dark:border-gray-900 has-[.active]:border-red-600 dark:has-[.active]:border-red-400"
+                                class="ml-4 pl-6 relative flex items-start justify-between gap-1 text-sm border-l-2 border-gray-100 dark:border-gray-900 has-[.active]:border-red-600 dark:has-[.active]:border-red-400"
                               >
                                 <NuxtLink
                                   :to="grandchild.path"
