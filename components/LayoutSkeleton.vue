@@ -23,7 +23,7 @@
     </aside>
 
     <!-- Main content area -->
-    <main class="col-span-12 lg:col-span-8 xl:col-span-6 h-[calc(100vh-270px)] sm:h-[calc(100vh-240px)] lg:h-auto">
+    <main class="col-span-12 lg:col-span-8 xl:col-span-6 min-h-[calc(100vh-270px)] sm:min-h-[calc(100vh-240px)] lg:min-h-auto">
       <slot name="content" />
     </main>
 

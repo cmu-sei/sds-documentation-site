@@ -111,9 +111,17 @@
             <NuxtLink
               :to="link.path"
               active-class="active"
-              class="line-clamp-2 w-full px-3 pb-2 text-sm font-semibold border-l-2 border-transparent text-gray-700 dark:text-gray-100 hover:text-black dark:hover:text-white rounded-lg"
+              class="flex items-center gap-1 w-full px-3 pb-2 text-sm font-semibold border-l-2 border-transparent text-gray-700 dark:text-gray-100 hover:text-black dark:hover:text-white rounded-lg"
               :title="link.title"
-            >{{ link.title }}</NuxtLink>
+            >
+              <Icon
+                v-if="link.icon"
+                :name="link.icon"
+                class="w-4 h-4"
+                :alt="`${link.title} icon`"
+              />
+              <span class="line-clamp-2">{{ link.title }}</span>
+            </NuxtLink>
             <ul v-if="link.children">
               <li
                 v-for="child in link.children.filter((i: ContentNavigationItem) => i.path !== link.path)"
@@ -126,13 +134,19 @@
                   <NuxtLink
                     :to="child.path"
                     active-class="active text-red-600 dark:text-red-300"
-                    class="grow px-3 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
+                    class="flex items-center gap-1 grow px-3 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
                   >
+                    <Icon
+                      v-if="child.icon"
+                      :name="child.icon"
+                      class="w-4 h-4"
+                      :alt="`${child.title} icon`"
+                    />
                     <span class="line-clamp-2">{{ child.title }}</span>
                     <span class="absolute inset-0"/>
                   </NuxtLink>
                   <button
-                    v-if="child.children"
+                    v-if="child.children && child.children.some(i => i.path !== child.path)"
                     class="p-1 rounded-sm text-left mt-1.5 z-10 hover:bg-gray-25 dark:hover:bg-gray-900 dark:bg-gray-950 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white"
                     type="button"
                     @click.prevent="toggleTreeNode(child)"
@@ -166,25 +180,31 @@
                     <span class="sr-only">Toggle tree</span>
                   </button>
                 </div>
-                <ul v-if="child.children && !closedTreeNodes.some(i => child.path === i)">
+                <ul v-if="child.children && !closedTreeNodes.some((i: string) => child.path === i)">
                   <li
                     v-for="subchild in child.children.filter((i: ContentNavigationItem) => i.path !== child.path)"
                     :key="subchild.path"
                     class="grid"
                   >
                     <div
-                      class="ml-4 pl-3 relative flex items-start justify-between gap-1 text-sm border-l-2 border-gray-100 dark:border-gray-900 has-[.active]:border-red-600 dark:has-[.active]:border-red-400"
+                      class="ml-5 pl-2 relative flex items-start justify-between gap-1 text-sm border-l-2 border-gray-100 dark:border-gray-900 has-[.active]:border-red-600 dark:has-[.active]:border-red-400"
                     >
                       <NuxtLink
                         :to="subchild.path"
                         active-class="active text-red-600 dark:text-red-300"
-                        class="grow px-3 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
+                        class="flex items-center gap-1 grow px-3 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
                       >
+                        <Icon
+                          v-if="subchild.icon"
+                          :name="subchild.icon"
+                          class="w-4 h-4"
+                          :alt="`${subchild.title} icon`"
+                        />
                         <span class="line-clamp-2">{{ subchild.title }}</span>
                         <span class="absolute inset-0"/>
                       </NuxtLink>
                       <button
-                        v-if="subchild.children"
+                        v-if="subchild.children && subchild.children.some(i => i.path !== subchild.path)"
                         class="p-1 rounded-sm text-left mt-1.5 z-10 hover:bg-gray-25 dark:hover:bg-gray-900 dark:bg-gray-950 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white"
                         type="button"
                         @click.prevent="toggleTreeNode(subchild)"
@@ -225,18 +245,24 @@
                         class="grid"
                       >
                         <div
-                          class="ml-4 pl-7 relative flex items-start justify-between gap-1 text-sm border-l-2 border-gray-100 dark:border-gray-900 has-[.active]:border-red-600 dark:has-[.active]:border-red-400"
+                          class="ml-5 pl-6 relative flex items-start justify-between gap-1 text-sm border-l-2 border-gray-100 dark:border-gray-900 has-[.active]:border-red-600 dark:has-[.active]:border-red-400"
                         >
                           <NuxtLink
                             :to="grandchild.path"
                             active-class="active text-red-600 dark:text-red-300"
-                            class="grow px-3 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
+                            class="flex items-center gap-1 grow px-3 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
                           >
+                            <Icon
+                              v-if="grandchild.icon"
+                              :name="grandchild.icon"
+                              class="w-4 h-4"
+                              :alt="`${grandchild.title} icon`"
+                            />
                             <span class="line-clamp-2">{{ grandchild.title }}</span>
                             <span class="absolute inset-0"/>
                           </NuxtLink>
                           <button
-                            v-if="grandchild.children"
+                            v-if="grandchild.children && grandchild.children.some(i => i.path !== grandchild.path)"
                             class="p-1 rounded-sm text-left mt-1.5 z-10 hover:bg-gray-25 dark:hover:bg-gray-900 dark:bg-gray-950 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white"
                             type="button"
                             @click.prevent="toggleTreeNode(grandchild)"
