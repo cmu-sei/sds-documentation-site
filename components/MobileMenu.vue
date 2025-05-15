@@ -74,7 +74,7 @@
                   <NuxtLink
                     :to="link.path"
                     active-class="active"
-                    class="flex items-start gap-2 w-full px-3 pb-2 text-sm font-semibold border-l-2 border-transparent text-gray-700 dark:text-gray-100 hover:text-black dark:hover:text-white rounded-lg"
+                    class="flex items-start gap-1.5 w-full px-2 pb-2 text-sm font-semibold border-l-2 border-transparent text-gray-700 dark:text-gray-100 hover:text-black dark:hover:text-white rounded-lg"
                     :title="link.title"
                   >
                     <Icon
@@ -97,7 +97,7 @@
                         <NuxtLink
                           :to="child.path"
                           active-class="active text-red-600 dark:text-red-300"
-                          class="flex items-start gap-2 grow px-3 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
+                          class="flex items-start gap-1.5 grow px-2 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
                         >
                           <Icon
                             v-if="child.icon"
@@ -150,12 +150,12 @@
                           class="grid"
                         >
                           <div
-                            class="ml-4 pl-3 relative flex items-start justify-between gap-1 text-sm border-l-2 border-gray-100 dark:border-gray-900 has-[.active]:border-red-600 dark:has-[.active]:border-red-400"
+                            class="ml-5 pl-2 relative flex items-start justify-between gap-1 text-sm border-l-2 border-gray-100 dark:border-gray-900 has-[.active]:border-red-600 dark:has-[.active]:border-red-400"
                           >
                             <NuxtLink
                               :to="subchild.path"
                               active-class="active text-red-600 dark:text-red-300"
-                              class="flex items-start gap-2 grow px-3 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
+                              class="flex items-start gap-1.5 grow px-2 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
                             >
                               <Icon
                                 v-if="subchild.icon"
@@ -208,12 +208,12 @@
                               class="grid"
                             >
                               <div
-                                class="ml-4 pl-7 relative flex items-start justify-between gap-1 text-sm border-l-2 border-gray-100 dark:border-gray-900 has-[.active]:border-red-600 dark:has-[.active]:border-red-400"
+                                class="ml-5 pl-6 relative flex items-start justify-between gap-1 text-sm border-l-2 border-gray-100 dark:border-gray-900 has-[.active]:border-red-600 dark:has-[.active]:border-red-400"
                               >
                                 <NuxtLink
                                   :to="grandchild.path"
                                   active-class="active text-red-600 dark:text-red-300"
-                                  class="flex items-start gap-2 grow px-3 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
+                                  class="flex items-start gap-1.5 grow px-2 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
                                 >
                                   <Icon
                                     v-if="grandchild.icon"
@@ -301,7 +301,7 @@
           >
             <template #default="{ item }">
               <span
-                class="block mx-3 px-3 py-1.5 text-sm text-gray-600 dark:text-gray-300 group-hover:text-black dark:group-hover:text-white group-hover:bg-gray-25 dark:group-hover:bg-gray-900 rounded-lg"
+                class="block mx-3 px-2 py-1.5 text-sm text-gray-600 dark:text-gray-300 group-hover:text-black dark:group-hover:text-white group-hover:bg-gray-25 dark:group-hover:bg-gray-900 rounded-lg"
               >{{ item.text }}</span>
             </template>
           </CustomScrollspy>
