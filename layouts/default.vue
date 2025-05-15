@@ -117,7 +117,7 @@
               <Icon
                 v-if="link.icon"
                 :name="link.icon"
-                class="w-4 h-4"
+                class="w-4 h-4 shrink-0"
                 :alt="`${link.title} icon`"
               />
               <span class="line-clamp-2">{{ link.title }}</span>
@@ -139,7 +139,7 @@
                     <Icon
                       v-if="child.icon"
                       :name="child.icon"
-                      class="w-4 h-4"
+                      class="w-4 h-4 shrink-0"
                       :alt="`${child.title} icon`"
                     />
                     <span class="line-clamp-2">{{ child.title }}</span>
@@ -197,7 +197,7 @@
                         <Icon
                           v-if="subchild.icon"
                           :name="subchild.icon"
-                          class="w-4 h-4"
+                          class="w-4 h-4 shrink-0"
                           :alt="`${subchild.title} icon`"
                         />
                         <span class="line-clamp-2">{{ subchild.title }}</span>
@@ -255,7 +255,7 @@
                             <Icon
                               v-if="grandchild.icon"
                               :name="grandchild.icon"
-                              class="w-4 h-4"
+                              class="w-4 h-4 shrink-0"
                               :alt="`${grandchild.title} icon`"
                             />
                             <span class="line-clamp-2">{{ grandchild.title }}</span>
