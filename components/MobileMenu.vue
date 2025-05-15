@@ -74,13 +74,13 @@
                   <NuxtLink
                     :to="link.path"
                     active-class="active"
-                    class="flex items-center gap-1 w-full px-3 pb-2 text-sm font-semibold border-l-2 border-transparent text-gray-700 dark:text-gray-100 hover:text-black dark:hover:text-white rounded-lg"
+                    class="flex items-start gap-1 w-full px-3 pb-2 text-sm font-semibold border-l-2 border-transparent text-gray-700 dark:text-gray-100 hover:text-black dark:hover:text-white rounded-lg"
                     :title="link.title"
                   >
                     <Icon
                       v-if="link.icon"
                       :name="link.icon"
-                      class="w-4 h-4 shrink-0"
+                      class="mt-0.5 w-4 h-4 shrink-0"
                       :alt="`${link.title} icon`"
                     />
                     <span class="line-clamp-2">{{ link.title }}</span>
@@ -97,12 +97,12 @@
                         <NuxtLink
                           :to="child.path"
                           active-class="active text-red-600 dark:text-red-300"
-                          class="flex items-center gap-1 grow px-3 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
+                          class="flex items-start gap-1 grow px-3 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
                         >
                           <Icon
                             v-if="child.icon"
                             :name="child.icon"
-                            class="w-4 h-4 shrink-0"
+                            class="mt-0.5 w-4 h-4 shrink-0"
                             :alt="`${child.title} icon`"
                           />
                           <span class="line-clamp-2">{{ child.title }}</span>
@@ -155,12 +155,12 @@
                             <NuxtLink
                               :to="subchild.path"
                               active-class="active text-red-600 dark:text-red-300"
-                              class="flex items-center gap-1 grow px-3 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
+                              class="flex items-start gap-1 grow px-3 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
                             >
                               <Icon
                                 v-if="subchild.icon"
                                 :name="subchild.icon"
-                                class="w-4 h-4 shrink-0"
+                                class="mt-0.5 w-4 h-4 shrink-0"
                                 :alt="`${subchild.title} icon`"
                               />
                               <span class="line-clamp-2">{{ subchild.title }}</span>
@@ -213,12 +213,12 @@
                                 <NuxtLink
                                   :to="grandchild.path"
                                   active-class="active text-red-600 dark:text-red-300"
-                                  class="flex items-center gap-1 grow px-3 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
+                                  class="flex items-start gap-1 grow px-3 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
                                 >
                                   <Icon
                                     v-if="grandchild.icon"
                                     :name="grandchild.icon"
-                                    class="w-4 h-4 shrink-0"
+                                    class="mt-0.5 w-4 h-4 shrink-0"
                                     :alt="`${grandchild.title} icon`"
                                   />
                                   <span class="line-clamp-2">{{ grandchild.title }}</span>
