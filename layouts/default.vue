@@ -394,8 +394,9 @@ const {
   githubUrl,
 } = useAppConfig()
 
-const isFullscreen = useCookie('fullscreen-toggle', { default: () => false })
-const darkMode = useCookie('dark-mode-toggle', { default: () => false })
+const isFullscreen = useState('fullscreen-toggle', () => false)
+const darkMode = useState('dark-mode-toggle', () => false)
+
 const toc = useToc()
 const showSearchModal = ref(false)
 
