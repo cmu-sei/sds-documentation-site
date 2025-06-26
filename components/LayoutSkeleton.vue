@@ -6,13 +6,23 @@
     ref="header"
     class="sticky top-0 z-30 border-b border-gray-200 bg-white dark:bg-gray-950 dark:border-gray-800"
   >
-    <div class="max-w-7xl mx-auto px-4 flex items-center justify-between">
+    <div
+      class="mx-auto px-4 flex items-center justify-between"
+      :class="{
+        'max-w-7xl': !fullwidth
+      }"
+    >
       <slot name="header" />
     </div>
   </header>
 
   <!-- Main layout with sidebar and content -->
-  <div class="grid grid-cols-12 max-w-7xl mx-auto px-4 py-6 lg:gap-12">
+  <div
+    class="grid grid-cols-12 mx-auto px-4 py-6 lg:gap-12"
+    :class="{
+      'max-w-7xl': !fullwidth
+    }"
+  >
 
     <!-- Sidebar: sticky -->
     <aside
@@ -49,7 +59,12 @@
         fill="currentColor"
       />
     </svg>
-    <div class="max-w-7xl mx-auto px-4 py-8">
+    <div
+      class="mx-auto px-4 py-8"
+      :class="{
+        'max-w-7xl': !fullwidth
+      }"
+    >
       <slot name="footer">
         <div class="flex gap-4 flex-col sm:flex-row sm:items-center sm:justify-between">
           <NuxtLink
@@ -138,6 +153,13 @@
 </template>
 
 <script setup lang="ts">
+defineProps({
+  fullwidth: {
+    type: Boolean,
+    default: false
+  }
+})
+
 const leftBar = useTemplateRef('leftBar')
 const lastScroll = useState<number>('lastScroll')
 

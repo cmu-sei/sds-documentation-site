@@ -1,5 +1,5 @@
 <template>
-  <LayoutSkeleton>
+  <LayoutSkeleton :fullwidth="isFullscreen">
     <template #header>
       <div class="flex gap-1 items-center">
         <MobileMenu class="lg:hidden" />
@@ -66,30 +66,38 @@
         />
         <SdsActionButton
           size="md"
+          @click="isFullscreen = !isFullscreen"
+        >
+          <Icon
+            v-if="isFullscreen"
+            name="ic:baseline-fullscreen"
+            class="w-5 h-5"
+            alt="Contract layout icon"
+          />
+          <Icon
+            v-else
+            name="ic:baseline-fullscreen-exit"
+            class="w-5 h-5"
+            alt="Expand layout icon"
+          />
+          <span class="sr-only">{{ isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen' }}</span>
+        </SdsActionButton>
+        <SdsActionButton
+          size="md"
           @click="darkMode = !darkMode"
         >
-          <svg
+          <Icon
+            v-if="darkMode"
+            name="ic:outline-nightlight"
             class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              v-if="darkMode"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-            />
-            <path
-              v-else
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-            />
-          </svg>
+            :alt="`Expand layout icon`"
+          />
+          <Icon
+            v-else
+            name="ic:outline-wb-sunny"
+            class="w-5 h-5"
+            :alt="`Expand layout icon`"
+          />
           <span class="sr-only">{{ darkMode ? 'Dark' : 'Light' }} mode</span>
         </SdsActionButton>
         <SearchBox
@@ -116,7 +124,7 @@
             >
               <Icon
                 v-if="link.icon"
-                :name="link.icon"
+                :name="(link.icon as string)"
                 class="mt-0.5 w-4 h-4 shrink-0"
                 :alt="`${link.title} icon`"
               />
@@ -138,7 +146,7 @@
                   >
                     <Icon
                       v-if="child.icon"
-                      :name="child.icon"
+                      :name="(child.icon as string)"
                       class="mt-0.5 w-4 h-4 shrink-0"
                       :alt="`${child.title} icon`"
                     />
@@ -196,7 +204,7 @@
                       >
                         <Icon
                           v-if="subchild.icon"
-                          :name="subchild.icon"
+                          :name="(subchild.icon as string)"
                           class="mt-0.5 w-4 h-4 shrink-0"
                           :alt="`${subchild.title} icon`"
                         />
@@ -254,7 +262,7 @@
                           >
                             <Icon
                               v-if="grandchild.icon"
-                              :name="grandchild.icon"
+                              :name="(grandchild.icon as string)"
                               class="mt-0.5 w-4 h-4 shrink-0"
                               :alt="`${grandchild.title} icon`"
                             />
@@ -386,6 +394,7 @@ const {
   githubUrl,
 } = useAppConfig()
 
+const isFullscreen = useCookie('fullscreen-toggle', { default: () => false })
 const darkMode = useCookie('dark-mode-toggle', { default: () => false })
 const toc = useToc()
 const showSearchModal = ref(false)
