@@ -404,18 +404,9 @@ const route = useRoute()
 const firstPart = computed(() => route.path.split('/')[1])
 const showScrollspy = ref(false)
 
-const { data: navigation } = await useAsyncData(`navigation-${route.path}`, () => {
-  return queryCollectionNavigation('content')
-})
-
-const { data: surround } = await useAsyncData(`surround-${route.path}`, () => {
-  return queryCollectionItemSurroundings('content', route.path)
-})
-
-const { data: sidebar } = await useAsyncData(`sidebar-${route.path}`, () => {
-  if (!firstPart.value) return Promise.resolve(null)
-  return queryCollectionNavigation('content').where('path', 'LIKE', `/${firstPart.value}%`)
-})
+const navigation = inject<ContentNavigationItem[]>('navigation', [])
+const surround = inject<ContentNavigationItem[]>('surround', [])
+const sidebar = inject<ContentNavigationItem[]>('sidebar', [])
 
 const closedTreeNodes = ref<string[]>([])
 

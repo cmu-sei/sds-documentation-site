@@ -14,6 +14,35 @@ const { data: page } = await useAsyncData(`page-${route.path}`, () => {
 
 useToc().value = page.value?.body.toc
 
+// Layout && Mobile Menu
+
+const firstPart = computed(() => route.path.split('/')[1])
+
+const { data: navigation } = await useAsyncData(`navigation-${route.path}`, () => {
+  return queryCollectionNavigation('content')
+})
+
+const { data: surround } = await useAsyncData(`surround-${route.path}`, () => {
+  return queryCollectionItemSurroundings('content', route.path)
+})
+
+const { data: sidebar } = await useAsyncData(`sidebar-${route.path}`, () => {
+  if (!firstPart.value) return Promise.resolve(null)
+  return queryCollectionNavigation('content').where('path', 'LIKE', `/${firstPart.value}%`)
+})
+
+provide('navigation', navigation)
+provide('surround', surround)
+provide('sidebar', sidebar)
+
+// Search
+
+const { data: searchData } = await useAsyncData(`search-box-${route.path}`, () => {
+  return queryCollectionSearchSections('content')
+})
+
+provide('searchData', searchData)
+
 definePageMeta({
   key: (route) => route.fullPath
 })

@@ -79,7 +79,7 @@
                   >
                     <Icon
                       v-if="link.icon"
-                      :name="link.icon"
+                      :name="(link.icon as string)"
                       class="mt-0.5 w-4 h-4 shrink-0"
                       :alt="`${link.title} icon`"
                     />
@@ -101,7 +101,7 @@
                         >
                           <Icon
                             v-if="child.icon"
-                            :name="child.icon"
+                            :name="(child.icon as string)"
                             class="mt-0.5 w-4 h-4 shrink-0"
                             :alt="`${child.title} icon`"
                           />
@@ -159,7 +159,7 @@
                             >
                               <Icon
                                 v-if="subchild.icon"
-                                :name="subchild.icon"
+                                :name="(subchild.icon as string)"
                                 class="mt-0.5 w-4 h-4 shrink-0"
                                 :alt="`${subchild.title} icon`"
                               />
@@ -217,7 +217,7 @@
                                 >
                                   <Icon
                                     v-if="grandchild.icon"
-                                    :name="grandchild.icon"
+                                    :name="(grandchild.icon as string)"
                                     class="mt-0.5 w-4 h-4 shrink-0"
                                     :alt="`${grandchild.title} icon`"
                                   />
@@ -325,14 +325,8 @@ const showPanel = ref(false)
 const route = useRoute()
 const firstPart = computed(() => route.path.split('/')[1])
 
-const { data: navigation } = await useAsyncData(`mobile-navigation-${route.path}`, () => {
-  return queryCollectionNavigation('content')
-})
-
-const { data: sidebar } = await useAsyncData(`mobile-sidebar-${route.path}`, () => {
-  if (!firstPart.value) return Promise.resolve(null)
-  return queryCollectionNavigation('content').where('path', 'LIKE', `/${firstPart.value}%`)
-})
+const navigation = inject<ContentNavigationItem[]>('navigation', [])
+const sidebar = inject<ContentNavigationItem[]>('sidebar', [])
 
 const toc = useToc()
 

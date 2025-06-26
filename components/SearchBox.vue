@@ -69,11 +69,7 @@ const searchText = ref('')
 const selectedIndex = ref(0)
 const results = ref()
 
-const route = useRoute()
-
-const { data: searchData } = await useAsyncData(`search-box-${route.path}`, () => {
-  return queryCollectionSearchSections('content')
-})
+const searchData = inject<Ref<{ id: string; title: string; titles: string[]; level: number; content: string; }[] | null>>('searchData')
 
 const removeDuplicatesByTitleAndURL = (array: { id: string; title: string; titles: string[]; level: number; content: string; }[]) => {
   const urlMap = new Map()
@@ -91,7 +87,7 @@ const removeDuplicatesByTitleAndURL = (array: { id: string; title: string; title
 
 watch(searchText, async (value) => {
   selectedIndex.value = 0
-  if (searchData.value) {
+  if (searchData && searchData.value) {
     results.value = removeDuplicatesByTitleAndURL(searchData.value.filter((item) =>
       item.title.toLowerCase().includes(value.toLowerCase())
     )).slice(0, 10)
