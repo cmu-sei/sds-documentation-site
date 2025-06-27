@@ -34,11 +34,10 @@
           >
             <NuxtLink
               :to="link.path"
-              active-class="active"
               class="tab tab-underline tab-red py-5"
               :title="link.title"
               :class="{
-                'active': link.path === `/${firstPart}` && !!firstPart
+                'active': isActive(link)
               }"
             >{{ link.title }}</NuxtLink>
           </li>
@@ -118,9 +117,11 @@
           >
             <NuxtLink
               :to="link.path"
-              active-class="active"
               class="flex items-start gap-1.5 w-full px-2 pb-2 text-sm font-semibold border-l-2 border-transparent text-gray-700 dark:text-gray-100 hover:text-black dark:hover:text-white rounded-lg"
               :title="link.title"
+              :class="{
+                'active': isActive(link)
+              }"
             >
               <Icon
                 v-if="link.icon"
@@ -141,8 +142,10 @@
                 >
                   <NuxtLink
                     :to="child.path"
-                    active-class="active text-red-600 dark:text-red-300"
                     class="flex items-start gap-1.5 grow px-2 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
+                    :class="{
+                      'active text-red-600 dark:text-red-300': isActive(child)
+                    }"
                   >
                     <Icon
                       v-if="child.icon"
@@ -199,8 +202,10 @@
                     >
                       <NuxtLink
                         :to="subchild.path"
-                        active-class="active text-red-600 dark:text-red-300"
                         class="flex items-start gap-1.5 grow px-2 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
+                        :class="{
+                          'active text-red-600 dark:text-red-300': isActive(subchild)
+                        }"
                       >
                         <Icon
                           v-if="subchild.icon"
@@ -257,8 +262,10 @@
                         >
                           <NuxtLink
                             :to="grandchild.path"
-                            active-class="active text-red-600 dark:text-red-300"
                             class="flex items-start gap-1.5 grow px-2 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
+                            :class="{
+                              'active text-red-600 dark:text-red-300': isActive(grandchild)
+                            }"
                           >
                             <Icon
                               v-if="grandchild.icon"
@@ -452,6 +459,24 @@ const showSearchModal = ref(false)
 const showScrollspy = ref(false)
 
 const closedTreeNodes = ref<string[]>([])
+
+const removeTrailingSlash = (path: string) => {
+  if (path !== '/' && path.endsWith('/')) {
+    return path.slice(0, -1)
+  }
+  return path
+}
+
+const isActive = (link: { path: string }) => {
+  const normalizedLinkPath = removeTrailingSlash(link.path)
+  const normalizedRoutePath = removeTrailingSlash(route.path)
+  const normalizedFirstPart = firstPart.value ? `/${firstPart.value}` : ''
+
+  return (
+    normalizedLinkPath === normalizedRoutePath ||
+    (normalizedLinkPath === normalizedFirstPart && !!firstPart.value)
+  )
+}
 
 const toggleTreeNode = (link: { path: string }) => {
   if (closedTreeNodes.value.some(i => link.path === i)) {
