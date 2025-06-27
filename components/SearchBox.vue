@@ -69,7 +69,7 @@ const searchText = ref('')
 const selectedIndex = ref(0)
 const results = ref()
 
-const searchData = inject<Ref<{ id: string; title: string; titles: string[]; level: number; content: string; }[] | null>>('searchData')
+const searchData = inject<Ref<{ id: string; title: string; titles: string[]; level: number; content: string; }[] | null>>('searchData', ref(null))
 
 const removeDuplicatesByTitleAndURL = (array: { id: string; title: string; titles: string[]; level: number; content: string; }[]) => {
   const urlMap = new Map()
@@ -87,7 +87,7 @@ const removeDuplicatesByTitleAndURL = (array: { id: string; title: string; title
 
 watch(searchText, async (value) => {
   selectedIndex.value = 0
-  if (searchData && searchData.value) {
+  if (searchData.value) {
     results.value = removeDuplicatesByTitleAndURL(searchData.value.filter((item) =>
       item.title.toLowerCase().includes(value.toLowerCase())
     )).slice(0, 10)

@@ -312,7 +312,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { ContentNavigationItem } from '@nuxt/content'
+import type { ContentNavigationItem, ContentCollectionItem } from '@nuxt/content'
 
 const {
   appSuitePrefix,
@@ -325,10 +325,10 @@ const showPanel = ref(false)
 const route = useRoute()
 const firstPart = computed(() => route.path.split('/')[1])
 
-const navigation = inject<ContentNavigationItem[]>('navigation', [])
-const sidebar = inject<ContentNavigationItem[]>('sidebar', [])
-
-const toc = useToc()
+const page = inject<Ref<ContentCollectionItem | null>>('page', ref(null))
+const toc = computed(() => page.value?.body.toc)
+const navigation = inject<Ref<ContentNavigationItem[] | null>>('navigation', ref(null))
+const sidebar = inject<Ref<ContentNavigationItem[] | null>>('sidebar', ref(null))
 
 const closedTreeNodes = ref<string[]>([])
 

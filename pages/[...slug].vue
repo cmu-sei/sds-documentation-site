@@ -12,7 +12,7 @@ const { data: page } = await useAsyncData(`page-${route.path}`, () => {
   return queryCollection('content').path(route.path).first()
 })
 
-useToc().value = page.value?.body.toc
+provide('page', page)
 
 // Layout && Mobile Menu
 
