@@ -3,7 +3,7 @@ import tailwindcss from '@tailwindcss/vite'
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ['nuxt-gtag', '@vueuse/nuxt', '@nuxt/content', '@nuxt/icon'],
+  modules: ['nuxt-gtag', '@vueuse/nuxt', '@nuxt/content', '@nuxt/icon', 'nuxt-github-pages'],
 
   icon: {
     mode: 'css',
@@ -11,6 +11,11 @@ export default defineNuxtConfig({
     clientBundle: {
       scan: true
     }
+  },
+
+  githubPages: {
+    // Directories to check for output files (default: ['dist', '.output/public'])
+    outputDirs: ['dist', '.output/public', '.playground/.output/public'],
   },
 
   content: {
