@@ -387,7 +387,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ContentNavigationItem } from '@nuxt/content'
+import type { ContentNavigationItem, ContentCollectionItem } from '@nuxt/content'
 
 const {
   pageTitle,
@@ -397,16 +397,17 @@ const {
 const isFullscreen = useState('fullscreen-toggle', () => false)
 const darkMode = useState('dark-mode-toggle', () => false)
 
-const toc = useToc()
 const showSearchModal = ref(false)
 
 const route = useRoute()
 const firstPart = computed(() => route.path.split('/')[1])
 const showScrollspy = ref(false)
 
-const navigation = inject<ContentNavigationItem[]>('navigation', [])
-const surround = inject<ContentNavigationItem[]>('surround', [])
-const sidebar = inject<ContentNavigationItem[]>('sidebar', [])
+const page = inject<Ref<ContentCollectionItem | null>>('page', ref(null))
+const toc = computed(() => page.value?.body.toc)
+const navigation = inject<Ref<ContentNavigationItem[] | null>>('navigation', ref(null))
+const surround = inject<Ref<ContentNavigationItem[] | null>>('surround', ref(null))
+const sidebar = inject<Ref<ContentNavigationItem[] | null>>('sidebar', ref(null))
 
 const closedTreeNodes = ref<string[]>([])
 
