@@ -379,7 +379,7 @@ const { data: surround } = await useAsyncData(`surround-${route.path}`, () => {
 
 const { data: sidebar } = await useAsyncData(`sidebar-${route.path}`, () => {
   if (!firstPart.value) return Promise.resolve(null)
-  return queryCollectionNavigation('content').where('path', 'LIKE', `/${firstPart.value}%`)
+  return queryCollectionNavigation('content').where('path', 'LIKE', `/${firstPart.value}/%`)
 })
 
 provide('navigation', navigation)
