@@ -7,6 +7,7 @@
           to="/"
           class="hidden lg:flex items-center gap-1 sm:min-w-64 text-lg font-light"
         >
+          <!-- Logo -->
           <svg
             width="16"
             height="16"
@@ -69,13 +70,13 @@
         >
           <Icon
             v-if="isFullscreen"
-            name="ic:baseline-fullscreen"
+            name="material-symbols:fullscreen-exit"
             class="w-5 h-5"
             alt="Contract layout icon"
           />
           <Icon
             v-else
-            name="ic:baseline-fullscreen-exit"
+            name="material-symbols:fullscreen"
             class="w-5 h-5"
             alt="Expand layout icon"
           />
@@ -87,13 +88,13 @@
         >
           <Icon
             v-if="darkMode"
-            name="ic:outline-nightlight"
+            name="material-symbols:nightlight-outline"
             class="w-5 h-5"
             :alt="`Expand layout icon`"
           />
           <Icon
             v-else
-            name="ic:outline-wb-sunny"
+            name="material-symbols:sunny-outline"
             class="w-5 h-5"
             :alt="`Expand layout icon`"
           />
@@ -106,7 +107,7 @@
     </template>
     <template #left-bar>
       <nav
-        v-if="sidebar && sidebar.some(i => i.children)"
+        v-if="sidebar && (sidebar as ContentSidebarItem[]).some((i: ContentSidebarItem) => i.children)"
         class="mt-4"
       >
         <ul>
@@ -157,37 +158,23 @@
                     <span class="absolute inset-0"/>
                   </NuxtLink>
                   <button
-                    v-if="child.children && child.children.some(i => i.path !== child.path)"
-                    class="p-1 rounded-sm text-left mt-1.5 z-10 hover:bg-gray-25 dark:hover:bg-gray-900 dark:bg-gray-950 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white"
+                    v-if="child.children && child.children.some((i: ContentSidebarItem) => i.path !== child.path)"
+                    class="p-1 rounded-sm text-left z-10 hover:bg-gray-25 dark:hover:bg-gray-900 dark:bg-gray-950 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white"
                     type="button"
                     @click.prevent="toggleTreeNode(child)"
                   >
-                    <svg
-                      v-if="closedTreeNodes.some(i => child.path === i)"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="32"
-                      viewBox="0 0 320 512"
-                      class="h-3 w-auto"
-                    >
-                      <path
-                        fill="currentColor"
-                        d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256L73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
-                      />
-                    </svg>
-                    <svg
+                    <Icon
+                      v-if="closedTreeNodes.some((i: string) => child.path === i)"
+                      name="material-symbols:keyboard-arrow-right"
+                      class="h-5 w-5"
+                      :alt="`Toggle tree for ${child.title}`"
+                    />
+                    <Icon
                       v-else
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="32"
-                      height="32"
-                      viewBox="0 0 512 512"
-                      class="h-3 w-auto"
-                    >
-                      <path
-                        fill="currentColor"
-                        d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7L86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
-                      />
-                    </svg>
+                      name="material-symbols:keyboard-arrow-down"
+                      class="h-5 w-5"
+                      :alt="`Toggle tree for ${child.title}`"
+                    />
                     <span class="sr-only">Toggle tree</span>
                   </button>
                 </div>
@@ -217,41 +204,27 @@
                         <span class="absolute inset-0"/>
                       </NuxtLink>
                       <button
-                        v-if="subchild.children && subchild.children.some(i => i.path !== subchild.path)"
-                        class="p-1 rounded-sm text-left mt-1.5 z-10 hover:bg-gray-25 dark:hover:bg-gray-900 dark:bg-gray-950 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white"
+                        v-if="subchild.children && subchild.children.some((i: ContentSidebarItem) => i.path !== subchild.path)"
+                        class="p-1 rounded-sm text-left z-10 hover:bg-gray-25 dark:hover:bg-gray-900 dark:bg-gray-950 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white"
                         type="button"
                         @click.prevent="toggleTreeNode(subchild)"
                       >
-                        <svg
-                          v-if="closedTreeNodes.some(i => subchild.path === i)"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="20"
-                          height="32"
-                          viewBox="0 0 320 512"
-                          class="h-3 w-auto"
-                        >
-                          <path
-                            fill="currentColor"
-                            d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256L73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
-                          />
-                        </svg>
-                        <svg
+                        <Icon
+                          v-if="closedTreeNodes.some((i: string) => subchild.path === i)"
+                          name="material-symbols:keyboard-arrow-right"
+                          class="h-5 w-5"
+                          :alt="`Toggle tree for ${subchild.title}`"
+                        />
+                        <Icon
                           v-else
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="32"
-                          height="32"
-                          viewBox="0 0 512 512"
-                          class="h-3 w-auto"
-                        >
-                          <path
-                            fill="currentColor"
-                            d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7L86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
-                          />
-                        </svg>
+                          name="material-symbols:keyboard-arrow-down"
+                          class="h-5 w-5"
+                          :alt="`Toggle tree for ${subchild.title}`"
+                        />
                         <span class="sr-only">Toggle tree</span>
                       </button>
                     </div>
-                    <ul v-if="subchild.children && !closedTreeNodes.some(i => subchild.path === i)">
+                    <ul v-if="subchild.children && !closedTreeNodes.some((i: ContentSidebarItem['path']) => subchild.path === i)">
                       <li
                         v-for="grandchild in subchild.children.filter((i: ContentNavigationItem) => i.path !== subchild.path)"
                         :key="grandchild.path"
@@ -277,37 +250,23 @@
                             <span class="absolute inset-0"/>
                           </NuxtLink>
                           <button
-                            v-if="grandchild.children && grandchild.children.some(i => i.path !== grandchild.path)"
-                            class="p-1 rounded-sm text-left mt-1.5 z-10 hover:bg-gray-25 dark:hover:bg-gray-900 dark:bg-gray-950 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white"
+                            v-if="grandchild.children && grandchild.children.some((i: ContentSidebarItem) => i.path !== grandchild.path)"
+                            class="p-1 rounded-sm text-left z-10 hover:bg-gray-25 dark:hover:bg-gray-900 dark:bg-gray-950 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white"
                             type="button"
                             @click.prevent="toggleTreeNode(grandchild)"
                           >
-                            <svg
-                              v-if="closedTreeNodes.some(i => grandchild.path === i)"
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="20"
-                              height="32"
-                              viewBox="0 0 320 512"
-                              class="h-4 w-auto"
-                            >
-                              <path
-                                fill="currentColor"
-                                d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256L73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
-                              />
-                            </svg>
-                            <svg
+                            <Icon
+                              v-if="closedTreeNodes.some((i: string) => grandchild.path === i)"
+                              name="material-symbols:keyboard-arrow-right"
+                              class="h-5 w-5"
+                              :alt="`Toggle tree for ${grandchild.title}`"
+                            />
+                            <Icon
                               v-else
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="32"
-                              height="32"
-                              viewBox="0 0 512 512"
-                              class="h-3 w-auto"
-                            >
-                              <path
-                                fill="currentColor"
-                                d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7L86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
-                              />
-                            </svg>
+                              name="material-symbols:keyboard-arrow-down"
+                              class="h-5 w-5"
+                              :alt="`Toggle tree for ${grandchild.title}`"
+                            />
                             <span class="sr-only">Toggle tree</span>
                           </button>
                         </div>
@@ -347,13 +306,15 @@
               :to="item.path"
               class="action-btn action-btn-ghost action-btn-gray"
             >
-              <svg v-if="index === 0" width="13" height="14" viewBox="0 0 13 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12.5977 6.75C12.5977 7.24219 12.2148 7.625 11.75 7.625H3.35547L6.22656 10.5234C6.58203 10.8516 6.58203 11.4258 6.22656 11.7539C6.0625 11.918 5.84375 12 5.625 12C5.37891 12 5.16016 11.918 4.99609 11.7539L0.621094 7.37891C0.265625 7.05078 0.265625 6.47656 0.621094 6.14844L4.99609 1.77344C5.32422 1.41797 5.89844 1.41797 6.22656 1.77344C6.58203 2.10156 6.58203 2.67578 6.22656 3.00391L3.35547 5.875H11.75C12.2148 5.875 12.5977 6.28516 12.5977 6.75Z" fill="#595A5C"/>
-              </svg>
+              <Icon
+                v-if="index === 0"
+                name="material-symbols:arrow-back"
+              />
               <span>{{ item.title }}</span>
-              <svg v-if="index === 1" width="13" height="14" viewBox="0 0 13 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12.3516 7.37891L7.97656 11.7539C7.8125 11.918 7.59375 12 7.375 12C7.12891 12 6.91016 11.918 6.74609 11.7539C6.39062 11.4258 6.39062 10.8516 6.74609 10.5234L9.61719 7.625H1.25C0.757812 7.625 0.375 7.24219 0.375 6.75C0.375 6.28516 0.757812 5.875 1.25 5.875H9.61719L6.74609 3.00391C6.39062 2.67578 6.39062 2.10156 6.74609 1.77344C7.07422 1.41797 7.64844 1.41797 7.97656 1.77344L12.3516 6.14844C12.707 6.47656 12.707 7.05078 12.3516 7.37891Z" fill="#595A5C"/>
-              </svg>
+              <Icon
+                v-if="index === 1"
+                name="material-symbols:arrow-forward"
+              />
             </NuxtLink>
           </template>
         </div>
@@ -362,18 +323,10 @@
     <template #right-bar>
       <template v-if="toc && toc.links.length > 0">
         <div class="flex gap-2 items-center mt-4 mb-2 text-sm font-semibold text-gray-700 dark:text-gray-100">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="32"
-            height="32"
-            viewBox="0 0 512 512"
+          <Icon
+            name="material-symbols:format-list-bulleted"
             class="w-3.5 h-3.5 inline-block text-gray-500"
-          >
-            <path
-              fill="currentColor"
-              d="M0 96c0-17.7 14.3-32 32-32h384c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32m64 160c0-17.7 14.3-32 32-32h384c17.7 0 32 14.3 32 32s-14.3 32-32 32H96c-17.7 0-32-14.3-32-32m384 160c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h384c17.7 0 32 14.3 32 32"
-            />
-          </svg>
+          />
           <p>On this page</p>
         </div>
         <CustomScrollspy
@@ -395,7 +348,11 @@
 </template>
 
 <script setup lang="ts">
+import { Icon } from '#components'
 import type { ContentNavigationItem } from '@nuxt/content'
+
+// Define or import ContentSidebarItem type
+type ContentSidebarItem = ContentNavigationItem & { children?: ContentNavigationItem[] }
 
 const route = useRoute()
 

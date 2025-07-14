@@ -22,7 +22,7 @@
       }"
     >
       <Icon
-        name="ic:outline-code"
+        name="material-symbols:code"
         class="w-5 h-5 mt-0.5"
         alt="Close fullscreen icon"
       />
@@ -37,13 +37,13 @@
       >
         <Icon
           v-if="quality === 'bad'"
-          name="ic:baseline-warning-amber"
+          name="material-symbols:warning-outline"
           class="w-4 h-4 mt-0.5"
           alt="Warning icon"
         />
         <Icon
           v-if="quality === 'good'"
-          name="ic:baseline-check-circle-outline"
+          name="material-symbols:check-circle-outline"
           class="w-4 h-4 mt-0.5"
           alt="Good quality icon"
         />
@@ -62,13 +62,13 @@
             >
               <Icon
                 v-if="useCompleteBlock"
-                name="ic:baseline-disabled-visible"
+                name="material-symbols:visibility"
                 class="w-4 h-4"
                 alt="Show complete code icon"
               />
               <Icon
                 v-else
-                name="ic:baseline-remove-red-eye"
+                name="imaterial-symbols:visibility-off"
                 class="w-4 h-4"
                 alt="Hide complete code icon"
               />
@@ -86,7 +86,7 @@
             >
               <template v-if="!isCopyingToClipboard">
               <Icon
-                name="ic:baseline-file-copy"
+                name="material-symbols:file-copy"
                 class="w-4 h-4"
                 alt="Copy code icon"
               />
@@ -94,7 +94,7 @@
             </template>
             <template v-else>
               <Icon
-                name="ic:baseline-check"
+                name="material-symbols:check"
                 class="w-4 h-4 text-green-400"
                 alt="Copied code icon"
               />
@@ -113,13 +113,13 @@
             >
               <Icon
                 v-if="fullscreen"
-                name="ic:baseline-close-fullscreen"
+                name="material-symbols:close-fullscreen"
                 class="w-4 h-4"
                 alt="Close fullscreen icon"
               />
               <Icon
                 v-else
-                name="ic:baseline-open-in-full"
+                name="material-symbols:open-in-full"
                 class="w-4 h-4"
                 alt="Open fullscreen icon"
               />
@@ -144,13 +144,13 @@
           >
             <Icon
               v-if="quality === 'bad'"
-              name="ic:baseline-warning-amber"
+              name="material-symbols:warning-outline"
               class="w-4 h-4"
               alt="Warning icon"
             />
             <Icon
               v-if="quality === 'good'"
-              name="ic:baseline-check-circle-outline"
+              name="material-symbols:check-circle-outline"
               class="w-4 h-4"
               alt="Good quality icon"
             />
@@ -171,13 +171,13 @@
           >
             <Icon
               v-if="useCompleteBlock"
-              name="ic:baseline-disabled-visible"
+              name="material-symbols:visibility"
               class="w-4 h-4"
               alt="Show complete code icon"
             />
             <Icon
               v-else
-              name="ic:baseline-remove-red-eye"
+              name="material-symbols:visibility-off"
               class="w-4 h-4"
               alt="Hide complete code icon"
             />
@@ -195,7 +195,7 @@
           >
             <template v-if="!isCopyingToClipboard">
               <Icon
-                name="ic:baseline-file-copy"
+                name="material-symbols:file-copy"
                 class="w-4 h-4"
                 alt="Copy code icon"
               />
@@ -203,7 +203,7 @@
             </template>
             <template v-else>
               <Icon
-                name="ic:baseline-check"
+                name="material-symbols:check"
                 class="w-4 h-4 text-green-400"
                 alt="Copied code icon"
               />
@@ -222,13 +222,13 @@
           >
             <Icon
               v-if="fullscreen"
-              name="ic:baseline-close-fullscreen"
+              name="material-symbols:close-fullscreen"
               class="w-4 h-4"
               alt="Close fullscreen icon"
             />
             <Icon
               v-else
-              name="ic:baseline-open-in-full"
+              name="material-symbols:open-in-full"
               class="w-4 h-4"
               alt="Open fullscreen icon"
             />
