@@ -408,8 +408,26 @@ const {
   githubUrl,
 } = useAppConfig()
 
-const isFullscreen = useCookie('fullscreen-toggle', { default: () => false })
-const darkMode = useCookie('dark-mode-toggle', { default: () => false })
+const isFullscreen = useState('fullscreen-toggle', () => false)
+const darkMode = useState('dark-mode-toggle', () => false)
+
+onMounted(() => {
+  const isFullscreenCookie = useCookie('fullscreen-toggle-cookie', { default: () => false })
+  isFullscreen.value = isFullscreenCookie.value
+
+  const darkModeCookie = useCookie('dark-mode-toggle-cookie', { default: () => false })
+  darkMode.value = darkModeCookie.value
+})
+
+watch(isFullscreen, (newValue) => {
+  const isFullscreenCookie = useCookie('fullscreen-toggle-cookie')
+  isFullscreenCookie.value = `${newValue}`
+})
+
+watch(darkMode, (newValue) => {
+  const darkModeCookie = useCookie('dark-mode-toggle-cookie')
+  darkModeCookie.value = `${newValue}`
+})
 
 const showSearchModal = ref(false)
 
