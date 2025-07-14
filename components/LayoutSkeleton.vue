@@ -46,6 +46,7 @@
 
   <!-- Footer -->
   <footer class="relative border-t mt-4 border-gray-200 dark:border-gray-800">
+    <!-- Logo -->
     <svg
       width="16"
       height="16"
@@ -71,6 +72,7 @@
             to="https://sei.cmu.edu"
             target="_blank"
           >
+            <!-- CMU/SEI Logo -->
             <svg width="264" height="46" viewBox="0 0 264 46" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g clip-path="url(#clip0_7332_256046)">
               <path d="M66.0516 6.10547V14.1472H67.3887V14.6766H62.0469V14.1472H63.3813V6.67194H62.3449V6.10547H66.0516Z" fill="currentColor"/>

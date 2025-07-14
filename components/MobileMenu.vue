@@ -3,20 +3,12 @@
     <SdsActionButton
       @click="showPanel = !showPanel"
     >
-      <svg
+      <Icon
+        name="material-symbols:menu"
         class="h-6 w-6"
-        stroke="currentColor"
-        fill="none"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4 6h16M4 12h16M4 18h16"
-        />
-      </svg>
+      />
       <span class="flex items-center gap-1 text-lg font-light">
+        <!-- Logo -->
         <svg
           width="16"
           height="16"
@@ -55,7 +47,7 @@
           <SdsNavigationItem
             :label="link.title"
             :href="link.path"
-            :selected="isExactActive || (link.path.startsWith(`/${firstPart}`) && !!firstPart)"
+            :selected="isExactActive || isActive(link)"
           />
         </NuxtLink>
         <hr class="my-4 border-gray-200 dark:border-gray-700">
@@ -73,8 +65,10 @@
                 >
                   <NuxtLink
                     :to="link.path"
-                    active-class="active"
                     class="flex items-start gap-1.5 w-full px-2 pb-2 text-sm font-semibold border-l-2 border-transparent text-gray-700 dark:text-gray-100 hover:text-black dark:hover:text-white rounded-lg"
+                    :class="{
+                      'active': isActive(link)
+                    }"
                     :title="link.title"
                   >
                     <Icon
@@ -96,8 +90,10 @@
                       >
                         <NuxtLink
                           :to="child.path"
-                          active-class="active text-red-600 dark:text-red-300"
                           class="flex items-start gap-1.5 grow px-2 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
+                          :class="{
+                            'active text-red-600 dark:text-red-300': isActive(child)
+                          }"
                         >
                           <Icon
                             v-if="child.icon"
@@ -110,36 +106,22 @@
                         </NuxtLink>
                         <button
                           v-if="child.children && child.children.some((i: ContentNavigationItem) => i.path !== child.path)"
-                          class="p-1 rounded-sm text-left mt-1.5 z-10 hover:bg-gray-25 dark:hover:bg-gray-900 dark:bg-gray-950 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white"
+                          class="p-1 rounded-sm text-left z-10 hover:bg-gray-25 dark:hover:bg-gray-900 dark:bg-gray-950 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white"
                           type="button"
                           @click.prevent="toggleTreeNode(child)"
                         >
-                          <svg
+                          <Icon
                             v-if="closedTreeNodes.some((i: string) => child.path === i)"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="32"
-                            viewBox="0 0 320 512"
-                            class="h-3 w-auto"
-                          >
-                            <path
-                              fill="currentColor"
-                              d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256L73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
-                            />
-                          </svg>
-                          <svg
+                            name="material-symbols:keyboard-arrow-right"
+                            class="h-5 w-5"
+                            :alt="`Toggle tree for ${child.title}`"
+                          />
+                          <Icon
                             v-else
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="32"
-                            height="32"
-                            viewBox="0 0 512 512"
-                            class="h-3 w-auto"
-                          >
-                            <path
-                              fill="currentColor"
-                              d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7L86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
-                            />
-                          </svg>
+                            name="material-symbols:keyboard-arrow-down"
+                            class="h-5 w-5"
+                            :alt="`Toggle tree for ${child.title}`"
+                          />
                           <span class="sr-only">Toggle tree</span>
                         </button>
                       </div>
@@ -154,8 +136,10 @@
                           >
                             <NuxtLink
                               :to="subchild.path"
-                              active-class="active text-red-600 dark:text-red-300"
                               class="flex items-start gap-1.5 grow px-2 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
+                              :class="{
+                                'active text-red-600 dark:text-red-300': isActive(subchild)
+                              }"
                             >
                               <Icon
                                 v-if="subchild.icon"
@@ -168,36 +152,22 @@
                             </NuxtLink>
                             <button
                               v-if="subchild.children && subchild.children.some((i: ContentNavigationItem) => i.path !== subchild.path)"
-                              class="p-1 rounded-sm text-left mt-1.5 z-10 hover:bg-gray-25 dark:hover:bg-gray-900 dark:bg-gray-950 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white"
+                              class="p-1 rounded-sm text-left z-10 hover:bg-gray-25 dark:hover:bg-gray-900 dark:bg-gray-950 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white"
                               type="button"
                               @click.prevent="toggleTreeNode(subchild)"
                             >
-                              <svg
+                              <Icon
                                 v-if="closedTreeNodes.some((i: string) => subchild.path === i)"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="20"
-                                height="32"
-                                viewBox="0 0 320 512"
-                                class="h-3 w-auto"
-                              >
-                                <path
-                                  fill="currentColor"
-                                  d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256L73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
-                                />
-                              </svg>
-                              <svg
+                                name="material-symbols:keyboard-arrow-right"
+                                class="h-5 w-5"
+                                :alt="`Toggle tree for ${subchild.title}`"
+                              />
+                              <Icon
                                 v-else
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="32"
-                                height="32"
-                                viewBox="0 0 512 512"
-                                class="h-3 w-auto"
-                              >
-                                <path
-                                  fill="currentColor"
-                                  d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7L86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
-                                />
-                              </svg>
+                                name="material-symbols:keyboard-arrow-down"
+                                class="h-5 w-5"
+                                :alt="`Toggle tree for ${subchild.title}`"
+                              />
                               <span class="sr-only">Toggle tree</span>
                             </button>
                           </div>
@@ -212,8 +182,10 @@
                               >
                                 <NuxtLink
                                   :to="grandchild.path"
-                                  active-class="active text-red-600 dark:text-red-300"
                                   class="flex items-start gap-1.5 grow px-2 py-1.5 rounded-lg z-10 hover:bg-gray-25 dark:hover:bg-gray-900 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white [&.active]:hover:text-red-600 dark:[&.active]:hover:text-red-300"
+                                  :class="{
+                                    'active text-red-600 dark:text-red-300': isActive(grandchild)
+                                  }"
                                 >
                                   <Icon
                                     v-if="grandchild.icon"
@@ -226,36 +198,22 @@
                                 </NuxtLink>
                                 <button
                                   v-if="grandchild.children && grandchild.children.some((i: ContentNavigationItem) => i.path !== grandchild.path)"
-                                  class="p-1 rounded-sm text-left mt-1.5 z-10 hover:bg-gray-25 dark:hover:bg-gray-900 dark:bg-gray-950 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white"
+                                  class="p-1 rounded-sm text-left z-10 hover:bg-gray-25 dark:hover:bg-gray-900 dark:bg-gray-950 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white"
                                   type="button"
                                   @click.prevent="toggleTreeNode(grandchild)"
                                 >
-                                  <svg
+                                  <Icon
                                     v-if="closedTreeNodes.some((i: string) => grandchild.path === i)"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="20"
-                                    height="32"
-                                    viewBox="0 0 320 512"
-                                    class="h-4 w-auto"
-                                  >
-                                    <path
-                                      fill="currentColor"
-                                      d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256L73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
-                                    />
-                                  </svg>
-                                  <svg
+                                    name="material-symbols:keyboard-arrow-right"
+                                    class="h-5 w-5"
+                                    :alt="`Toggle tree for ${grandchild.title}`"
+                                  />
+                                  <Icon
                                     v-else
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 512 512"
-                                    class="h-3 w-auto"
-                                  >
-                                    <path
-                                      fill="currentColor"
-                                      d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7L86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
-                                    />
-                                  </svg>
+                                    name="material-symbols:keyboard-arrow-down"
+                                    class="h-5 w-5"
+                                    :alt="`Toggle tree for ${grandchild.title}`"
+                                  />
                                   <span class="sr-only">Toggle tree</span>
                                 </button>
                               </div>
@@ -278,18 +236,10 @@
           v-if="toc && toc.links.length > 0"
         >
           <div class="flex gap-2 items-center mb-2 text-sm font-semibold text-gray-700 dark:text-gray-100">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
-              viewBox="0 0 512 512"
+            <Icon
+              name="material-symbols:format-list-bulleted"
               class="w-3.5 h-3.5 inline-block text-gray-500"
-            >
-              <path
-                fill="currentColor"
-                d="M0 96c0-17.7 14.3-32 32-32h384c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32m64 160c0-17.7 14.3-32 32-32h384c17.7 0 32 14.3 32 32s-14.3 32-32 32H96c-17.7 0-32-14.3-32-32m384 160c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h384c17.7 0 32 14.3 32 32"
-              />
-            </svg>
+            />
             <p>On this page</p>
           </div>
           <CustomScrollspy
@@ -312,6 +262,8 @@
 </template>
 
 <script lang="ts" setup>
+import { Icon } from '#components'
+
 import type { ContentNavigationItem } from '@nuxt/content'
 
 const {
@@ -330,6 +282,24 @@ const navigation = inject<Ref<ContentNavigationItem[] | null>>('navigation', ref
 const sidebar = inject<Ref<ContentNavigationItem[] | null>>('sidebar', ref(null))
 
 const closedTreeNodes = ref<string[]>([])
+
+const removeTrailingSlash = (path: string) => {
+  if (path !== '/' && path.endsWith('/')) {
+    return path.slice(0, -1)
+  }
+  return path
+}
+
+const isActive = (link: { path: string }) => {
+  const normalizedLinkPath = removeTrailingSlash(link.path)
+  const normalizedRoutePath = removeTrailingSlash(route.path)
+  const normalizedFirstPart = firstPart.value ? `/${firstPart.value}` : ''
+
+  return (
+    normalizedLinkPath === normalizedRoutePath ||
+    (normalizedLinkPath === normalizedFirstPart && !!firstPart.value)
+  )
+}
 
 const toggleTreeNode = (link: { path: string }) => {
   if (closedTreeNodes.value.some(i => link.path === i)) {

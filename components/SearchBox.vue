@@ -7,7 +7,7 @@
       @click="handleShowSearchModalClick"
     >
       <Icon
-        name="ic:baseline-search"
+        name="material-symbols:search"
         class="w-5 h-5"
         alt="Search icon"
       />
