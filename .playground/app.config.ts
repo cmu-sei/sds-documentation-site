@@ -4,6 +4,6 @@ export default defineAppConfig({
   },
   githubUrl: 'https://github.com',
   appSuitePrefix: 'SEI',
-  appSuite: 'CERT',
-  pageTitle: 'CERT Secure Coding'
+  appSuite: 'SEI',
+  pageTitle: 'Documentation Site'
 })
