@@ -21,7 +21,7 @@
     "vue": "latest"
   },
   "dependencies": {
-    "@cmu-sei/sei-design-system": "^4.1.0",
+    "@cmu-sei/sei-design-system": "^4.2.0",
     "@iconify-json/material-symbols": "^1.2.29",
     "@nuxt/content": "^3.6.1",
     "@nuxt/icon": "^1.14.0",
