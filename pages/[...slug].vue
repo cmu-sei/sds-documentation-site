@@ -435,6 +435,43 @@ const showScrollspy = ref(false)
 
 const closedTreeNodes = ref<string[]>([])
 
+// Recursively collect all paths of nodes with children
+function collectClosedPaths(nodes: ContentSidebarItem[] = []): string[] {
+  let paths: string[] = [];
+  for (const node of nodes) {
+    if (node.children && node.children.length > 0) {
+      paths.push(node.path);
+      paths = paths.concat(collectClosedPaths(node.children as ContentSidebarItem[]));
+    }
+  }
+  return paths;
+}
+
+watch(sidebar, (newSidebar) => {
+  if (Array.isArray(newSidebar)) {
+    // Initialize all nodes as closed
+    closedTreeNodes.value = collectClosedPaths(newSidebar as ContentSidebarItem[]);
+
+    // Find the active node and its ancestors
+    function findActiveAncestors(nodes: ContentSidebarItem[], targetPath: string, ancestors: string[] = []): string[] {
+      for (const node of nodes) {
+        if (node.path === targetPath) {
+          return ancestors.concat(node.path);
+        }
+        if (node.children && node.children.length > 0) {
+          const result = findActiveAncestors(node.children as ContentSidebarItem[], targetPath, ancestors.concat(node.path));
+          if (result.length) return result;
+        }
+      }
+      return [];
+    }
+
+    const activePaths = findActiveAncestors(newSidebar as ContentSidebarItem[], route.path);
+    // Remove active node and ancestors from closedTreeNodes
+    closedTreeNodes.value = closedTreeNodes.value.filter(path => !activePaths.includes(path));
+  }
+}, { immediate: true });
+
 const removeTrailingSlash = (path: string) => {
   if (path !== '/' && path.endsWith('/')) {
     return path.slice(0, -1)
