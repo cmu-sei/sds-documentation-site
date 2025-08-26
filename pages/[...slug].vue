@@ -108,7 +108,7 @@
     <template #left-bar>
       <nav
         v-if="sidebar && (sidebar as ContentSidebarItem[]).some((i: ContentSidebarItem) => i.children)"
-        class="mt-4"
+        class="mt-4 max-w-64"
       >
         <ul>
           <li
@@ -231,7 +231,7 @@
                         class="grid"
                       >
                         <div
-                          class="ml-4 pl-6 relative flex items-start justify-between gap-1 text-sm border-l-2 border-gray-100 dark:border-gray-900 has-[.active]:border-red-600 dark:has-[.active]:border-red-400"
+                          class="ml-4 pl-7.5 relative flex items-start justify-between gap-1 text-sm border-l-2 border-gray-100 dark:border-gray-900 has-[.active]:border-red-600 dark:has-[.active]:border-red-400"
                         >
                           <NuxtLink
                             :to="grandchild.path"
