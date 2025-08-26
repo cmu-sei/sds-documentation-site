@@ -108,7 +108,7 @@
     <template #left-bar>
       <nav
         v-if="sidebar && (sidebar as ContentSidebarItem[]).some((i: ContentSidebarItem) => i.children)"
-        class="mt-4"
+        class="mt-4 max-w-64"
       >
         <ul>
           <li
@@ -231,7 +231,7 @@
                         class="grid"
                       >
                         <div
-                          class="ml-4 pl-6 relative flex items-start justify-between gap-1 text-sm border-l-2 border-gray-100 dark:border-gray-900 has-[.active]:border-red-600 dark:has-[.active]:border-red-400"
+                          class="ml-4 pl-7.5 relative flex items-start justify-between gap-1 text-sm border-l-2 border-gray-100 dark:border-gray-900 has-[.active]:border-red-600 dark:has-[.active]:border-red-400"
                         >
                           <NuxtLink
                             :to="grandchild.path"
@@ -434,6 +434,43 @@ const showSearchModal = ref(false)
 const showScrollspy = ref(false)
 
 const closedTreeNodes = ref<string[]>([])
+
+// Recursively collect all paths of nodes with children
+function collectClosedPaths(nodes: ContentSidebarItem[] = []): string[] {
+  let paths: string[] = [];
+  for (const node of nodes) {
+    if (node.children && node.children.length > 0) {
+      paths.push(node.path);
+      paths = paths.concat(collectClosedPaths(node.children as ContentSidebarItem[]));
+    }
+  }
+  return paths;
+}
+
+watch(sidebar, (newSidebar) => {
+  if (Array.isArray(newSidebar)) {
+    // Initialize all nodes as closed
+    closedTreeNodes.value = collectClosedPaths(newSidebar as ContentSidebarItem[]);
+
+    // Find the active node and its ancestors
+    function findActiveAncestors(nodes: ContentSidebarItem[], targetPath: string, ancestors: string[] = []): string[] {
+      for (const node of nodes) {
+        if (node.path === targetPath) {
+          return ancestors.concat(node.path);
+        }
+        if (node.children && node.children.length > 0) {
+          const result = findActiveAncestors(node.children as ContentSidebarItem[], targetPath, ancestors.concat(node.path));
+          if (result.length) return result;
+        }
+      }
+      return [];
+    }
+
+    const activePaths = findActiveAncestors(newSidebar as ContentSidebarItem[], route.path);
+    // Remove active node and ancestors from closedTreeNodes
+    closedTreeNodes.value = closedTreeNodes.value.filter(path => !activePaths.includes(path));
+  }
+}, { immediate: true });
 
 const removeTrailingSlash = (path: string) => {
   if (path !== '/' && path.endsWith('/')) {
