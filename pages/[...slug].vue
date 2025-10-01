@@ -2,7 +2,7 @@
   <LayoutSkeleton :fullwidth="isFullscreen">
     <template #header>
       <div class="flex gap-1 items-center">
-        <MobileMenu class="lg:hidden" />
+        <LazyMobileMenu class="lg:hidden" />
         <NuxtLink
           to="/"
           class="hidden lg:flex items-center gap-1 sm:min-w-64 text-lg font-light"
@@ -100,7 +100,7 @@
           />
           <span class="sr-only">{{ darkMode ? 'Dark' : 'Light' }} mode</span>
         </SdsActionButton>
-        <SearchBox
+        <LazySearchBox
           v-model="showSearchModal"
         />
       </div>
@@ -329,7 +329,7 @@
           />
           <p>On this page</p>
         </div>
-        <CustomScrollspy
+        <LazyCustomScrollspy
           :items="toc.links"
           parent="#page-content"
           item-class="group ml-1.5 border-l-2 border-gray-100 dark:border-gray-900 [&.active]:font-semibold [&.active]:border-red-600 dark:[&.active]:border-red-400 [&.active_span]:text-red-600 dark:[&.active_span]:text-red-300"
@@ -341,7 +341,7 @@
                 class="block mx-3 px-2 py-1.5 text-sm text-gray-600 dark:text-gray-300 group-hover:text-black dark:group-hover:text-white group-hover:bg-gray-25 dark:group-hover:bg-gray-900 rounded-lg"
               >{{ item.text }}</span>
             </template>
-          </CustomScrollspy>
+          </LazyCustomScrollspy>
       </template>
     </template>
   </LayoutSkeleton>
@@ -369,10 +369,14 @@ provide('toc', toc)
 
 const firstPart = computed(() => route.path.split('/')[1])
 
-const { data: navigation } = await useAsyncData(`navigation-${route.path}`, () => {
-  return queryCollectionNavigation('content')
-})
+// Use globally loaded navigation data from plugin
+const { $globalNavigation, $globalSearchData } = useNuxtApp()
 
+// Expose as local variables for template usage
+const navigation = $globalNavigation
+const searchData = $globalSearchData
+
+// Only fetch route-specific data
 const { data: surround } = await useAsyncData(`surround-${route.path}`, () => {
   return queryCollectionItemSurroundings('content', route.path)
 })
@@ -382,16 +386,10 @@ const { data: sidebar } = await useAsyncData(`sidebar-${route.path}`, () => {
   return queryCollectionNavigation('content').where('path', 'LIKE', `/${firstPart.value}/%`)
 })
 
+// Provide data to child components
 provide('navigation', navigation)
 provide('surround', surround)
 provide('sidebar', sidebar)
-
-// Search
-
-const { data: searchData } = await useAsyncData(`search-box-${route.path}`, () => {
-  return queryCollectionSearchSections('content')
-})
-
 provide('searchData', searchData)
 
 definePageMeta({

@@ -69,6 +69,7 @@ const searchText = ref('')
 const selectedIndex = ref(0)
 const results = ref()
 
+// Use the globally provided search data from the plugin
 const searchData = inject<Ref<{ id: string; title: string; titles: string[]; level: number; content: string; }[] | null>>('searchData', ref(null))
 
 const removeDuplicatesByTitleAndURL = (array: { id: string; title: string; titles: string[]; level: number; content: string; }[]) => {
@@ -85,15 +86,24 @@ const removeDuplicatesByTitleAndURL = (array: { id: string; title: string; title
   return array.filter(item => urlMap.get(item.title) === item.id)
 }
 
-watch(searchText, async (value) => {
+// Debounced search function to improve performance
+const performSearch = (value: unknown) => {
+  const searchValue = typeof value === 'string' ? value : '';
   selectedIndex.value = 0
   if (searchData.value) {
     results.value = removeDuplicatesByTitleAndURL(searchData.value.filter((item) =>
-      item.title.toLowerCase().includes(value.toLowerCase())
+      item.title.toLowerCase().includes(searchValue.toLowerCase())
     )).slice(0, 10)
   } else {
     results.value = []
   }
+}
+
+// Debounce search with 300ms delay to reduce computations while typing
+const debouncedSearch = debounce(performSearch, 300)
+
+watch(searchText, (value) => {
+  debouncedSearch(value)
 })
 
 onMounted(() => {

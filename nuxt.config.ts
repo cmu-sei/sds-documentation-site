@@ -5,11 +5,40 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['nuxt-gtag', '@vueuse/nuxt', '@nuxt/content', '@nuxt/icon'],
 
+  // Enable experimental features for better performance
+  experimental: {
+    payloadExtraction: true,
+    renderJsonPayloads: true,
+  },
+
   icon: {
     mode: 'css',
     cssLayer: 'base',
     clientBundle: {
-      scan: true
+      scan: true,
+      icons: [
+        'material-symbols:search',
+        'material-symbols:menu',
+        'material-symbols:keyboard-arrow-left',
+        'material-symbols:keyboard-arrow-right',
+        'material-symbols:keyboard-arrow-down',
+        'material-symbols:format-list-bulleted',
+        'material-symbols:code',
+        'material-symbols:warning-outline',
+        'material-symbols:check-circle-outline',
+        'material-symbols:visibility',
+        'material-symbols:visibility-off',
+        'material-symbols:file-copy',
+        'material-symbols:check',
+        'material-symbols:close-fullscreen',
+        'material-symbols:open-in-full',
+        'material-symbols:fullscreen-exit',
+        'material-symbols:fullscreen',
+        'material-symbols:nightlight-outline',
+        'material-symbols:sunny-outline',
+        'material-symbols:arrow-back',
+        'material-symbols:arrow-forward',
+      ],
     }
   },
 
@@ -72,7 +101,24 @@ export default defineNuxtConfig({
 
   nitro: {
     prerender: {
-      routes: ['/sitemap.xml']
+      routes: ['/sitemap.xml'],
+      // Limit concurrent renders to reduce memory usage
+      concurrency: 5,
+      // Add interval between renders to allow garbage collection
+      interval: 100,
+      // Fail gracefully instead of crashing
+      failOnError: false,
+      // Retry failed routes
+      retry: 3,
+      retryDelay: 500
+    },
+    // Enable memory optimizations
+    experimental: {
+      wasm: false
+    },
+    // Reduce payload size
+    replace: {
+      'process.env.NODE_ENV': JSON.stringify('production')
     }
   },
 
