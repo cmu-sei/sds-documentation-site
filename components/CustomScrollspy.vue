@@ -61,112 +61,99 @@ const props = defineProps({
   inactiveClass: { type: String, default: '' }
 })
 
+const activeId = ref<string>()
+let observer: IntersectionObserver | null = null
+const visibleElements = new Set<string>()
+
 const parentEl = computed<HTMLElement | null>(() => {
   if (typeof document === 'undefined') return null
   return props.parent ? document.querySelector(props.parent) : null
 })
 
-const activeId = ref()
-const lastActiveId = ref()
-
-const getAnchorTop = (item: { id: string, text: string }): number => {
-  const anchor = document.getElementById(item.id) as HTMLAnchorElement
-  return anchor ? anchor.getBoundingClientRect().top : 0
-}
-
-const isItemActive = (
-  index: number,
-  item: { id: string, text: string },
-  nextItem: { id: string, text: string } | undefined
-): [boolean, string | null] => {
-  const scrollTop = parentEl.value && parentEl.value.getBoundingClientRect().top || window.scrollY
-
-  if (index === 0 && scrollTop === 0) {
-    return [true, null]
-  }
-
-  if (scrollTop < getAnchorTop(item)) {
-    return [false, null]
-  }
-
-  if (!nextItem || scrollTop < getAnchorTop(nextItem)) {
-    return [true, item.id]
-  }
-
-  return [false, null]
-}
-
-const isInViewport = (item: { id: string, text: string }) => {
-  const anchor = document.getElementById(item.id) as HTMLAnchorElement
-  const rect = anchor?.getBoundingClientRect()
-  if (!rect) return false
-  if (parentEl.value) {
-    const parentRect = parentEl.value.getBoundingClientRect()
-    return (
-      rect.top >= parentRect.top &&
-      rect.bottom <= parentRect.bottom
-    )
-  } else {
-    return (
-      rect.top >= 0 &&
-      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
-    )
-  }
-}
-
-const setActiveItem = () => {
-  const itemsInViewport: { id: string }[] = []
-  lastActiveId.value = activeId.value
-
-  props.items.forEach(item => {
-    if (isInViewport(item)) {
-      itemsInViewport.push(item)
-    }
-  })
-
-  if (itemsInViewport.length) {
-    activeId.value = itemsInViewport[0].id
+const updateActiveId = () => {
+  if (visibleElements.size === 0) {
+    // No elements visible, keep current active (don't reset)
     return
   }
 
-  if (lastActiveId.value) {
-    activeId.value = lastActiveId.value
-    return
+  // Find the first visible item in document order
+  const firstVisible = props.items.find(item => visibleElements.has(item.id))
+  if (firstVisible) {
+    activeId.value = firstVisible.id
+  }
+}
+
+const setupObserver = () => {
+  // Clean up existing observer
+  if (observer) {
+    observer.disconnect()
   }
 
-  if (props.items.length && !activeId.value) {
-    activeId.value = props.items[0].id
+  visibleElements.clear()
 
-    for (let i = 0; i < props.items.length; i++) {
-      const anchor = props.items[i]
-      const nextAnchor = props.items[i + 1]
+  if (!props.items.length) return
 
-      const [isActive, id] = isItemActive(i, anchor, nextAnchor)
+  // Create intersection observer with optimized settings
+  const observerOptions: IntersectionObserverInit = {
+    root: parentEl.value,
+    rootMargin: '-80px 0px -75% 0px', // Top zone for active detection
+    threshold: 0
+  }
 
-      if (isActive) {
-        activeId.value = id
+  observer = new IntersectionObserver((entries) => {
+    // Track which elements are entering/leaving the intersection zone
+    let hasChanges = false
+    
+    entries.forEach((entry) => {
+      if (entry.isIntersecting && entry.target.id) {
+        if (!visibleElements.has(entry.target.id)) {
+          visibleElements.add(entry.target.id)
+          hasChanges = true
+        }
+      } else if (entry.target.id) {
+        if (visibleElements.has(entry.target.id)) {
+          visibleElements.delete(entry.target.id)
+          hasChanges = true
+        }
       }
+    })
+
+    // Only update if there were actual changes
+    if (hasChanges) {
+      updateActiveId()
     }
-    return
-  }
+  }, observerOptions)
+
+  // Observe all heading elements
+  requestAnimationFrame(() => {
+    props.items.forEach(item => {
+      const element = document.getElementById(item.id)
+      if (element && observer) {
+        observer.observe(element)
+      }
+    })
+  })
 }
 
-const onScroll = throttleAndDebounce(setActiveItem, 100)
+// Watch for items changes and re-setup observer
+watch(() => props.items, () => {
+  requestAnimationFrame(setupObserver)
+}, { deep: true })
 
 onMounted(() => {
-  requestAnimationFrame(setActiveItem)
-  if (parentEl.value) {
-    parentEl.value.addEventListener('scroll', onScroll)
-  } else {
-    window.addEventListener('scroll', onScroll)
+  // Set initial active item
+  if (props.items.length > 0 && props.items[0]) {
+    activeId.value = props.items[0].id
   }
+  
+  // Setup observer after a short delay to ensure DOM is ready
+  setTimeout(setupObserver, 100)
 })
 
 onUnmounted(() => {
-  if (parentEl.value) {
-    parentEl.value.removeEventListener('scroll', onScroll)
-  } else {
-    window.removeEventListener('scroll', onScroll)
+  if (observer) {
+    observer.disconnect()
+    observer = null
   }
 })
 </script>
