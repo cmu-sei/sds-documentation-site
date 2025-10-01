@@ -84,7 +84,7 @@ export default defineNuxtConfig({
     // Provide the Open Sans font used by our Tailwind preset
     '@cmu-sei/sei-design-system/open-sans/index.css',
     // Provide the Tailwind CSS directives to our app
-    '../assets/css/main.css',
+    '../app/assets/css/main.css',
     // Provide the CSS for every component
     '@cmu-sei/sei-design-system/dist/style.css',
   ],
