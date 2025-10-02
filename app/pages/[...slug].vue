@@ -26,7 +26,7 @@
       </div>
       <div class="hidden lg:block grow overflow-auto">
         <ul
-          v-if="navigation && navigation.length > 0"
+          v-if="Array.isArray(navigation) && navigation.length > 0"
           class="flex"
         >
           <li
@@ -289,7 +289,13 @@
       />
       <Body class="bg-white dark:bg-gray-950 text-black dark:text-white" />
       <div>
-        <div class="prose max-w-none prose-blue dark:prose-invert py-4 mx-auto prose-pre:bg-white prose-pre:border dark:prose-pre:bg-black dark:prose-pre:border-gray-800">
+        <div
+          class="
+            scroll-smooth
+            prose-headings:scroll-mt-24
+            prose max-w-none prose-blue dark:prose-invert py-4 mx-auto prose-pre:bg-white prose-pre:border dark:prose-pre:bg-black dark:prose-pre:border-gray-800
+          "
+        >
           <ContentRenderer v-if="page" :value="page" />
           <div v-else>Page not found</div>
         </div>
