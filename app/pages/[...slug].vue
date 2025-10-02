@@ -412,11 +412,11 @@ const {
   githubUrl,
 } = useAppConfig()
 
-const isFullscreen = useState('fullscreen-toggle', () => false)
+const isFullscreen = useState('fullscreen-toggle', () => true)
 const darkMode = useState('dark-mode-toggle', () => false)
 
 onMounted(() => {
-  const isFullscreenCookie = useCookie('fullscreen-toggle-cookie', { default: () => false })
+  const isFullscreenCookie = useCookie('fullscreen-toggle-cookie', { default: () => true })
   isFullscreen.value = isFullscreenCookie.value
 
   const darkModeCookie = useCookie('dark-mode-toggle-cookie', { default: () => false })
@@ -502,22 +502,16 @@ const toggleTreeNode = (link: { path: string }) => {
   }
 }
 
+const { scrollToElement } = useScrollToHash()
+
 onMounted(() => {
   if (route.hash && route.hash !== '') {
-    const scrollEl = document.querySelector(route.hash)
-    if (scrollEl) {
-      scrollEl.scrollIntoView(true)
-    } else {
-      const pageContentEl = document.getElementById('page-content')
-      if (pageContentEl) {
-        pageContentEl.scrollTop = 0
-      }
-    }
+    // Use setTimeout to ensure content is fully rendered
+    setTimeout(() => {
+      scrollToElement(route.hash)
+    }, 100)
   } else {
-    const pageContentEl = document.getElementById('page-content')
-    if (pageContentEl) {
-      pageContentEl.scrollTop = 0
-    }
+    window.scrollTo({ top: 0, behavior: 'instant' })
   }
   requestAnimationFrame(() => (showScrollspy.value = true))
 })

@@ -10,21 +10,10 @@ export default {
       const nuxtApp = useNuxtApp()
       return new Promise((resolve) => {
         nuxtApp.hooks.hookOnce('page:finish', () => {
-          const headerOffset = 96 // 24 * 4 = 96px (scroll-mt-24)
-
           setTimeout(() => {
-            const el: HTMLElement | null = document.querySelector(to.hash)
-            if (el) {
-              const elementPosition = el.getBoundingClientRect().top
-              const offsetPosition = elementPosition + window.pageYOffset - headerOffset
-              window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-              })
-              resolve({ left: 0, top: offsetPosition })
-            } else {
-              resolve({ el: to.hash, top: headerOffset })
-            }
+            const { scrollToElement } = useScrollToHash()
+            const offsetPosition = scrollToElement(to.hash)
+            resolve({ left: 0, top: offsetPosition })
           }, 100)
         })
       })
