@@ -5,19 +5,27 @@ export default {
   scrollBehavior(to, _from, savedPosition) {
     if (savedPosition) return savedPosition
 
-    // Scroll to target id
+    // Scroll to target id with offset for fixed header
     if (to.hash) {
       const nuxtApp = useNuxtApp()
       return new Promise((resolve) => {
         nuxtApp.hooks.hookOnce('page:finish', () => {
-          const el: HTMLElement | null = document.querySelector(to.hash)
-          const pageContent: HTMLElement | null = document.querySelector('#page-content')
-          const scrollTop = el && pageContent ? pageContent.scrollTop = el.offsetTop - pageContent.offsetTop : 0
-          if (pageContent) {
-            resolve({ left: 0, top: scrollTop })
-          } else {
-            resolve({ el: to.hash })
-          }
+          const headerOffset = 96 // 24 * 4 = 96px (scroll-mt-24)
+
+          setTimeout(() => {
+            const el: HTMLElement | null = document.querySelector(to.hash)
+            if (el) {
+              const elementPosition = el.getBoundingClientRect().top
+              const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+              window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+              })
+              resolve({ left: 0, top: offsetPosition })
+            } else {
+              resolve({ el: to.hash, top: headerOffset })
+            }
+          }, 100)
         })
       })
     }
