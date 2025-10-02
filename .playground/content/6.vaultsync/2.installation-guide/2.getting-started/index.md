@@ -2,7 +2,7 @@
 
 Welcome to VaultSync! This quick-start guide walks you through setting up your workspace, uploading your first files, and sharing content securely.
 
-If you haven’t already, be sure to review the [Installation Guide](../installation-guide) to install or access VaultSync in your environment.
+If you haven't already, be sure to review the [Installation Guide](../installation-guide) to install or access VaultSync in your environment.
 
 ---
 
@@ -10,7 +10,7 @@ If you haven’t already, be sure to review the [Installation Guide](../installa
 
 Visit [vaultsync.app](https://vaultsync.app) and either:
 
-- Sign in using your organization’s credentials  
+- Sign in using your organization's credentials  
 - Or create a new workspace with your email and a secure password
 
 If your team uses SSO (Single Sign-On), select the appropriate provider on the login screen.
@@ -69,8 +69,8 @@ Under **Settings > Permissions**, you can:
 
 To sync files across devices, install VaultSync for:
 
-- **Desktop** (Windows/macOS) – Available in your dashboard  
-- **Mobile** (iOS & Android) – Available in the App Store and Google Play
+- **Desktop** (Windows/macOS) - Available in your dashboard  
+- **Mobile** (iOS & Android) - Available in the App Store and Google Play
 
 ---
 

@@ -2,7 +2,7 @@
 
 *Release Date: 2025-08-06*
 
-We’re excited to announce the first stable release of **VaultSync**—a secure, cloud-based file collaboration and backup system designed to protect your data while keeping your teams in sync.
+We're excited to announce the first stable release of **VaultSync**—a secure, cloud-based file collaboration and backup system designed to protect your data while keeping your teams in sync.
 
 This release introduces the core functionality of VaultSync, delivering reliable syncing, encrypted storage, and user-friendly sharing tools out of the box.
 
@@ -48,9 +48,9 @@ This release introduces the core functionality of VaultSync, delivering reliable
 
 ---
 
-## 📣 What’s Next
+## 📣 What's Next
 
-We’re actively working on the following for upcoming releases:
+We're actively working on the following for upcoming releases:
 
 - Full mobile editing experience  
 - Granular permission analytics  
