@@ -17,7 +17,7 @@ VaultSync 1.2.0 introduces powerful compliance controls, real-time desktop colla
 ### Real-Time Desktop Co-Editing
 
 - Collaborate on text documents simultaneously with **live presence indicators**  
-- See who’s viewing or editing a file in real time  
+- See who's viewing or editing a file in real time  
 - Includes change tracking, inline comments, and auto-versioning
 
 ### Two-Way Sync with Box & Dropbox
@@ -53,7 +53,7 @@ VaultSync 1.2.0 introduces powerful compliance controls, real-time desktop colla
 
 ---
 
-## 🔭 What’s Coming in 1.3.0
+## 🔭 What's Coming in 1.3.0
 
 - Full audit trail export (JSON and CSV)  
 - Granular permission automation via policy rules  

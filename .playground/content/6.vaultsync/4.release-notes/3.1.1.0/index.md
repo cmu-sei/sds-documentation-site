@@ -49,7 +49,7 @@ New mobile features require the latest version of the VaultSync mobile app (v1.1
 
 ---
 
-## 🔮 What’s Next
+## 🔮 What's Next
 
 In upcoming releases:
 
