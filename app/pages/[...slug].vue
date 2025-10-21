@@ -40,6 +40,7 @@
               :class="{
                 'active': isActive(link)
               }"
+              @mouseenter="prefetchPage(link.path)"
             >{{ link.title }}</NuxtLink>
           </li>
         </ul>
@@ -147,6 +148,7 @@
                     :class="{
                       'active text-red-600 dark:text-red-300': isActive(child)
                     }"
+                    @mouseenter="prefetchPage(child.path)"
                   >
                     <Icon
                       v-if="child.icon"
@@ -297,7 +299,7 @@
           "
         >
           <ContentRenderer v-if="page" :value="page" />
-          <div v-else>Page not found</div>
+          <div v-else class="text-gray-500">Loading...</div>
         </div>
         <div
           v-if="surround && surround.length > 0"
@@ -362,8 +364,30 @@ type ContentSidebarItem = ContentNavigationItem & { children?: ContentNavigation
 
 const route = useRoute()
 
-const { data: page } = await useAsyncData(`page-${route.path}`, () => {
-  return queryCollection('content').path(route.path).first()
+// Normalize the path - remove trailing slash for lookups (do this once for consistency)
+const lookupPath = computed(() => {
+  const path = route.path
+  return path.endsWith('/') && path !== '/' ? path.slice(0, -1) : path
+})
+
+// Use async data with proper keys for better caching
+// The component stays mounted, but data updates when route changes
+// Use normalized lookupPath as key to ensure SSR/client consistency
+const { data: page } = await useAsyncData(`page-${lookupPath.value}`, async () => {
+  const path = lookupPath.value
+  
+  // Try the exact path first
+  let result = await queryCollection('content').path(path).first()
+  
+  // If not found and path doesn't end with /index, try appending /index
+  if (!result && !path.endsWith('/index')) {
+    result = await queryCollection('content').path(`${path}/index`).first()
+  }
+  
+  return result
+}, {
+  lazy: false, // Load immediately for faster initial render
+  watch: [lookupPath], // Re-fetch when path changes
 })
 
 const toc = computed(() => page.value?.body.toc)
@@ -382,25 +406,42 @@ const { $globalNavigation, $globalSearchData } = useNuxtApp()
 const navigation = $globalNavigation
 const searchData = $globalSearchData
 
-// Only fetch route-specific data
-const { data: surround } = await useAsyncData(`surround-${route.path}`, () => {
-  return queryCollectionItemSurroundings('content', route.path)
+// Optimize: Only fetch surround and sidebar when route changes
+// Use normalized lookupPath for consistency
+const { data: surround } = await useAsyncData(`surround-${lookupPath.value}`, () => {
+  return queryCollectionItemSurroundings('content', lookupPath.value)
+}, {
+  lazy: true, // This can be lazy since it's just prev/next links
+  watch: [lookupPath],
 })
 
-const { data: sidebar } = await useAsyncData(`sidebar-${route.path}`, () => {
-  if (!firstPart.value) return Promise.resolve([])
-  return queryCollectionNavigation('content').where('path', 'LIKE', `/${firstPart.value}/%`)
+// Load sidebar navigation for the current section
+const { data: sidebarData } = await useAsyncData(`sidebar-${firstPart.value}`, async () => {
+  if (!firstPart.value) return []
+  // Query navigation for content and filter to current section
+  const allNav = await queryCollectionNavigation('content')
+  return allNav.filter((item: ContentNavigationItem) => 
+    item.path.startsWith(`/${firstPart.value}/`) || item.path === `/${firstPart.value}`
+  )
+}, {
+  lazy: false, // Load immediately so sidebar is available on first render
+  watch: [firstPart], // Reload when section changes
 })
+
+const sidebar = computed(() => sidebarData.value ?? [])
+
+// Normalize sidebar items with trailing slashes (navigation is already normalized in plugin)
+const normalizedSidebar = computed(() => normalizeNavigationPaths(sidebar.value))
 
 // Provide data to child components
-provide('navigation', navigation)
+// Navigation is already normalized in the plugin, so use it directly
+provide('navigation', ref(navigation))
 provide('surround', surround)
-provide('sidebar', sidebar)
+provide('sidebar', normalizedSidebar)
 provide('searchData', searchData)
 
-definePageMeta({
-  key: (route) => route.fullPath
-})
+// Remove definePageMeta key to allow component reuse and faster navigation
+// The useAsyncData keys will handle data fetching per route
 
 useSeoMeta({
   title: () => page.value?.title || 'Loading...',
@@ -412,32 +453,60 @@ const {
   githubUrl,
 } = useAppConfig()
 
-const isFullscreen = useState('fullscreen-toggle', () => true)
-const darkMode = useState('dark-mode-toggle', () => false)
+// For SSG, cookies don't exist during build time
+// Initialize with defaults during SSR, then update from cookies on client
+const isFullscreenCookie = useCookie<boolean>('fullscreen-toggle-cookie', { 
+  default: () => true,
+  decode: (value) => {
+    if (!value) return true
+    if (value === 'false' || value === '0') return false
+    if (value === 'true' || value === '1') return true
+    return !!value
+  },
+  encode: (value) => String(value),
+})
 
+const darkModeCookie = useCookie<boolean>('dark-mode-toggle-cookie', { 
+  default: () => false,
+  decode: (value) => {
+    if (!value) return false
+    if (value === 'false' || value === '0') return false
+    if (value === 'true' || value === '1') return true
+    return !!value
+  },
+  encode: (value) => String(value),
+})
+
+// Use refs that will be updated on client mount to avoid SSR/client mismatch
+const isFullscreen = ref(true)
+const darkMode = ref(false)
+
+// On client mount, sync with cookie values
 onMounted(() => {
-  const isFullscreenCookie = useCookie('fullscreen-toggle-cookie', { default: () => true })
   isFullscreen.value = isFullscreenCookie.value
-
-  const darkModeCookie = useCookie('dark-mode-toggle-cookie', { default: () => false })
   darkMode.value = darkModeCookie.value
-})
-
-watch(isFullscreen, (newValue) => {
-  const isFullscreenCookie = useCookie('fullscreen-toggle-cookie')
-  isFullscreenCookie.value = `${newValue}`
-})
-
-watch(darkMode, (newValue) => {
-  const darkModeCookie = useCookie('dark-mode-toggle-cookie')
-  darkModeCookie.value = `${newValue}`
+  
+  // Watch for changes and update cookies
+  watch(isFullscreen, (newValue) => {
+    isFullscreenCookie.value = newValue
+  })
+  
+  watch(darkMode, (newValue) => {
+    darkModeCookie.value = newValue
+  })
 })
 
 const showSearchModal = ref(false)
 
 const showScrollspy = ref(false)
 
-const closedTreeNodes = ref<string[]>([])
+// Helper function to remove trailing slash
+const removeTrailingSlash = (path: string) => {
+  if (path !== '/' && path.endsWith('/')) {
+    return path.slice(0, -1)
+  }
+  return path
+}
 
 // Recursively collect all paths of nodes with children
 function collectClosedPaths(nodes: ContentSidebarItem[] = []): string[] {
@@ -451,37 +520,42 @@ function collectClosedPaths(nodes: ContentSidebarItem[] = []): string[] {
   return paths;
 }
 
-watch(sidebar, (newSidebar) => {
-  if (Array.isArray(newSidebar)) {
-    // Initialize all nodes as closed
-    closedTreeNodes.value = collectClosedPaths(newSidebar as ContentSidebarItem[]);
-
-    // Find the active node and its ancestors
-    function findActiveAncestors(nodes: ContentSidebarItem[], targetPath: string, ancestors: string[] = []): string[] {
-      for (const node of nodes) {
-        if (node.path === targetPath) {
-          return ancestors.concat(node.path);
-        }
-        if (node.children && node.children.length > 0) {
-          const result = findActiveAncestors(node.children as ContentSidebarItem[], targetPath, ancestors.concat(node.path));
-          if (result.length) return result;
-        }
-      }
-      return [];
+// Find the active node and its ancestors
+function findActiveAncestors(nodes: ContentSidebarItem[], targetPath: string, ancestors: string[] = []): string[] {
+  for (const node of nodes) {
+    // Normalize both paths for comparison (remove trailing slashes)
+    if (removeTrailingSlash(node.path) === removeTrailingSlash(targetPath)) {
+      return ancestors.concat(node.path);
     }
-
-    const activePaths = findActiveAncestors(newSidebar as ContentSidebarItem[], route.path);
-    // Remove active node and ancestors from closedTreeNodes
-    closedTreeNodes.value = closedTreeNodes.value.filter(path => !activePaths.includes(path));
+    if (node.children && node.children.length > 0) {
+      const result = findActiveAncestors(node.children as ContentSidebarItem[], targetPath, ancestors.concat(node.path));
+      if (result.length) return result;
+    }
   }
-}, { immediate: true });
-
-const removeTrailingSlash = (path: string) => {
-  if (path !== '/' && path.endsWith('/')) {
-    return path.slice(0, -1)
-  }
-  return path
+  return [];
 }
+
+// Initialize closedTreeNodes - compute initial state synchronously
+// This ensures SSR and client start with the same value
+function computeInitialClosedNodes(): string[] {
+  if (!Array.isArray(sidebar.value) || sidebar.value.length === 0) {
+    return []
+  }
+  
+  const allClosed = collectClosedPaths(sidebar.value as ContentSidebarItem[])
+  // Normalize route path to remove trailing slash to match comparison in findActiveAncestors
+  const normalizedRoutePath = removeTrailingSlash(route.path)
+  // Also need to search with sidebar's format, so normalize sidebar paths for comparison
+  const activePaths = findActiveAncestors(sidebar.value as ContentSidebarItem[], normalizedRoutePath)
+  return allClosed.filter(path => !activePaths.includes(path))
+}
+
+const closedTreeNodes = ref<string[]>(computeInitialClosedNodes())
+
+// Watch for route changes to update closed nodes (but not sidebar changes during hydration)
+watch(() => route.path, () => {
+  closedTreeNodes.value = computeInitialClosedNodes()
+})
 
 const isActive = (link: { path: string }) => {
   const normalizedLinkPath = removeTrailingSlash(link.path)
@@ -503,6 +577,25 @@ const toggleTreeNode = (link: { path: string }) => {
 }
 
 const { scrollToElement } = useScrollToHash()
+
+// Prefetch page data on hover for instant navigation
+const prefetchPage = async (path: string) => {
+  // Use $fetch for prefetching since component is already mounted
+  // This will populate Nuxt's internal cache
+  try {
+    // Prefetch the page content
+    await queryCollection('content').path(path).first()
+    
+    // Prefetch surround data
+    await queryCollectionItemSurroundings('content', path)
+    
+    // Prefetch the route component
+    await preloadRouteComponents(path)
+  } catch (error) {
+    // Silently fail - prefetch is just an optimization
+    console.debug('Prefetch failed for', path, error)
+  }
+}
 
 onMounted(() => {
   if (route.hash && route.hash !== '') {

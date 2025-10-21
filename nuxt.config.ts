@@ -9,6 +9,14 @@ export default defineNuxtConfig({
   experimental: {
     payloadExtraction: true,
     renderJsonPayloads: true,
+    componentIslands: true,
+  },
+
+  // Optimize route generation
+  routeRules: {
+    // Cache navigation data as static
+    '/api/_content/navigation/**': { swr: true },
+    '/api/_content/query/**': { swr: true },
   },
 
   icon: {
@@ -102,24 +110,14 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       routes: ['/sitemap.xml'],
-      // Limit concurrent renders to reduce memory usage
-      concurrency: 5,
-      // Add interval between renders to allow garbage collection
-      interval: 100,
-      // Fail gracefully instead of crashing
       failOnError: false,
-      // Retry failed routes
-      retry: 3,
-      retryDelay: 500
+      concurrency: 100,
+      interval: 100,
+      crawlLinks: true,
     },
-    // Enable memory optimizations
-    experimental: {
-      wasm: false
-    },
-    // Reduce payload size
     replace: {
       'process.env.NODE_ENV': JSON.stringify('production')
-    }
+    },
   },
 
   compatibilityDate: '2025-01-22'

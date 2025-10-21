@@ -10,6 +10,7 @@
         [activeClass]: activeId === i.id,
         [inactiveClass]: activeId !== i.id
       }"
+      @click.prevent="handleClick(i.id)"
     >
       <!-- @slot Default content. Determines the content of the item link. @binding item -->
       <slot :item="i">{{ i.text }}</slot>
@@ -61,9 +62,21 @@ const props = defineProps({
   inactiveClass: { type: String, default: '' }
 })
 
+const router = useRouter()
+const { scrollToElement } = useScrollToHash()
+
 const activeId = ref<string>()
 let observer: IntersectionObserver | null = null
 const visibleElements = new Set<string>()
+
+const handleClick = (id: string) => {
+  // Update the URL hash
+  router.push({ hash: `#${id}` })
+  // Scroll to the element
+  scrollToElement(`#${id}`)
+  // Update active state immediately
+  activeId.value = id
+}
 
 const parentEl = computed<HTMLElement | null>(() => {
   if (typeof document === 'undefined') return null

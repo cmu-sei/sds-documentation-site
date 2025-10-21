@@ -68,9 +68,26 @@ const searchTextRef = ref<HTMLElement>()
 const searchText = ref('')
 const selectedIndex = ref(0)
 const results = ref()
+const searchDataLoaded = ref(false)
 
-// Use the globally provided search data from the plugin
-const searchData = inject<Ref<{ id: string; title: string; titles: string[]; level: number; content: string; }[] | null>>('searchData', ref(null))
+// Lazy load search data only when search is opened for the first time
+const searchData = ref<{ id: string; title: string; titles: string[]; level: number; content: string; }[] | null>(null)
+
+// Load search data on demand
+const loadSearchData = async () => {
+  if (searchDataLoaded.value || !modelValue.value) return
+  
+  searchDataLoaded.value = true
+  const data = await queryCollectionSearchSections('content')
+  searchData.value = data
+}
+
+// Watch modal opening to trigger search data load
+watch(modelValue, (isOpen) => {
+  if (isOpen && !searchDataLoaded.value) {
+    loadSearchData()
+  }
+})
 
 const removeDuplicatesByTitleAndURL = (array: { id: string; title: string; titles: string[]; level: number; content: string; }[]) => {
   const urlMap = new Map()
