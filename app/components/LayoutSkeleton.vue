@@ -145,6 +145,10 @@
           </NuxtLink>
           <div class="text-sm text-gray-700 dark:text-gray-300">
             <p>© {{ new Date().getFullYear() }} Carnegie Mellon University</p>
+            <ul class="flex [&>li:not(:last-child)]:after:content-['|'] [&>li:not(:last-child)]:after:mx-1 [&>li:not(:last-child)]:after:text-gray-300 dark:[&>li:not(:last-child)]:after:text-gray-700">
+              <li class="sm:ml-auto"><NuxtLink to="https://www.sei.cmu.edu/legal/" target="_blank" class="link link-tertiary">Legal</NuxtLink></li>
+              <li><NuxtLink to="https://www.sei.cmu.edu/legal/privacy-notice/" target="_blank" class="link link-tertiary">Privacy Policy</NuxtLink></li>
+            </ul>
           </div>
         </div>
       </slot>
