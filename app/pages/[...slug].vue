@@ -607,5 +607,33 @@ onMounted(() => {
     window.scrollTo({ top: 0, behavior: 'instant' })
   }
   requestAnimationFrame(() => (showScrollspy.value = true))
+  
+  // Handle hash link clicks on the same page
+  const handleHashClick = (event: MouseEvent) => {
+    const target = event.target as HTMLElement
+    const anchor = target.closest('a')
+    
+    if (anchor && anchor.hash) {
+      const url = new URL(anchor.href)
+      const currentUrl = new URL(window.location.href)
+      
+      // Check if the link is to the same page (only hash is different)
+      if (url.pathname === currentUrl.pathname && url.hash) {
+        event.preventDefault()
+        // Update the URL hash
+        window.history.pushState({}, '', url.hash)
+        // Scroll to the element
+        scrollToElement(url.hash)
+      }
+    }
+  }
+  
+  // Add click listener to the document
+  document.addEventListener('click', handleHashClick)
+  
+  // Clean up on unmount
+  onUnmounted(() => {
+    document.removeEventListener('click', handleHashClick)
+  })
 })
 </script>
