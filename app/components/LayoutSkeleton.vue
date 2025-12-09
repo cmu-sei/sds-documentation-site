@@ -164,11 +164,11 @@
               <template v-if="footerLinks">
                 <li
                   v-for="link in (footerLinks as AppConfigInput['footerLinks'])"
-                  :key="link.url"
+                  :key="link.path"
                   class="inline-block"
                 >
                   <NuxtLink
-                    :to="link.url"
+                    :to="link.path"
                     target="_blank"
                     class="link link-primary link-red"
                   >{{ link.title }}</NuxtLink>

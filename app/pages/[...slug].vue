@@ -7,7 +7,7 @@
               to="https://sei.cmu.edu"
               target="_blank"
             >
-              <svg width="300" height="51" viewBox="0 0 300 51" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg class="w-60 h-auto lg:w-[300px]" width="300" height="51" viewBox="0 0 300 51" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M75.1837 6.61328V16.0918H76.7684V16.7284H70.4648V16.0918H72.0495V7.28526H70.817V6.61328H75.1837Z" fill="currentColor" class="text-red-600 dark:text-white"/>
                 <path d="M12.9945 0.495146H12.431C12.3958 0.990291 12.1493 1.2025 11.6563 1.2025C10.7055 1.2025 9.26165 0 7.60653 0C2.85245 0 0 4.70388 0 8.84189C0 13.0153 2.7468 17.1179 7.3248 17.1179C10.1068 17.1179 11.1281 15.8093 11.8676 15.8093C12.3606 15.8093 12.431 16.2337 12.431 16.7642H13.0649V11.0347H12.431L12.2902 11.8128C11.9732 13.6872 10.4942 16.4813 7.5361 16.4813C4.89494 16.4813 3.87369 14.1824 3.87369 8.55895C3.87369 2.6172 5.28231 0.636616 7.60653 0.636616C10.2477 0.636616 12.0437 3.60749 12.431 5.97712H12.9945V0.495146Z" fill="currentColor" class="text-red-600 dark:text-white"/>
                 <path d="M21.1282 14.0056C21.093 15.2081 20.3887 16.2338 19.3322 16.2338C17.7827 16.2338 17.7123 14.9252 17.7123 13.8995C17.7123 12.697 17.8532 11.8835 19.3322 11.7067L21.1282 11.5299V14.0056ZM25.2836 14.7483C25.2836 15.3496 24.8962 16.0216 24.6497 16.0216C24.2271 16.0216 24.1567 15.5971 24.1567 14.8898V9.62003C24.1567 7.00283 21.7269 6.36621 19.3674 6.36621C17.0784 6.36621 15.4233 7.49797 15.4233 8.7712C15.4233 9.58466 15.8811 10.2566 16.9023 10.2566C17.7827 10.2566 18.311 9.69076 18.311 8.87731C18.311 7.71018 17.1136 7.71018 17.1136 7.67481C17.1136 7.1443 18.4518 7.00283 19.2266 7.00283C20.9521 7.00283 21.1634 7.63944 21.1634 9.01878V10.9286L18.9096 11.1055C16.8319 11.2823 14.5781 11.8128 14.5781 14.2178C14.5781 16.1984 16.3741 17.0118 18.0997 17.0118C18.9801 17.0118 20.5647 16.6582 21.1634 15.5618C21.586 16.5167 22.4312 17.0118 23.4524 17.0118C24.9315 17.0118 25.8823 16.1277 25.8823 14.7837H25.2836V14.7483Z" fill="currentColor" class="text-red-600 dark:text-white"/>
@@ -66,7 +66,7 @@
               <span class="sr-only">SEI</span>
             </NuxtLink>
           </div>
-          <div class="hidden ml-auto sm:flex gap-2 items-center py-3">
+          <div class="ml-auto flex gap-1 sm:gap-2 items-center">
             <NuxtLink
               v-if="githubUrl"
               :to="githubUrl"
@@ -93,7 +93,11 @@
               class="w-px h-6 mx-1 bg-gray-200 dark:bg-gray-800"
               aria-hidden="true"
             />
-            <SdsActionButton size="md" @click="isFullscreen = !isFullscreen">
+            <SdsActionButton
+              class="hidden lg:inline-flex"
+              size="md"
+              @click="isFullscreen = !isFullscreen"
+            >
               <Icon
                 v-if="isFullscreen"
                 name="material-symbols:fullscreen-exit"
@@ -110,7 +114,7 @@
                 isFullscreen ? "Exit fullscreen" : "Enter fullscreen"
               }}</span>
             </SdsActionButton>
-            <SdsActionButton size="md" @click="darkMode = !darkMode">
+            <SdsActionButton class="hidden sm:inline-flex" size="md" @click="darkMode = !darkMode">
               <Icon
                 v-if="darkMode"
                 name="material-symbols:nightlight-outline"
@@ -127,9 +131,6 @@
                 >{{ darkMode ? "Dark" : "Light" }} mode</span
               >
             </SdsActionButton>
-            <LazySearchBox v-model="showSearchModal" />
-          </div>
-          <div class="sm:hidden ml-auto flex gap-2 items-center py-3">
             <LazySearchBox v-model="showSearchModal" />
           </div>
         </div>
@@ -164,8 +165,17 @@
             v-if="Array.isArray(navigation) && navigation.length > 0"
             class="flex"
           >
-            <li v-for="link of navigation" :key="link.path">
+            <li v-for="(link, index) of navigation" :key="link.path">
+              <MegaMenu
+                v-if="link.fromAppConfig"
+                :item="link"
+                :is-active="isActive(link)"
+                :prefetch-page="prefetchPage"
+                :index="index"
+                :total="navigation.length"
+              />
               <NuxtLink
+                v-else
                 :to="link.path"
                 class="tab tab-underline tab-red py-5"
                 :title="link.title"
