@@ -5,7 +5,7 @@ export default defineAppConfig({
   },
   appSuitePrefix: 'SDS',
   appSuite: 'Docs',
-  pageTitle: 'Sample Documentation Site'
+  pageTitle: 'Sample Documentation Site',
 })
 
 declare module '@nuxt/schema' {
@@ -17,6 +17,8 @@ declare module '@nuxt/schema' {
     githubUrl?: string
     appSuitePrefix: string,
     appSuite: string,
-    pageTitle: string
+    pageTitle: string,
+    footerLinks?: Array<{ title: string, url: string }>
+    navigation?: Array<{ title: string, url: string, children?: Array<{ title: string, url: string }> }>
   }
 }

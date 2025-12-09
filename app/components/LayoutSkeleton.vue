@@ -1,20 +1,36 @@
 <template>
 <div class="min-h-screen">
 
-  <!-- Sticky Header -->
+  <!-- Top Header (scrollable) -->
   <header
-    ref="header"
-    class="sticky top-0 z-30 border-b border-gray-200 bg-white dark:bg-gray-950 dark:border-gray-800"
+    class="bg-white dark:bg-gray-950"
+  >
+    <div class="bg-gray-25 dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
+      <div
+        class="mx-auto"
+        :class="{
+          'max-w-7xl': !fullwidth
+        }"
+      >
+        <slot name="header-top" />
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Navigation Bar -->
+  <div
+    ref="navBar"
+    class="sticky top-0 z-50 border-b border-gray-100 bg-white dark:bg-gray-950 dark:border-gray-800"
   >
     <div
-      class="mx-auto px-4 flex items-center justify-between"
+      class="mx-auto"
       :class="{
         'max-w-7xl': !fullwidth
       }"
     >
-      <slot name="header" />
+      <slot name="header-nav" />
     </div>
-  </header>
+  </div>
 
   <!-- Main layout with sidebar and content -->
   <div
@@ -45,7 +61,7 @@
   </div>
 
   <!-- Footer -->
-  <footer class="relative border-t mt-4 border-gray-200 dark:border-gray-800">
+  <footer class="relative border-t mt-4 border-gray-100 dark:border-gray-800">
     <!-- Logo -->
     <svg
       width="16"
@@ -67,13 +83,13 @@
       }"
     >
       <slot name="footer">
-        <div class="flex gap-4 flex-col sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex gap-4 flex-col md:flex-row md:items-center md:justify-between">
           <NuxtLink
             to="https://sei.cmu.edu"
             target="_blank"
           >
             <!-- CMU/SEI Logo -->
-            <svg width="264" height="46" viewBox="0 0 264 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="300" height="51" viewBox="0 0 264 46" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g clip-path="url(#clip0_7332_256046)">
               <path d="M66.0516 6.10547V14.1472H67.3887V14.6766H62.0469V14.1472H63.3813V6.67194H62.3449V6.10547H66.0516Z" fill="currentColor"/>
               <mask id="mask0_7332_256046" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="12" height="15">
@@ -143,11 +159,27 @@
             </svg>
             <span class="sr-only">SEI</span>
           </NuxtLink>
-          <div class="text-sm text-gray-700 dark:text-gray-300">
-            <p>© {{ new Date().getFullYear() }} Carnegie Mellon University</p>
-            <ul class="flex [&>li:not(:last-child)]:after:content-['|'] [&>li:not(:last-child)]:after:mx-1 [&>li:not(:last-child)]:after:text-gray-300 dark:[&>li:not(:last-child)]:after:text-gray-700">
-              <li class="sm:ml-auto"><NuxtLink to="https://www.sei.cmu.edu/legal/" target="_blank" class="link link-tertiary">Legal</NuxtLink></li>
-              <li><NuxtLink to="https://www.sei.cmu.edu/legal/privacy-notice/" target="_blank" class="link link-tertiary">Privacy Policy</NuxtLink></li>
+          <div class="md:text-right text-gray-700 dark:text-gray-300">
+            <ul class="text-sm flex-inline [&>li:not(:last-child)]:after:content-['·'] [&>li:not(:last-child)]:after:mx-3 [&>li:not(:last-child)]:after:text-gray-300 dark:[&>li:not(:last-child)]:after:text-gray-700 mb-2">
+              <template v-if="footerLinks">
+                <li
+                  v-for="link in (footerLinks as AppConfigInput['footerLinks'])"
+                  :key="link.url"
+                  class="inline-block"
+                >
+                  <NuxtLink
+                    :to="link.url"
+                    target="_blank"
+                    class="link link-primary link-red"
+                  >{{ link.title }}</NuxtLink>
+                </li>
+              </template>
+              <li class="inline-block"><NuxtLink to="https://www.cmu.edu" target="_blank" class="link link-primary link-red">www.cmu.edu</NuxtLink></li>
+            </ul>
+            <p class="text-xs">© {{ new Date().getFullYear() }} Carnegie Mellon University</p>
+            <ul class="text-xs flex [&>li:not(:last-child)]:after:content-['|'] [&>li:not(:last-child)]:after:mx-1 [&>li:not(:last-child)]:after:text-gray-300 dark:[&>li:not(:last-child)]:after:text-gray-700">
+              <li class="sm:ml-auto"><NuxtLink to="https://www.sei.cmu.edu/legal/" target="_blank" class="link link-tertiary link-inline">Legal</NuxtLink></li>
+              <li><NuxtLink to="https://www.sei.cmu.edu/legal/privacy-notice/" target="_blank" class="link link-tertiary link-inline">Privacy Policy</NuxtLink></li>
             </ul>
           </div>
         </div>
@@ -159,6 +191,10 @@
 </template>
 
 <script setup lang="ts">
+import type { AppConfigInput } from 'nuxt/schema'
+
+const { footerLinks } = useAppConfig()
+
 defineProps({
   fullwidth: {
     type: Boolean,
