@@ -62,6 +62,8 @@ const props = defineProps({
   inactiveClass: { type: String, default: '' }
 })
 
+const emit = defineEmits(['click'])
+
 const router = useRouter()
 const { scrollToElement } = useScrollToHash()
 
@@ -76,6 +78,7 @@ const handleClick = (id: string) => {
   scrollToElement(`#${id}`)
   // Update active state immediately
   activeId.value = id
+  emit('click', id)
 }
 
 const parentEl = computed<HTMLElement | null>(() => {

@@ -55,7 +55,7 @@
             ref="dropdownRef"
             role="menu"
             :aria-label="`${item.title} submenu`"
-            class="fixed w-64 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-b-lg shadow-lg z-50 origin-top"
+            class="fixed w-64 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-b-lg shadow-lg z-50 origin-top"
             :style="dropdownStyle"
             @keydown="handleDropdownKeydown"
           >

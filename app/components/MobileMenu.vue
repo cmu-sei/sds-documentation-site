@@ -9,8 +9,9 @@
       />
       <span class="sr-only">Navigation menu</span>
     </SdsActionButton>
-    <SdsPanel
+    <SdsMobileMenu
       v-model="showPanel"
+      :mobile-menus="mobileMenus"
       side="right"
       size="md"
     >
@@ -20,22 +21,29 @@
           <span class="font-semibold text-gray-600 dark:text-gray-300">{{ appSuite }}</span>
         </p>
       </template>
-      <template #default>
-        <NuxtLink
-          v-for="link of navigation"
-          :key="link.path"
-          v-slot="{ isExactActive }"
-          :to="link.path"
-          custom
+      <template #default="{ navigate }">
+        <SdsNavigationItem
+          v-for="menuItem in mobileMenus"
+          :key="menuItem.key"
+          :label="menuItem.title"
+          :href="menuItem.href"
+          :type="menuItem.type"
+          :selected="isActive(menuItem)"
+          @click="menuItem.type === 'slide' ? navigate(menuItem.key) : undefined"
         >
-          <SdsNavigationItem
-            :label="link.title"
-            :href="link.path"
-            :selected="isExactActive || isActive(link)"
-          />
-        </NuxtLink>
-        <hr class="my-4 border-gray-200 dark:border-gray-700">
+          <template
+            v-if="menuItem.icon"
+            #left
+          >
+            <Icon
+              :name="menuItem.icon"
+              class="mt-0.5 w-4 h-4 shrink-0"
+              :alt="`${menuItem.title} icon`"
+            />
+          </template>
+        </SdsNavigationItem>
         <template v-if="sidebar && sidebar?.some((i: ContentNavigationItem) => i.children)">
+          <hr class="my-4 border-gray-200 dark:border-gray-700">
           <div class="-ml-3 flex flex-col gap-2">
             <nav
               v-if="sidebar && sidebar.some((i: ContentNavigationItem) => i.children)"
@@ -212,13 +220,10 @@
             </nav>
           </div>
         </template>
-        <hr
-          v-if="toc && toc.links.length > 0"
-          class="my-8 border-gray-200 dark:border-gray-700"
-        >
         <div
           v-if="toc && toc.links.length > 0"
         >
+          <hr class="my-8 border-gray-200 dark:border-gray-700">
           <div class="flex gap-2 items-center mb-2 text-sm font-semibold text-gray-700 dark:text-gray-100">
             <Icon
               name="material-symbols:format-list-bulleted"
@@ -232,6 +237,7 @@
             item-class="group ml-1.5 border-l-2 border-gray-100 dark:border-gray-900 [&.active]:font-semibold [&.active]:border-red-600 dark:[&.active]:border-red-400 [&.active_span]:text-red-600 dark:[&.active_span]:text-red-300"
             active-class="active"
             class="grid"
+            @click="showPanel = false"
           >
             <template #default="{ item }">
               <span
@@ -241,7 +247,39 @@
           </CustomScrollspy>
         </div>
       </template>
-    </SdsPanel>
+      <template
+        v-for="menuItem in mobileMenus.filter(m => m.type === 'slide')"
+        :key="menuItem.key"
+        #[`panel(${menuItem.key})`]="{ navigate }"
+      >
+        <SdsNavigationItem
+          type="back"
+          @click="navigate()"
+        />
+        <SdsNavigationItem
+          :label="menuItem.title"
+          type="title"
+        >
+          <template
+            v-if="menuItem.icon"
+            #left
+          >
+            <Icon
+              :name="menuItem.icon"
+              class="mt-0.5 w-4 h-4 shrink-0"
+              :alt="`${menuItem.title} icon`"
+            />
+          </template>
+        </SdsNavigationItem>
+        <SdsNavigationItem
+          v-for="child in menuItem.children"
+          :key="child.key"
+          :label="child.title"
+          :href="child.href"
+        />
+        <hr class="mt-2 mb-1 border-gray-200 dark:border-gray-700">
+      </template>
+    </SdsMobileMenu>
   </div>
 </template>
 
@@ -291,4 +329,27 @@ const toggleTreeNode = (link: { path: string }) => {
     closedTreeNodes.value.push(link.path)
   }
 }
+
+const mobileMenus = computed(() => {
+  if (!navigation.value) return []
+  return navigation.value.map((link: ContentNavigationItem) => {
+    // We only want nested menus for links from the app config
+    const hasChildren = link.fromAppConfig && link.children && link.children.length > 0
+    return {
+      key: link.path.replace(/\//g, '-').replace(/^-/, ''),
+      title: link.title,
+      icon: link.icon as string | undefined,
+      href: hasChildren ? undefined : link.path,
+      type: hasChildren ? ('slide' as const) : undefined,
+      path: link.path, // Store path for selection checking
+      children: hasChildren
+        ? link.children?.map((child: ContentNavigationItem) => ({
+            key: child.path.replace(/\//g, '-').replace(/^-/, ''),
+            title: child.title,
+            href: child.path,
+          }))
+        : undefined,
+    }
+  })
+})
 </script>
