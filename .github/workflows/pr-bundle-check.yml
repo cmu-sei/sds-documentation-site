@@ -25,14 +25,14 @@ jobs:
         registry-url: 'https://npm.pkg.github.com'
         # Defaults to the user or organization that owns the workflow file
         scope: '@cmu-sei'
-        token: ${{ secrets.GITHUB_TOKEN }}
+        # token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Cache dependencies
-      uses: actions/cache@v4
-      id: cache
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}-${{ hashFiles('.nvmrc') }}
+    # - name: Cache dependencies
+    #   uses: actions/cache@v4
+    #   id: cache
+    #   with:
+    #     path: ~/.npm
+    #     key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}-${{ hashFiles('.nvmrc') }}
 
     # - name: Install dependencies
     #   run: npm install
@@ -42,6 +42,32 @@ jobs:
 
     # - name: Lint components
     #   run: npm run lint
+
+    - name: Set package version to prerelease with commit SHA
+      run: |
+        SHORT_SHA=$(git rev-parse --short HEAD)
+        CURRENT_VERSION=$(node -p "require('./package.json').version")
+        BASE_VERSION=$(echo $CURRENT_VERSION | sed 's/-.*$//')
+        # strip leading v if present
+        BASE_VERSION="${BASE_VERSION#v}"
+        npm version "${BASE_VERSION}-beta.${SHORT_SHA}" --no-git-tag-version
+        NEW_VERSION=$(node -p "require('./package.json').version")
+        echo "Beta version set to: $NEW_VERSION"
+
+    - name: Update package-lock.json
+      run: npm install --package-lock-only
+
+    - name: Check whether version already published
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        VERSION=$(node -p "require('./package.json').version")
+        PKG_NAME=$(node -p "require('./package.json').name")
+        echo "Checking registry for $PKG_NAME@$VERSION"
+        if npm --registry=https://npm.pkg.github.com view "$PKG_NAME@$VERSION" >/dev/null 2>&1; then
+          echo "Version $VERSION already exists in registry - aborting publish"
+          exit 1
+        fi
 
     - name: Publish dry-run
       env:
