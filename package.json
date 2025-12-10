@@ -10,8 +10,7 @@
     "generate": "NODE_OPTIONS='--max-old-space-size=8192' npx nuxt generate .playground",
     "preview": "npx nuxt preview .playground",
     "lint": "npx eslint .",
-    "change-registry-in-package-lock": "./scripts/update-package-lock.sh",
-    "bundle:release": "./scripts/bundle-release.sh"
+    "release": "./scripts/release.sh"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.12.1",
