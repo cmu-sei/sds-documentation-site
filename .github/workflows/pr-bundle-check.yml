@@ -25,7 +25,7 @@ jobs:
         registry-url: 'https://npm.pkg.github.com'
         # Defaults to the user or organization that owns the workflow file
         scope: '@cmu-sei'
-        # token: ${{ secrets.GITHUB_TOKEN }}
+        # token: ${{ secrets.CMU_SEI_PACKAGE_ACCESS }}
 
     - name: Cache dependencies
       uses: actions/cache@v4
@@ -35,7 +35,9 @@ jobs:
         key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}-${{ hashFiles('.nvmrc') }}
 
     - name: Authenticate with GitHub Packages
-      run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
+      run: |
+        echo "@cmu-sei:registry=https://npm.pkg.github.com" >> ~/.npmrc
+        echo "//npm.pkg.github.com/:_authToken=${{ secrets.CMU_SEI_PACKAGE_ACCESS }}" > ~/.npmrc
 
     - name: Install dependencies
       run: npm install
