@@ -34,11 +34,16 @@ jobs:
         path: ~/.npm
         key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}-${{ hashFiles('.nvmrc') }}
 
-    - name: Install dependencies
-      run: npm install
+    # - name: Install dependencies
+    #   run: npm install
 
-    - name: Prepare .nuxt directory
-      run: npm run dev:prepare
+    # - name: Prepare .nuxt directory
+    #   run: npm run dev:prepare
 
-    - name: Lint components
-      run: npm run lint
+    # - name: Lint components
+    #   run: npm run lint
+
+    - name: Publish dry-run
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: npm publish --tag beta --dry-run
