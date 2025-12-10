@@ -5,11 +5,48 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['nuxt-gtag', '@vueuse/nuxt', '@nuxt/content', '@nuxt/icon'],
 
+  // Enable experimental features for better performance
+  experimental: {
+    payloadExtraction: true,
+    renderJsonPayloads: true,
+    componentIslands: true,
+  },
+
+  // Optimize route generation
+  routeRules: {
+    // Cache navigation data as static
+    '/api/_content/navigation/**': { swr: true },
+    '/api/_content/query/**': { swr: true },
+  },
+
   icon: {
     mode: 'css',
     cssLayer: 'base',
     clientBundle: {
-      scan: true
+      scan: true,
+      icons: [
+        'material-symbols:search',
+        'material-symbols:menu',
+        'material-symbols:keyboard-arrow-left',
+        'material-symbols:keyboard-arrow-right',
+        'material-symbols:keyboard-arrow-down',
+        'material-symbols:format-list-bulleted',
+        'material-symbols:code',
+        'material-symbols:warning-outline',
+        'material-symbols:check-circle-outline',
+        'material-symbols:visibility',
+        'material-symbols:visibility-off',
+        'material-symbols:file-copy',
+        'material-symbols:check',
+        'material-symbols:close-fullscreen',
+        'material-symbols:open-in-full',
+        'material-symbols:fullscreen-exit',
+        'material-symbols:fullscreen',
+        'material-symbols:nightlight-outline',
+        'material-symbols:sunny-outline',
+        'material-symbols:arrow-back',
+        'material-symbols:arrow-forward',
+      ],
     }
   },
 
@@ -55,7 +92,7 @@ export default defineNuxtConfig({
     // Provide the Open Sans font used by our Tailwind preset
     '@cmu-sei/sei-design-system/open-sans/index.css',
     // Provide the Tailwind CSS directives to our app
-    '../assets/css/main.css',
+    '../app/assets/css/main.css',
     // Provide the CSS for every component
     '@cmu-sei/sei-design-system/dist/style.css',
   ],
@@ -72,8 +109,15 @@ export default defineNuxtConfig({
 
   nitro: {
     prerender: {
-      routes: ['/sitemap.xml']
-    }
+      routes: ['/sitemap.xml'],
+      failOnError: false,
+      concurrency: 100,
+      interval: 100,
+      crawlLinks: true,
+    },
+    replace: {
+      'process.env.NODE_ENV': JSON.stringify('production')
+    },
   },
 
   compatibilityDate: '2025-01-22'
