@@ -1,6 +1,7 @@
 name: PR Bundle Check
 
 on:
+  workflow_dispatch: # Manual trigger
   pull_request:
     branches:
       - main
