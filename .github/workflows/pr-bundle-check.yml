@@ -38,6 +38,8 @@ jobs:
 
     - name: Install dependencies
       run: npm install
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.CMU_SEI_PACKAGE_ACCESS }}
 
     - name: Prepare .nuxt directory
       run: npm run dev:prepare
