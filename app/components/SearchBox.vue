@@ -44,15 +44,17 @@
           >{{ item.titles[0] }}</span>
         </nuxt-link>
       </nav>
-      <div
+      <SdsCallout
         v-else
-        class="p-6 my-4 text-blue-800 bg-blue-25 border border-blue-200 rounded-sm dark:bg-blue-950 dark:border-blue-800 dark:text-blue-200"
+        type="subtle"
+        variant="blue"
+        class="mt-4"
       >
         <p v-if="searchText === ''">
           Type a query in the search box above to display a list of results.
         </p>
         <p v-else>No results found. Try to simplify your query.</p>
-      </div>
+      </SdsCallout>
     </sds-modal>
   </div>
 </template>
@@ -63,7 +65,6 @@ const modelValue = defineModel({
   default: false
 })
 
-const searchButtonRef = ref<HTMLElement>()
 const searchTextRef = ref<HTMLElement>()
 const searchText = ref('')
 const selectedIndex = ref(0)
@@ -147,7 +148,7 @@ const handleKeyUp = async (e: KeyboardEvent) => {
       await navigateTo(results.value[selectedIndex.value].id)
       modelValue.value = false
     }
-  } else if (e.key === '/') {
+  } else if (e.key === '/' || (e.key === 'k' && (e.metaKey || e.ctrlKey))) {
     if (!e.target) return
     const tagName = (e.target as HTMLElement).tagName.toLowerCase();
     if (tagName === "textarea") return;

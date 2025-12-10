@@ -10,8 +10,23 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     return
   }
 
+  // Get app config to check for navigation array
+  const appConfig = useAppConfig()
+  
   // Load navigation on both server and client for SSR/hydration
   const { data: navigation } = await useAsyncData('global-navigation', async () => {
+    // Use navigation from app config if defined, otherwise query collection
+    if (appConfig.navigation && Array.isArray(appConfig.navigation) && appConfig.navigation.length > 0) {
+      // Use the navigation from app config and normalize the paths
+      return normalizeNavigationPaths(appConfig.navigation.map(item => ({
+        ...item,
+        path: item.path,
+        _path: item.path,
+        fromAppConfig: true,
+      })))
+    }
+    
+    // Fallback to querying collection navigation
     const nav = await queryCollectionNavigation('content')
     // Normalize paths with trailing slashes for consistency between SSR and client
     return normalizeNavigationPaths(nav)
