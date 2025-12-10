@@ -160,12 +160,12 @@
             <span class="sr-only">SEI</span>
           </NuxtLink>
           <div class="md:text-right text-gray-700 dark:text-gray-300">
-            <ul class="text-sm flex-inline [&>li:not(:last-child)]:after:content-['·'] [&>li:not(:last-child)]:after:mx-3 [&>li:not(:last-child)]:after:text-gray-300 dark:[&>li:not(:last-child)]:after:text-gray-700 mb-2">
+            <ul class="text-sm sm:flex-inline sm:[&>li:not(:last-child)]:after:content-['·'] sm:[&>li:not(:last-child)]:after:mx-3 sm:[&>li:not(:last-child)]:after:text-gray-300 dark:sm:[&>li:not(:last-child)]:after:text-gray-700 mb-4 md:mb-2">
               <template v-if="footerLinks">
                 <li
                   v-for="link in (footerLinks as AppConfigInput['footerLinks'])"
                   :key="link.path"
-                  class="inline-block"
+                  class="sm:inline-block"
                 >
                   <NuxtLink
                     :to="link.path"
