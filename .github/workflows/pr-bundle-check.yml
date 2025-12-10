@@ -22,6 +22,10 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version-file: '.nvmrc'
+        registry-url: 'https://npm.pkg.github.com'
+        # Defaults to the user or organization that owns the workflow file
+        scope: '@cmu-sei'
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Cache dependencies
       uses: actions/cache@v4
