@@ -27,21 +27,24 @@ jobs:
         scope: '@cmu-sei'
         # token: ${{ secrets.GITHUB_TOKEN }}
 
-    # - name: Cache dependencies
-    #   uses: actions/cache@v4
-    #   id: cache
-    #   with:
-    #     path: ~/.npm
-    #     key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}-${{ hashFiles('.nvmrc') }}
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      id: cache
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}-${{ hashFiles('.nvmrc') }}
 
-    # - name: Install dependencies
-    #   run: npm install
+    - name: Authenticate with GitHub Packages
+      run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
 
-    # - name: Prepare .nuxt directory
-    #   run: npm run dev:prepare
+    - name: Install dependencies
+      run: npm install
 
-    # - name: Lint components
-    #   run: npm run lint
+    - name: Prepare .nuxt directory
+      run: npm run dev:prepare
+
+    - name: Lint components
+      run: npm run lint
 
     - name: Set package version to prerelease with commit SHA
       run: |
