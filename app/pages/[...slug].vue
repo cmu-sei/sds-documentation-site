@@ -140,7 +140,7 @@
         <div class="w-full lg:w-auto px-4 py-3 flex gap-1 items-center justify-between">
           <NuxtLink
             to="/"
-            class="flex items-center gap-1 sm:min-w-64 lg:text-lg font-semibold"
+            class="flex items-center gap-2 sm:min-w-64 lg:text-lg font-semibold"
           >
             <!-- Logo -->
             <svg
