@@ -293,6 +293,9 @@ const {
   appSuite,
 } = useAppConfig()
 
+const config = useRuntimeConfig()
+const baseURL = config.app.baseURL
+
 const showPanel = ref(false)
 
 const route = useRoute()
@@ -332,6 +335,13 @@ const toggleTreeNode = (link: { path: string }) => {
 
 const mobileMenus = computed(() => {
   if (!navigation.value) return []
+  
+  // Helper to prepend baseURL to a path
+  const withBaseURL = (path: string) => {
+    if (!baseURL || baseURL === '/') return path
+    return `${baseURL.replace(/\/$/, '')}${path}`
+  }
+  
   return navigation.value.map((link: ContentNavigationItem) => {
     // We only want nested menus for links from the app config
     const hasChildren = link.fromAppConfig && link.children && link.children.length > 0
@@ -339,14 +349,14 @@ const mobileMenus = computed(() => {
       key: link.path.replace(/\//g, '-').replace(/^-/, ''),
       title: link.title,
       icon: link.icon as string | undefined,
-      href: hasChildren ? undefined : link.path,
+      href: hasChildren ? undefined : withBaseURL(link.path),
       type: hasChildren ? ('slide' as const) : undefined,
       path: link.path, // Store path for selection checking
       children: hasChildren
         ? link.children?.map((child: ContentNavigationItem) => ({
             key: child.path.replace(/\//g, '-').replace(/^-/, ''),
             title: child.title,
-            href: child.path,
+            href: withBaseURL(child.path),
           }))
         : undefined,
     }
