@@ -8,7 +8,7 @@
       class="tab tab-underline tab-red py-5 flex items-center gap-1"
       :title="item.title"
       :class="{
-        active: isActive,
+        active: isActive || isOpen,
       }"
       :aria-expanded="isOpen"
       :aria-haspopup="'true'"
@@ -73,12 +73,12 @@
                     @click="closeMenu"
                   >
                     <span class="flex items-center gap-2">
-                      <span class="font-semibold text-sm text-red-600 dark:text-red-300 group-hover:underline group-focus-visible:underline">
+                      <span class="wrap-break-word break-all font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-red-600 dark:group-hover:text-red-300 group-focus-visible:text-red-600 dark:group-focus-visible:text-red-300">
                         {{ item.title }}
                       </span>
                       <Icon
                         name="material-symbols:arrow-forward"
-                        class="w-4 h-4 text-red-600 dark:text-red-300"
+                        class="shrink-0 w-4 h-4 text-red-600 dark:text-red-300 group-hover:translate-x-1 transition-transform"
                       />
                     </span>
                   </NuxtLink>
@@ -93,7 +93,7 @@
                     role="menuitem"
                     tabindex="-1"
                     :data-index="childIndex + 1"
-                    class="group block p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus-visible:bg-gray-50 dark:focus-visible:bg-gray-800"
+                    class="group block p-3 rounded-lg hover:bg-gray-25 dark:hover:bg-gray-850 transition-colors focus:outline-none focus-visible:bg-gray-50 dark:focus-visible:bg-gray-850"
                     @mouseenter="prefetchPage(child.path)"
                     @click="closeMenu"
                   >
@@ -104,7 +104,7 @@
                         class="w-5 h-5 mt-0.5 shrink-0 text-gray-500 dark:text-gray-400 group-hover:text-red-600 dark:group-hover:text-red-300"
                       />
                       <span class="flex-1 min-w-0">
-                        <span class="text-sm text-gray-900 dark:text-gray-100 group-hover:text-red-600 dark:group-hover:text-red-300">
+                        <span class="wrap-break-word break-all text-sm text-gray-900 dark:text-gray-100 group-hover:text-red-600 dark:group-hover:text-red-300">
                           {{ child.title }}
                         </span>
                       </span>
