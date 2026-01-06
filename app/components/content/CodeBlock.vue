@@ -23,10 +23,10 @@
     >
       <Icon
         name="material-symbols:code"
-        class="w-5 h-5 mt-0.5"
+        class="w-5 h-5"
         alt="Close fullscreen icon"
       />
-      <p class="text-sm text-gray-700 dark:text-gray-300">{{ title }}</p>
+      <p class="text-sm text-gray-700 dark:text-gray-300 my-auto pt-2">{{ title }}</p>
       <div
         v-if="quality !== 'average'"
         class="absolute left-1/2 -translate-x-1/2 text-sm p-2 rounded-sm flex gap-1 items-center"
@@ -38,13 +38,13 @@
         <Icon
           v-if="quality === 'bad'"
           name="material-symbols:warning-outline"
-          class="w-4 h-4 mt-0.5"
+          class="w-4 h-4"
           alt="Warning icon"
         />
         <Icon
           v-if="quality === 'good'"
           name="material-symbols:check-circle-outline"
-          class="w-4 h-4 mt-0.5"
+          class="w-4 h-4"
           alt="Good quality icon"
         />
         <span>{{ quality === 'good' ? 'Compliant' : 'Non-compliant' }} code</span>
