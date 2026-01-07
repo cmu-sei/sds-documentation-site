@@ -165,17 +165,17 @@
             v-if="Array.isArray(navigation) && navigation.length > 0"
             class="flex"
           >
-            <li v-for="(link, index) of navigation" :key="link.path">
+            <li v-for="(link, index) of navigation" :key="link.path || link.title">
               <MegaMenu
                 v-if="link.fromAppConfig"
                 :item="link"
-                :is-active="isActive(link)"
+                :is-active="link.path ? isActive(link) : false"
                 :prefetch-page="prefetchPage"
                 :index="index"
                 :total="navigation.length"
               />
               <NuxtLink
-                v-else
+                v-else-if="link.path"
                 :to="link.path"
                 class="tab tab-underline tab-red py-5"
                 :title="link.title"
@@ -184,6 +184,12 @@
                 }"
                 @mouseenter="prefetchPage(link.path)"
                 >{{ link.title }}</NuxtLink
+              >
+              <span
+                v-else
+                class="tab tab-underline tab-red py-5"
+                :title="link.title"
+                >{{ link.title }}</span
               >
             </li>
           </ul>
@@ -713,7 +719,8 @@ watch(
   },
 );
 
-const isActive = (link: { path: string }) => {
+const isActive = (link: { path?: string }) => {
+  if (!link.path) return false;
   const normalizedLinkPath = removeTrailingSlash(link.path);
   const normalizedRoutePath = removeTrailingSlash(route.path);
   const normalizedFirstPart = firstPart.value ? `/${firstPart.value}` : "";
