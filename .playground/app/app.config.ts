@@ -7,22 +7,25 @@ export default defineAppConfig({
   appSuite: 'SDS',
   pageTitle: 'Documentation Site',
   navigation: [
-    { title: 'Home', path: '/' },
+    { title: 'About', path: '/' },
     {
-      title: 'Getting Started',
-      path: '/getting-started',
+      title: 'Features',
+      path: '/features',
       children: [
-        { title: 'asdfasdf', path: '/guides/installation' },
-        { title: 'fewfwef', path: '/guides/configuration' }
+        { title: 'Code Blocks', path: '/features/codeblocks' },
+        { title: 'Callouts', path: '/features/callouts' }
       ]
     },
     {
-      title: 'Guides', path: '/guides', children: [
-        { title: 'Installation', path: '/guides/installation' },
-        { title: 'Configuration', path: '/guides/configuration' }
+      title: 'Guides',
+      children: [
+        { title: 'FlowStack', path: '/flowstack' },
+        { title: 'Lume', path: '/lume' },
+        { title: 'ScribeAI', path: '/scribeai' },
+        { title: 'VaultSync', path: '/vaultsync' },
       ]
     },
-    { title: 'API Reference', path: '/api' },
+    { title: 'Contact Us', path: '/contact-us' },
   ],
   footerLinks: [
     { title: 'Contact Us', path: 'https://sei.cmu.edu/contact-us/' },

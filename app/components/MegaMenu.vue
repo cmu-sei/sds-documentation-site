@@ -26,7 +26,7 @@
     
     <!-- Regular link for items without children -->
     <NuxtLink
-      v-else
+      v-else-if="item.path"
       ref="triggerRef"
       :to="item.path"
       class="tab tab-underline tab-red py-5 flex items-center gap-1"
@@ -38,6 +38,16 @@
     >
       {{ item.title }}
     </NuxtLink>
+    
+    <!-- Plain text for items without children and without path -->
+    <span
+      v-else
+      ref="triggerRef"
+      class="tab tab-underline tab-red py-5 flex items-center gap-1"
+      :title="item.title"
+    >
+      {{ item.title }}
+    </span>
 
     <!-- Mega Menu Dropdown - Teleported to body -->
     <ClientOnly>
@@ -61,8 +71,8 @@
           >
             <div class="p-4">
               <div class="grid gap-2">
-                <!-- View All link -->
-                <div>
+                <!-- View All link (only if parent has a path) -->
+                <div v-if="item.path">
                   <NuxtLink
                     :to="item.path"
                     role="menuitem"
@@ -84,15 +94,15 @@
                   </NuxtLink>
                 </div>
 
-                <hr class="border-gray-100 dark:border-gray-800">
-                
+                <hr v-if="item.path" class="border-gray-100 dark:border-gray-800">
+
                 <!-- Child items -->
                 <div v-for="(child, childIndex) in item.children" :key="child.path">
                   <NuxtLink
                     :to="child.path"
                     role="menuitem"
                     tabindex="-1"
-                    :data-index="childIndex + 1"
+                    :data-index="item.path ? childIndex + 1 : childIndex"
                     class="group block p-3 rounded-lg hover:bg-gray-25 dark:hover:bg-gray-850 transition-colors focus:outline-none focus-visible:bg-gray-50 dark:focus-visible:bg-gray-850"
                     @mouseenter="prefetchPage(child.path)"
                     @click="closeMenu"
@@ -143,7 +153,7 @@ const dropdownRef = ref<HTMLElement | null>(null);
 const dropdownStyle = ref({});
 const currentFocusIndex = ref(0);
 
-const menuId = computed(() => props.item.path);
+const menuId = computed(() => props.item.path || props.item.title);
 
 const hasChildren = computed(() => {
   return props.item.children && props.item.children.length > 0;
