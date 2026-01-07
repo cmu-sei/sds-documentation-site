@@ -314,7 +314,8 @@ const removeTrailingSlash = (path: string) => {
   return path
 }
 
-const isActive = (link: { path: string }) => {
+const isActive = (link: { path?: string }) => {
+  if (!link.path) return false
   const normalizedLinkPath = removeTrailingSlash(link.path)
   const normalizedRoutePath = removeTrailingSlash(route.path)
   const normalizedFirstPart = firstPart.value ? `/${firstPart.value}` : ''
@@ -346,10 +347,10 @@ const mobileMenus = computed(() => {
     // We only want nested menus for links from the app config
     const hasChildren = link.fromAppConfig && link.children && link.children.length > 0
     return {
-      key: link.path.replace(/\//g, '-').replace(/^-/, ''),
+      key: link.path ? link.path.replace(/\//g, '-').replace(/^-/, '') : link.title.replace(/\s+/g, '-').toLowerCase(),
       title: link.title,
       icon: link.icon as string | undefined,
-      href: hasChildren ? undefined : withBaseURL(link.path),
+      href: hasChildren ? undefined : (link.path ? withBaseURL(link.path) : undefined),
       type: hasChildren ? ('slide' as const) : undefined,
       path: link.path, // Store path for selection checking
       children: hasChildren

@@ -19,6 +19,6 @@ declare module '@nuxt/schema' {
     appSuite: string,
     pageTitle: string,
     footerLinks?: Array<{ title: string, path: string }>
-    navigation?: Array<{ title: string, path: string, children?: Array<{ title: string, path: string }> }>
+    navigation?: Array<{ title: string, path?: string, children?: Array<{ title: string, path: string }> }>
   }
 }
