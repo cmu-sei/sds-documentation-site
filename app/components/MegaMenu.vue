@@ -8,7 +8,8 @@
       class="tab tab-underline tab-red py-5 flex items-center gap-1"
       :title="item.title"
       :class="{
-        active: isActive || isOpen,
+        active: isActive,
+        'text-red-600 dark:text-red-300': isOpen,
       }"
       :aria-expanded="isOpen"
       :aria-haspopup="'true'"
@@ -69,8 +70,8 @@
             :style="dropdownStyle"
             @keydown="handleDropdownKeydown"
           >
-            <div class="p-4">
-              <div class="grid gap-2">
+            <div>
+              <div class="grid p-2.5 gap-1">
                 <!-- View All link (only if parent has a path) -->
                 <div v-if="item.path">
                   <NuxtLink
@@ -78,7 +79,7 @@
                     role="menuitem"
                     tabindex="-1"
                     data-index="0"
-                    class="group block p-3 rounded-lg focus:outline-none"
+                    class="group block px-2.5 py-2 rounded-lg focus:outline-none"
                     @mouseenter="prefetchPage(item.path)"
                     @click="closeMenu"
                   >
@@ -94,7 +95,7 @@
                   </NuxtLink>
                 </div>
 
-                <hr v-if="item.path" class="border-gray-100 dark:border-gray-800">
+                <hr v-if="item.path" class="border-gray-100 dark:border-gray-800 -mx-2.5 my-1.5">
 
                 <!-- Child items -->
                 <div v-for="(child, childIndex) in item.children" :key="child.path">
@@ -103,11 +104,11 @@
                     role="menuitem"
                     tabindex="-1"
                     :data-index="item.path ? childIndex + 1 : childIndex"
-                    class="group block p-3 rounded-lg hover:bg-gray-25 dark:hover:bg-gray-850 transition-colors focus:outline-none focus-visible:bg-gray-50 dark:focus-visible:bg-gray-850"
+                    class="group block px-2.5 py-2 rounded-lg hover:bg-gray-25 dark:hover:bg-gray-850 transition-colors focus:outline-none focus-visible:bg-gray-50 dark:focus-visible:bg-gray-850"
                     @mouseenter="prefetchPage(child.path)"
                     @click="closeMenu"
                   >
-                    <span class="flex items-start gap-3">
+                    <span class="flex items-start">
                       <Icon
                         v-if="child.icon"
                         :name="(child.icon as string)"
