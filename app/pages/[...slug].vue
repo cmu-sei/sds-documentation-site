@@ -763,14 +763,6 @@ const prefetchPage = async (path: string) => {
 };
 
 onMounted(() => {
-  if (route.hash && route.hash !== "") {
-    // Use setTimeout to ensure content is fully rendered
-    setTimeout(() => {
-      scrollToElement(route.hash);
-    }, 100);
-  } else {
-    window.scrollTo({ top: 0, behavior: "instant" });
-  }
   requestAnimationFrame(() => (showScrollspy.value = true));
 
   // Handle hash link clicks on the same page
