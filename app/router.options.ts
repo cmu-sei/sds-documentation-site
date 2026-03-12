@@ -1,10 +1,43 @@
 import type { RouterConfig } from '@nuxt/schema'
 
-// CSS selector special characters need escaping when used with querySelector
-// (e.g. anchor IDs containing dots like #AA.Bibliography-Koenig89)
-const escapedSelector = (hash: string) => {
-  if (!hash.startsWith('#')) return hash
-  return '#' + CSS.escape(hash.slice(1))
+const stripHashPrefix = (hash: string) => hash.startsWith('#') ? hash.slice(1) : hash
+
+const decodeHash = (value: string) => {
+  try {
+    return decodeURIComponent(value)
+  } catch {
+    return value
+  }
+}
+
+const getElementFromHash = (hash: string) => {
+  const rawId = stripHashPrefix(hash)
+  if (!rawId) return null
+
+  const decodedId = decodeHash(rawId)
+
+  const byDecodedId = document.getElementById(decodedId)
+  if (byDecodedId) return byDecodedId
+
+  const byRawId = document.getElementById(rawId)
+  if (byRawId) return byRawId
+
+  const selectorId = typeof CSS !== 'undefined' && typeof CSS.escape === 'function'
+    ? CSS.escape(decodedId)
+    : decodedId
+
+  const byEscapedDecoded = document.querySelector(`#${selectorId}`)
+  if (byEscapedDecoded) return byEscapedDecoded
+
+  if (decodedId !== rawId) {
+    const rawSelectorId = typeof CSS !== 'undefined' && typeof CSS.escape === 'function'
+      ? CSS.escape(rawId)
+      : rawId
+
+    return document.querySelector(`#${rawSelectorId}`)
+  }
+
+  return null
 }
 
 // https://router.vuejs.org/api/#routeroptions
@@ -23,7 +56,7 @@ export default {
         return new Promise((resolve) => {
           requestAnimationFrame(() => {
             const HEADER_OFFSET = 96
-            const el = document.querySelector(escapedSelector(to.hash))
+            const el = getElementFromHash(to.hash)
             if (el) {
               const top = el.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET
               resolve({ left: 0, top, behavior: 'instant' })
