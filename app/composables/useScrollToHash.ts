@@ -10,13 +10,12 @@ export const useScrollToHash = () => {
       
       window.scrollTo({
         top: offsetPosition,
-        behavior: 'smooth'
       })
       return offsetPosition
     }
     
     // If element not found, scroll to top
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0 })
     return 0
   }
   
