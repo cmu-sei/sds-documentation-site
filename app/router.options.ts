@@ -1,5 +1,12 @@
 import type { RouterConfig } from '@nuxt/schema'
 
+// CSS selector special characters need escaping when used with querySelector
+// (e.g. anchor IDs containing dots like #AA.Bibliography-Koenig89)
+const escapedSelector = (hash: string) => {
+  if (!hash.startsWith('#')) return hash
+  return '#' + CSS.escape(hash.slice(1))
+}
+
 // https://router.vuejs.org/api/#routeroptions
 export default {
   scrollBehavior(to, from, savedPosition) {
@@ -16,7 +23,7 @@ export default {
         return new Promise((resolve) => {
           requestAnimationFrame(() => {
             const HEADER_OFFSET = 96
-            const el = document.querySelector(to.hash)
+            const el = document.querySelector(escapedSelector(to.hash))
             if (el) {
               const top = el.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET
               resolve({ left: 0, top, behavior: 'instant' })
