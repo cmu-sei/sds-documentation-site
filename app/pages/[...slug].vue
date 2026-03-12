@@ -719,6 +719,17 @@ watch(
   },
 );
 
+// Scroll to top when navigating to a new route (without a hash).
+// Hash-based navigation is handled by the scrollspy and the hash click handler.
+watch(
+  () => route.path,
+  () => {
+    if (import.meta.client && !route.hash) {
+      window.scrollTo({ top: 0, behavior: 'instant' })
+    }
+  }
+);
+
 const isActive = (link: { path?: string }) => {
   if (!link.path) return false;
   const normalizedLinkPath = removeTrailingSlash(link.path);
