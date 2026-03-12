@@ -1,5 +1,5 @@
 <template>
-<div class="min-h-screen">
+<div class="min-h-screen flex flex-col">
 
   <!-- Top Header (scrollable) -->
   <header
@@ -34,7 +34,7 @@
 
   <!-- Main layout with sidebar and content -->
   <div
-    class="grid grid-cols-12 mx-auto px-4 py-6 lg:gap-12"
+    class="grow w-full grid grid-cols-12 mx-auto px-4 py-6 lg:gap-12"
     :class="{
       'max-w-7xl': !fullwidth
     }"
@@ -43,7 +43,7 @@
     <!-- Sidebar: sticky -->
     <aside
       ref="leftBar"
-      class="hidden lg:block lg:col-span-3 sticky top-[90px] self-start lg:h-[calc(100vh-90px)] overflow-y-auto"
+      class="hidden lg:block lg:col-span-3 sticky top-22.5 self-start lg:max-h-[calc(100vh-90px)] overflow-y-auto"
     >
       <slot name="left-bar" />
     </aside>
@@ -54,7 +54,7 @@
     </main>
 
     <!-- Table of Contents: sticky -->
-    <nav class="hidden xl:block col-span-3 sticky top-[90px] self-start xl:h-[calc(100vh-90px)] overflow-y-auto">
+    <nav class="hidden xl:block col-span-3 sticky top-22.5 self-start xl:max-h-[calc(100vh-90px)] overflow-y-auto">
       <slot name="right-bar" />
     </nav>
 
