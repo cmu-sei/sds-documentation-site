@@ -17,7 +17,9 @@
       <template #title>
         <h2>Search</h2>
       </template>
+      <label for="search-input" class="sr-only">Search all pages</label>
       <input
+        id="search-input"
         ref="searchTextRef"
         v-model="searchText"
         type="text"
@@ -33,8 +35,8 @@
           :class="{
             'bg-gray-50 dark:bg-gray-800': selectedIndex === index,
           }"
-          @mouseover="selectedIndex = index"
-          @focus="selectedIndex = index"
+          @mouseover="selectedIndex = parseInt(`${index}`)"
+          @focus="selectedIndex = parseInt(`${index}`)"
           @click="modelValue = false"
         >
           <span>{{ item.title }}</span>

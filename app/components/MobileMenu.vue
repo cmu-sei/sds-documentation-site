@@ -114,7 +114,7 @@
                             class="h-5 w-5"
                             :alt="`Toggle tree for ${child.title}`"
                           />
-                          <span class="sr-only">Toggle tree</span>
+                          <span class="sr-only">{{ closedTreeNodes.some((i: string) => child.path === i) ? 'Expand' : 'Collapse' }} {{ child.title }}</span>
                         </button>
                       </div>
                       <ul v-if="child.children && !closedTreeNodes.some((i: string) => child.path === i)">
@@ -160,7 +160,7 @@
                                 class="h-5 w-5"
                                 :alt="`Toggle tree for ${subchild.title}`"
                               />
-                              <span class="sr-only">Toggle tree</span>
+                              <span class="sr-only">{{ closedTreeNodes.some((i: string) => subchild.path === i) ? 'Expand' : 'Collapse' }} {{ subchild.title }}</span>
                             </button>
                           </div>
                           <ul v-if="subchild.children && !closedTreeNodes.some((i: string) => subchild.path === i)">
@@ -206,7 +206,7 @@
                                     class="h-5 w-5"
                                     :alt="`Toggle tree for ${grandchild.title}`"
                                   />
-                                  <span class="sr-only">Toggle tree</span>
+                                  <span class="sr-only">{{ closedTreeNodes.some((i: string) => grandchild.path === i) ? 'Expand' : 'Collapse' }} {{ grandchild.title }}</span>
                                 </button>
                               </div>
                             </li>
