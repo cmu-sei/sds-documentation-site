@@ -1,6 +1,12 @@
 <template>
 <div class="min-h-screen flex flex-col">
 
+  <!-- Skip to main content (WCAG 2.4.1) -->
+  <a
+    href="#main-content"
+    class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-100 focus:px-4 focus:py-2 focus:rounded focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:bg-white focus:text-black dark:focus:bg-gray-950 dark:focus:text-white"
+  >Skip to main content</a>
+
   <!-- Top Header (scrollable) -->
   <header
     class="bg-white dark:bg-gray-950"
@@ -18,8 +24,9 @@
   </header>
 
   <!-- Sticky Navigation Bar -->
-  <div
+  <nav
     ref="navBar"
+    aria-label="Primary navigation"
     class="sticky top-0 z-50 border-b border-gray-100 bg-white dark:bg-gray-950 dark:border-gray-800"
   >
     <div
@@ -30,7 +37,7 @@
     >
       <slot name="header-nav" />
     </div>
-  </div>
+  </nav>
 
   <!-- Main layout with sidebar and content -->
   <div
@@ -49,7 +56,7 @@
     </aside>
 
     <!-- Main content area -->
-    <main class="col-span-12 lg:col-span-8 xl:col-span-6 min-h-[calc(100vh-270px)] sm:min-h-[calc(100vh-240px)] lg:min-h-auto">
+    <main id="main-content" class="col-span-12 lg:col-span-8 xl:col-span-6 min-h-[calc(100vh-270px)] sm:min-h-[calc(100vh-240px)] lg:min-h-auto">
       <slot name="content" />
     </main>
 
@@ -64,6 +71,7 @@
   <footer class="relative border-t mt-4 border-gray-100 dark:border-gray-800">
     <!-- Logo -->
     <svg
+      aria-hidden="true"
       width="16"
       height="16"
       viewBox="0 0 16 16"
