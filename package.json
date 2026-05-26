@@ -21,15 +21,15 @@
     "vue": "latest"
   },
   "dependencies": {
-    "@cmu-sei/sei-design-system": "^4.8.0",
-    "@iconify-json/material-symbols": "^1.2.66",
-    "@nuxt/content": "^3.13.0",
-    "@nuxt/icon": "^2.2.1",
+    "@cmu-sei/sei-design-system": "^4.10.0",
+    "@iconify-json/material-symbols": "^1.2.74",
+    "@nuxt/content": "^3.14.0",
+    "@nuxt/icon": "^2.2.2",
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/typography": "^0.5.19",
-    "@tailwindcss/vite": "^4.2.2",
-    "@vueuse/nuxt": "^14.2.1",
-    "better-sqlite3": "^12.9.0",
+    "@tailwindcss/vite": "^4.3.0",
+    "@vueuse/nuxt": "^14.3.0",
+    "better-sqlite3": "^12.10.0",
     "nuxt-gtag": "^4.1.0",
     "sitemap": "^9.0.1",
     "tailwindcss": "^4.0.12"
