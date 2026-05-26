@@ -432,7 +432,20 @@
         lang="en"
       />
       <Body class="bg-white dark:bg-gray-950 text-black dark:text-white" />
-      <div>
+      <template v-if="!page">
+        <div class="flex flex-col items-center justify-center gap-2 py-20 h-full">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <path d="M7 3H16.375C17.4375 3 18.4375 3.4375 19.1875 4.1875L25.8125 10.8125C26.5625 11.5625 27 12.625 27 13.6875V16.0625C20.8125 16.5625 16 21.6875 16 28C16 30.625 16.8125 33.0625 18.25 35H7C4.8125 35 3 33.1875 3 31V7C3 4.8125 4.8125 3 7 3ZM23.375 14L16 6.6875V12.5C16 13.3125 16.6875 14 17.5 14H23.375Z" fill="#99CBE3"/>
+            <path d="M28 37C23 37 19 33 19 28C19 23 23 19 28 19C33 19 37 23 37 28C37 33 33 37 28 37ZM28 30.75C27.3125 30.75 26.75 31.3125 26.75 32C26.75 32.6875 27.3125 33.25 28 33.25C28.6875 33.25 29.25 32.6875 29.25 32C29.25 31.3125 28.6875 30.75 28 30.75ZM28 24.5C28.8125 24.5 29.5 25.1875 29.5 26C29.5 26.4375 29.25 26.875 28.8125 27.0625L28.0625 27.375C27.4375 27.6875 27 28.3125 27 29C27 29.5625 27.4375 30 28 30C28.5 30 28.9375 29.625 29 29.1875L29.625 28.875C30.75 28.375 31.5 27.25 31.5 26C31.5 24.0625 29.9375 22.5 28 22.5C26.3125 22.5 24.875 23.6875 24.5625 25.3125C24.4375 25.875 24.8125 26.375 25.375 26.5C25.875 26.625 26.4375 26.25 26.5625 25.6875C26.6875 25 27.25 24.5 28 24.5Z" fill="#007CBA"/>
+          </svg>
+          <h1 class="font-semibold text-lg">Page not found</h1>
+          <p>Sorry, we couldn't find the page you are looking for.</p>
+          <p class="pt-4">
+            <NuxtLink to="/" class="link link-primary link-inline dark:text-blue-300">Go home</NuxtLink> or <NuxtLink to="https://sei.cmu.edu/contact-us/" class="link link-primary link-inline dark:text-blue-300" external>Contact us</NuxtLink>
+          </p>
+        </div>
+      </template>
+      <div v-else>
         <div
           class="scroll-smooth prose-headings:scroll-mt-24 prose prose-sm md:prose-md max-w-none prose-blue dark:prose-invert py-4 mx-auto prose-pre:bg-white prose-pre:border dark:prose-pre:bg-black dark:prose-pre:border-gray-800"
         >
@@ -549,6 +562,7 @@ const searchData = $globalSearchData;
 const { data: surround } = await useAsyncData(
   `surround-${lookupPath.value}`,
   () => {
+    if (!page.value) return Promise.resolve(null);
     return queryCollectionItemSurroundings("content", lookupPath.value);
   },
   {
@@ -561,6 +575,7 @@ const { data: surround } = await useAsyncData(
 const { data: sidebarData } = await useAsyncData(
   `sidebar-${firstPart.value}`,
   async () => {
+    if (!page.value) return [];
     if (!firstPart.value) return [];
     // Query navigation for content and filter to current section
     const allNav = await queryCollectionNavigation("content");
@@ -594,8 +609,8 @@ provide("searchData", searchData);
 // The useAsyncData keys will handle data fetching per route
 
 useSeoMeta({
-  title: () => page.value?.title || "Loading...",
-  description: () => page.value?.description || "Loading...",
+  title: () => page.value?.title || "Page not found",
+  description: () => page.value?.description || "Page not found",
 });
 
 const { pageTitle, githubUrl } = useAppConfig();
