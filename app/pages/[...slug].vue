@@ -457,15 +457,20 @@
           class="hidden sm:flex gap-2 justify-between w-full border-t border-gray-100 dark:border-gray-900 mt-4 py-8"
         >
           <template v-for="(item, index) in surround" :key="item?.stem">
-            <NuxtLink
-              v-if="item"
-              :to="item.path"
-              class="action-btn action-btn-ghost action-btn-gray"
-            >
-              <Icon v-if="index === 0" name="material-symbols:arrow-back" />
-              <span class="overflow-hidden max-w-64 text-ellipsis">{{ item.title }}</span>
-              <Icon v-if="index === 1" name="material-symbols:arrow-forward" />
-            </NuxtLink>
+            <SdsTooltip>
+              <template #trigger>
+                <NuxtLink
+                  v-if="item"
+                  :to="item.path"
+                  class="action-btn action-btn-secondary action-btn-gray"
+                >
+                  <Icon v-if="index === 0" name="material-symbols:arrow-back" />
+                  <span class="overflow-hidden max-w-64 text-ellipsis">{{ index === 0 ? 'Previous page' : 'Next page' }}</span>
+                  <Icon v-if="index === 1" name="material-symbols:arrow-forward" />
+                </NuxtLink>
+              </template>
+              <p>{{ item.title }}</p>
+            </SdsTooltip>
           </template>
         </div>
       </div>

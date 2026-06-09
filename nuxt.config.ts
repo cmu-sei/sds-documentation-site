@@ -1,4 +1,5 @@
 import tailwindcss from '@tailwindcss/vite'
+import fortranFreeForm from '@shikijs/langs/fortran-free-form'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -70,7 +71,12 @@ export default defineNuxtConfig({
             'javascript',
             'perl',
             'python',
-            'rust'
+            'rust',
+            {
+              ...fortranFreeForm[0],
+              name: 'fortran',
+              aliases: [...(fortranFreeForm[0].aliases || [])],
+            },
           ]
         }
       }
@@ -79,6 +85,10 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      meta: [
+        // CSP via meta tag for static hosting (e.g., GitHub Pages)
+        { 'http-equiv': 'Content-Security-Policy', content: "object-src 'none';" },
+      ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
         { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
