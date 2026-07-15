@@ -13,7 +13,8 @@ export default defineAppConfig({
       path: '/features',
       children: [
         { title: 'Code Blocks', path: '/features/codeblocks' },
-        { title: 'Callouts', path: '/features/callouts' }
+        { title: 'Callouts', path: '/features/callouts' },
+        { title: 'Tables', path: '/features/tables' }
       ]
     },
     {
