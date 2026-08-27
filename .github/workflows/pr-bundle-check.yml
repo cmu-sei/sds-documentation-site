@@ -46,3 +46,6 @@ jobs:
 
     - name: Lint components
       run: npm run lint
+
+    - name: Test link validation
+      run: npm test

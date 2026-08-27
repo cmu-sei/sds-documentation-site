@@ -454,7 +454,7 @@
         </div>
         <div
           v-if="surround && surround.length > 0"
-          class="hidden sm:flex gap-2 justify-between w-full border-t border-gray-100 dark:border-gray-900 mt-4 py-8"
+          class="flex gap-2 justify-between w-full border-t border-gray-100 dark:border-gray-900 mt-4 py-8"
         >
           <template v-for="(item, index) in surround" :key="item?.stem">
             <SdsTooltip>

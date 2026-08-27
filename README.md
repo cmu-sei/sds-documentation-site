@@ -42,6 +42,18 @@ defineNuxtConfig({
 })
 ```
 
+## Link validation
+
+The layer includes internal link validation for generated sites. It is disabled by default so upgrading the layer does not change existing builds.
+
+Enable it when generating a downstream application in CI:
+
+```bash
+SDS_LINK_CHECK=true npm run generate
+```
+
+Generation exits with a nonzero status when a rendered page contains a broken internal route or fragment. Remote URLs are not fetched, and trailing-slash style is not enforced, so third-party availability and URL formatting do not make pull requests fail. Add this command to each downstream application's pull request workflow and make that workflow a required status check before merging.
+
 ## Development Server
 
 Start the development server on http://localhost:3000
