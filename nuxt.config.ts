@@ -1,10 +1,23 @@
 import tailwindcss from '@tailwindcss/vite'
 import fortranFreeForm from '@shikijs/langs/fortran-free-form'
 
+const linkCheckEnabled = process.env.SDS_LINK_CHECK === 'true'
+const fortranLanguage = fortranFreeForm[0]!
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ['nuxt-gtag', '@vueuse/nuxt', '@nuxt/content', '@nuxt/icon'],
+  modules: ['nuxt-gtag', '@vueuse/nuxt', '@nuxt/content', '@nuxt/icon', 'nuxt-link-checker'],
+
+  linkChecker: {
+    enabled: linkCheckEnabled,
+    runOnBuild: true,
+    failOnError: linkCheckEnabled,
+    fetchRemoteUrls: false,
+    skipInspections: ['trailing-slash'],
+    // Upstream compares encoded fragments to decoded element IDs.
+    excludeLinks: [/#%EF%B8%8F-/i],
+  },
 
   // Enable experimental features for better performance
   experimental: {
@@ -73,9 +86,10 @@ export default defineNuxtConfig({
             'python',
             'rust',
             {
-              ...fortranFreeForm[0],
+              ...fortranLanguage,
               name: 'fortran',
-              aliases: [...(fortranFreeForm[0].aliases || [])],
+              scopeName: fortranLanguage.scopeName ?? 'source.fortran',
+              aliases: [...(fortranLanguage.aliases || [])],
             },
           ]
         }
