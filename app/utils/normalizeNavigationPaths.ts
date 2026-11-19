@@ -1,11 +1,14 @@
-// Helper function to recursively add trailing slashes to navigation items
-export function normalizeNavigationPaths(items: unknown[]): unknown[] {
-  return items.map((item: unknown) => {
-    const navItem = item as { path: string; children?: unknown[] }
+interface NavigationPathItem {
+  path?: string
+  children?: NavigationPathItem[]
+}
+
+export function normalizeNavigationPaths<T extends NavigationPathItem>(items: T[]): T[] {
+  return items.map(item => {
     return {
-      ...navItem,
-      path: addTrailingSlash(navItem.path),
-      children: navItem.children ? normalizeNavigationPaths(navItem.children) : undefined
+      ...item,
+      path: item.path === undefined ? undefined : addTrailingSlash(item.path),
+      children: item.children ? normalizeNavigationPaths(item.children) : undefined
     }
   })
 }

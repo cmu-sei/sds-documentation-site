@@ -1,5 +1,6 @@
 import tailwindcss from '@tailwindcss/vite'
 import fortranFreeForm from '@shikijs/langs/fortran-free-form'
+import { fileURLToPath } from 'node:url'
 
 const linkCheckEnabled = process.env.SDS_LINK_CHECK === 'true'
 const fortranLanguage = fortranFreeForm[0]!
@@ -116,7 +117,7 @@ export default defineNuxtConfig({
     // Provide the Open Sans font used by our Tailwind preset
     '@cmu-sei/sei-design-system/open-sans/index.css',
     // Provide the Tailwind CSS directives to our app
-    '../app/assets/css/main.css',
+    fileURLToPath(new URL('./app/assets/css/main.css', import.meta.url)),
     // Provide the CSS for every component
     '@cmu-sei/sei-design-system/dist/style.css',
   ],
@@ -134,7 +135,7 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       routes: ['/sitemap.xml'],
-      failOnError: false,
+      failOnError: linkCheckEnabled,
       concurrency: 100,
       interval: 100,
       crawlLinks: true,

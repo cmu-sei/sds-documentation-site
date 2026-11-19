@@ -3,6 +3,21 @@
   "type": "module",
   "version": "1.7.0",
   "main": "./nuxt.config.ts",
+  "files": [
+    "app",
+    "modules",
+    "nuxt.config.ts",
+    "public",
+    "server",
+    "types"
+  ],
+  "engines": {
+    "node": "^22.22.3 || ^24.15.0 || >=26.0.0"
+  },
+  "peerDependencies": {
+    "nuxt": "^4.6.4",
+    "vue": "^3.5.45"
+  },
   "scripts": {
     "dev": "npx nuxi dev .playground",
     "dev:prepare": "npx nuxt prepare .playground",
@@ -10,37 +25,39 @@
     "generate": "NODE_OPTIONS='--max-old-space-size=8192' npx nuxt generate .playground",
     "preview": "npx nuxt preview .playground",
     "lint": "npx eslint .",
+    "typecheck": "nuxt prepare .playground && vue-tsc --build --noEmit",
     "test": "node --test tests/*.test.mjs",
+    "check": "npm run typecheck && npm run lint && npm test && npm run build",
     "release": "./scripts/release.sh"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.17.0",
-    "@vueuse/core": "^14.1.0",
+    "@vueuse/core": "^15.0.0",
     "eslint": "^10.9.1",
-    "nuxt": "^4.5.2",
-    "typescript": "^5.9.3",
-    "vue": "^3.5.41"
+    "nuxt": "^4.6.4",
+    "typescript": "^6.0.3",
+    "vue": "^3.5.45",
+    "vue-tsc": "3.3.13"
   },
   "dependencies": {
-    "@cmu-sei/sei-design-system": "^4.14.0",
+    "@cmu-sei/sei-design-system": "^4.17.0",
     "@iconify-json/material-symbols": "^1.2.89",
     "@nuxt/content": "^3.15.2",
     "@nuxt/icon": "^2.5.1",
-    "@tailwindcss/forms": "^0.5.11",
-    "@tailwindcss/typography": "^0.5.20",
+    "@shikijs/langs": "^4.6.0",
     "@tailwindcss/vite": "^4.3.3",
-    "@vueuse/nuxt": "^14.4.0",
-    "better-sqlite3": "^12.11.1",
+    "@vueuse/nuxt": "^15.0.0",
+    "better-sqlite3": "^13.2.0",
     "nuxt-gtag": "^5.0.0",
-    "nuxt-link-checker": "^5.3.0",
-    "sitemap": "^9.0.1",
+    "nuxt-link-checker": "^6.0.1",
+    "sitemap": "^10.0.0",
     "tailwindcss": "^4.0.12"
   },
   "allowScripts": {
     "@parcel/watcher@2.5.6": true,
     "fsevents@2.3.3": true,
-    "unrs-resolver@1.12.2": true,
-    "better-sqlite3@12.11.1": true,
+    "unrs-resolver@1.13.0": true,
+    "better-sqlite3@13.2.0": true,
     "esbuild@0.28.2": true
   }
 }

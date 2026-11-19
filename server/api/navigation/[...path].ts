@@ -1,5 +1,6 @@
 // Server-side navigation cache to speed up SSG
 import type { ContentNavigationItem } from '@nuxt/content'
+import { queryCollectionNavigation } from '@nuxt/content/server'
 
 const navigationCache = new Map<string, ContentNavigationItem[]>()
 
@@ -12,7 +13,7 @@ export default defineEventHandler(async (event) => {
   }
 
   // Fetch navigation data
-  const navigation = await queryCollectionNavigation('content')
+  const navigation = await queryCollectionNavigation(event, 'content')
   
   // Filter based on path if provided
   let result = navigation
