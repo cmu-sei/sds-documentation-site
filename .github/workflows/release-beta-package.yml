@@ -59,6 +59,14 @@ jobs:
           exit 1
         fi
 
+    - name: Install dependencies
+      run: npm install
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.CMU_SEI_PACKAGE_ACCESS_TOKEN }}
+
+    - name: Validate layer
+      run: npm run check
+
     - name: Publish dry-run
       env:
         NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

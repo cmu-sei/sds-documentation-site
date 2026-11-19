@@ -525,7 +525,7 @@ const lookupPath = computed(() => {
 // Use async data with proper keys for better caching
 // The component stays mounted, but data updates when route changes
 // Use normalized lookupPath as key to ensure SSR/client consistency
-const { data: page } = await useAsyncData(
+const { data: page, error: pageError } = await useAsyncData(
   `page-${lookupPath.value}`,
   async () => {
     const path = lookupPath.value;
@@ -546,6 +546,17 @@ const { data: page } = await useAsyncData(
   },
 );
 
+if (pageError.value) {
+  throw createError(pageError.value);
+}
+
+if (import.meta.server && !page.value) {
+  const event = useRequestEvent();
+  if (event) {
+    setResponseStatus(event, 404);
+  }
+}
+
 const toc = computed(() => page.value?.body.toc);
 
 provide("page", page);
@@ -559,7 +570,7 @@ const firstPart = computed(() => route.path.split("/")[1]);
 const { $globalNavigation, $globalSearchData } = useNuxtApp();
 
 // Expose as local variables for template usage
-const navigation = $globalNavigation;
+const navigation = ref($globalNavigation);
 const searchData = $globalSearchData;
 
 // Optimize: Only fetch surround and sidebar when route changes
@@ -605,7 +616,7 @@ const normalizedSidebar = computed(() =>
 
 // Provide data to child components
 // Navigation is already normalized in the plugin, so use it directly
-provide("navigation", ref(navigation));
+provide("navigation", navigation);
 provide("surround", surround);
 provide("sidebar", normalizedSidebar);
 provide("searchData", searchData);

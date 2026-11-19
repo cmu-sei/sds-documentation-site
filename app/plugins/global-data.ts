@@ -1,20 +1,13 @@
-export default defineNuxtPlugin(async (nuxtApp) => {
+export default defineNuxtPlugin(async () => {
   // Skip ONLY during prerendering to prevent memory leaks
   // But allow normal SSR for dev/production
   const isPrerendering = import.meta.server && (process.env.PRERENDER === 'true' || process.env.prerender === 'true')
   
-  if (isPrerendering) {
-    // During prerendering, provide empty arrays
-    nuxtApp.provide('globalSearchData', [])
-    nuxtApp.provide('globalNavigation', [])
-    return
-  }
-
   // Get app config to check for navigation array
   const appConfig = useAppConfig()
   
   // Load navigation on both server and client for SSR/hydration
-  const { data: navigation } = await useAsyncData('global-navigation', async () => {
+  const { data: navigation } = isPrerendering ? { data: ref([]) } : await useAsyncData('global-navigation', async () => {
     // Use navigation from app config if defined, otherwise query collection
     if (appConfig.navigation && Array.isArray(appConfig.navigation) && appConfig.navigation.length > 0) {
       // Use the navigation from app config and normalize the paths
@@ -37,6 +30,10 @@ export default defineNuxtPlugin(async (nuxtApp) => {
   })
 
   // Provide the data directly
-  nuxtApp.provide('globalSearchData', null)
-  nuxtApp.provide('globalNavigation', navigation.value ?? [])
+  return {
+    provide: {
+      globalSearchData: isPrerendering ? [] : null,
+      globalNavigation: navigation.value ?? [],
+    },
+  }
 })

@@ -41,11 +41,5 @@ jobs:
       env:
         NODE_AUTH_TOKEN: ${{ secrets.CMU_SEI_PACKAGE_ACCESS_TOKEN }}
 
-    - name: Prepare .nuxt directory
-      run: npm run dev:prepare
-
-    - name: Lint components
-      run: npm run lint
-
-    - name: Test link validation
-      run: npm test
+    - name: Validate layer
+      run: npm run check

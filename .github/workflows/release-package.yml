@@ -4,6 +4,10 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -19,6 +23,14 @@ jobs:
         # Defaults to the user or organization that owns the workflow file
         scope: '@cmu-sei'
         token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Install dependencies
+      run: npm install
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.CMU_SEI_PACKAGE_ACCESS_TOKEN }}
+
+    - name: Validate layer
+      run: npm run check
 
     - name: Publish dry-run
       env:
