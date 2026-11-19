@@ -136,7 +136,7 @@ import { Icon } from "#components";
 import type { ContentNavigationItem } from "@nuxt/content";
 
 interface Props {
-  item: ContentNavigationItem;
+  item: Pick<ContentNavigationItem, 'title' | 'children'> & { path?: string };
   isActive: boolean;
   prefetchPage: (path: string) => Promise<void>;
   index: number;
